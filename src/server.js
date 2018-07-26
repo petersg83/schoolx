@@ -1,26 +1,23 @@
 import Koa from 'koa';
 import helmet from 'koa-helmet';
 import router from './router';
+import db from './db';
 
 const app = new Koa();
 
-app.use(helmet());
-app.use(router.routes());
+db.sequelize.authenticate()
+  .then(() => console.log('Connection has been established successfully.'))
+  .catch(err => console.error('Unable to connect to the database:', err));
 
 app.use(async (context, next) => {
-  console.log('11111');
   const start = Date.now();
   await next();
   const ms = Date.now() - start;
   context.set('X-Response-Time', `${ms}ms`);
 });
 
-app.use(context => console.log('context.url', context.url));
+app.use(helmet());
 
-app.use(async context => {
-  console.log('22222');
-  context.body += 'use';
-});
-
+app.use(router.routes());
 
 app.listen(3000);

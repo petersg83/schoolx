@@ -1,0 +1,8 @@
+export default {
+  postgres: {
+    username: 'POSTGRES_USERNAME',
+    password: 'POSTGRES_PASSWORD',
+    database: 'POSTGRES_DATABASE',
+    host: 'POSTGRES_HOST',
+  },
+};

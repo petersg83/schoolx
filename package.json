@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist/ && babel ./src/ --out-dir dist/ --copy-files",
-    "start": "npm run build && node dist/server.js"
+    "start": "npm run build && node dist/server.js",
+    "execute": "./node_modules/babel-cli/bin/babel-node.js"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
@@ -16,6 +17,9 @@
     "koa": "^2.5.2",
     "koa-helmet": "^4.0.0",
     "koa-router": "^7.4.0",
-    "rimraf": "^2.6.2"
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2",
+    "rimraf": "^2.6.2",
+    "sequelize": "^4.38.0"
   }
 }

@@ -1,13 +1,5 @@
-import Router from 'koa-router';
+import router from './koa-router';
 
-const router = new Router();
-
-router.get('/lol', (context, next) => {
-  console.log('context.url', context.url);
-  console.log('33333');
-  context.body += 'get';
-  next();
-});
-
+require('./routes/school');
 
 export default router;
