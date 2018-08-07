@@ -1,0 +1,1 @@
+import MemberSettings from './index';

@@ -1,0 +1,1 @@
+import SchoolYear from './index';

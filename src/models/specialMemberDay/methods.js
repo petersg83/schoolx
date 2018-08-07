@@ -1,0 +1,1 @@
+import SpecialMemberDay from './index';

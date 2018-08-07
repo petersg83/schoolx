@@ -1,0 +1,1 @@
+import MemberYear from './index';

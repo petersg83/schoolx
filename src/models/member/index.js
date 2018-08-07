@@ -1,25 +1,35 @@
 import { sequelize, Sequelize } from '../../database';
 
-const School = sequelize.define('school', {
+const Member = sequelize.define('member', {
   id: {
     type: Sequelize.STRING,
     primaryKey: true,
     defaultValue: Sequelize.UUIDV4,
   },
-  name: {
+  schoolId: {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  urlName: {
+  firstName: {
     type: Sequelize.STRING,
     allowNull: false,
+  },
+  lastName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  passwordHash: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  jwt: {
+    type: Sequelize.STRING,
   },
 }, {
   paranoid: true,
   indexes: [{
-    fields: ['urlName'],
-    unique: true,
+    fields: ['schoolId'],
   }],
 });
 
-export default School;
+export default Member;

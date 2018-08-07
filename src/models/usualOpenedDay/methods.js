@@ -1,0 +1,1 @@
+import UsualOpenedDay from './index';

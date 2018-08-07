@@ -1,25 +1,32 @@
 import { sequelize, Sequelize } from '../../database';
 
-const School = sequelize.define('school', {
+const SchoolSettings = sequelize.define('schoolSettings', {
   id: {
     type: Sequelize.STRING,
     primaryKey: true,
     defaultValue: Sequelize.UUIDV4,
   },
-  name: {
+  schoolId: {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  urlName: {
+  timezone: {
     type: Sequelize.STRING,
     allowNull: false,
+    defaultValue: 'Europe/Paris',
+  },
+  startAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+  },
+  endAt: {
+    type: Sequelize.DATE,
   },
 }, {
   paranoid: true,
   indexes: [{
-    fields: ['urlName'],
-    unique: true,
+    fields: ['schoolId'],
   }],
 });
 
-export default School;
+export default SchoolSettings;
