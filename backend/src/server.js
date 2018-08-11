@@ -1,6 +1,8 @@
 import Koa from 'koa';
 import helmet from 'koa-helmet';
 import router from './router';
+import bodyParser from 'koa-bodyparser';
+import cors from '@koa/cors';
 import db from './db';
 
 const app = new Koa();
@@ -8,6 +10,14 @@ const app = new Koa();
 db.sequelize.authenticate()
   .then(() => console.log('Connection has been established successfully.'))
   .catch(err => console.error('Unable to connect to the database:', err));
+
+app.use(cors({ origin: '*' }));
+
+app.use(bodyParser({
+  extendTypes: {
+    json: ['application/x-javascript'], // will parse application/x-javascript type body as a JSON string
+  },
+}));
 
 app.use(async (context, next) => {
   const start = Date.now();

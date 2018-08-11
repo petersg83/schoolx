@@ -5,4 +5,5 @@ export default {
     database: 'POSTGRES_DATABASE',
     host: 'POSTGRES_HOST',
   },
+  jwtSecret: 'JWT_SECRET',
 };
