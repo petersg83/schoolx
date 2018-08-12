@@ -4,7 +4,6 @@ import config from '../../../config';
 export default (type, params) => {
   // called when the user attempts to log in
   if (type === AUTH_LOGIN) {
-    const { username, password } = params;
     return fetch(`${config.apiEndpoint}/login`, {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json'}),

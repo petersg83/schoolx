@@ -7,7 +7,7 @@ router.post('/login', async (ctx, next) => {
   let status = 200;
 
   if (params.subdomain === 'superadmin') {
-
+    // TODO: superadmin connection
   } else {
     const admin = await db.Admin.authenticate({
       email: params.email,
