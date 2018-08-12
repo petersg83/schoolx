@@ -2,6 +2,7 @@ import React from 'react';
 import jsonServerProvider from 'ra-data-json-server';
 import { Admin, Resource, fetchUtils, resolveBrowserLocale } from 'react-admin';
 import { SchoolList } from './reactAdminComponents/schools';
+import { MemberList } from './reactAdminComponents/members';
 import Dashboard from './reactAdminComponents/dashboard';
 import authProvider from './reactAdminComponents/authProvider';
 import frenchMessages from 'ra-language-french';
@@ -26,6 +27,19 @@ const httpClient = (url, options = {}) => {
 
 const dataProvider = jsonServerProvider('http://localhost:3000', httpClient);
 
+const getRessources = (role) => {
+  if (role === 'admin') {
+    return [
+      <Resource name="members" list={MemberList}/>,
+    ];
+  } else if (role === 'superAdmin') {
+    return [
+      <Resource name="schools" list={SchoolList}/>,
+      <Resource name="members" list={MemberList}/>,
+    ];
+  }
+}
+
 const AdminPanel = props => (<Admin
   locale={resolveBrowserLocale()}
   i18nProvider={i18nProvider}
@@ -33,7 +47,7 @@ const AdminPanel = props => (<Admin
   dashboard={Dashboard}
   authProvider={authProvider}
 >
-  <Resource name="schools" list={SchoolList}/>
+  {getRessources}
 </Admin>);
 
 export default AdminPanel;

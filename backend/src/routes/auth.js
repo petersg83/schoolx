@@ -6,8 +6,21 @@ router.post('/login', async (ctx, next) => {
   let jwt;
   let status = 200;
 
+  console.log('subdomain', params.subdomain);
+
   if (params.subdomain === 'superadmin') {
-    // TODO: superadmin connection
+    const superAdmin = await db.SuperAdmin.authenticate({
+      email: params.email,
+      password: params.password,
+    });
+    if (superAdmin && !superAdmin.jwt) {
+      const jwt = await db.SuperAdmin.setAndgetNewJWT({ superAdminId: superAdmin.id, email: params.email });
+      ctx.body = { jwt };
+    } else if (superAdmin) {
+      ctx.body = { jwt: superAdmin.jwt };
+    } else {
+      ctx.status = 403;
+    }
   } else {
     const admin = await db.Admin.authenticate({
       email: params.email,

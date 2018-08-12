@@ -1,4 +1,5 @@
 import { AUTH_LOGIN, AUTH_LOGOUT, AUTH_ERROR, AUTH_CHECK, AUTH_GET_PERMISSIONS } from 'react-admin';
+import jwtFactory from 'jsonwebtoken';
 import config from '../../../config';
 
 export default (type, params) => {
@@ -24,11 +25,13 @@ export default (type, params) => {
     })
     .then(res => {
       localStorage.setItem('jwt', res.jwt);
+      localStorage.setItem('role', jwtFactory.decode(res.jwt).role);
     })
   }
   // called when the user clicks on the logout button
   if (type === AUTH_LOGOUT) {
     localStorage.removeItem('jwt');
+    localStorage.removeItem('role');
     return Promise.resolve();
   }
   // called when the API returns an error
@@ -36,6 +39,7 @@ export default (type, params) => {
     const { status } = params;
     if (status === 401 || status === 403) {
       localStorage.removeItem('jwt');
+      localStorage.removeItem('role');
       return Promise.reject();
     }
     return Promise.resolve();

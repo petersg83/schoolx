@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "import": "^0.0.6",
+    "jsonwebtoken": "^8.3.0",
     "ra-data-json-server": "^2.2.0",
     "ra-language-english": "^2.2.0",
     "ra-language-french": "^2.2.0",
