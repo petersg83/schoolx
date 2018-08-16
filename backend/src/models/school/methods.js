@@ -1,10 +1,5 @@
 import School from './index';
 
-School.getSchools = ({
-  end = 10,
-  order = 'DESC',
-  sort = id,
-  start = 0,
-}) => {
+School.findById = (id, options = {}) => School.findOne({ where: { id }, transaction: options.transaction });
 
-};
+School.findByCriteria = ({offset = 0, limit = 10, order = 'DESC'}) => School.findAll({ offset, limit, order });

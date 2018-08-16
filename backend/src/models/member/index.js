@@ -20,7 +20,6 @@ const Member = sequelize.define('member', {
   },
   passwordHash: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
   jwt: {
     type: Sequelize.STRING,

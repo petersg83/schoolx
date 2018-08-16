@@ -6,8 +6,6 @@ router.post('/login', async (ctx, next) => {
   let jwt;
   let status = 200;
 
-  console.log('subdomain', params.subdomain);
-
   if (params.subdomain === 'superadmin') {
     const superAdmin = await db.SuperAdmin.authenticate({
       email: params.email,

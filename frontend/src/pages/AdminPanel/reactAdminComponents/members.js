@@ -3,13 +3,13 @@ import { List, Datagrid, TextField } from 'react-admin';
 
 export const MemberList = (props) => (
     <List
-      title="Toutes les membres"
+      title="Membres"
       {...props}
     >
         <Datagrid>
           <TextField source="id" />
-          <TextField source="firstName" />
-          <TextField source="lastName" />
+          <TextField source="firstName" label="Prénom" />
+          <TextField source="lastName" label="Nom" />
         </Datagrid>
     </List>
 );
