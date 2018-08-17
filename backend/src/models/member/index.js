@@ -18,6 +18,10 @@ const Member = sequelize.define('member', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  birthday: {
+    type: Sequelize.DATE,
+    allowNull: false,
+  },
   passwordHash: {
     type: Sequelize.STRING,
   },

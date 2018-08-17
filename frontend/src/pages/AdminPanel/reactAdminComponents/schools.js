@@ -1,5 +1,5 @@
 import React from 'react';
-import { Create, Datagrid, DisabledInput, DateField, Edit, EditButton, List, TextField, TextInput, SimpleForm, } from 'react-admin';
+import { Create, Datagrid, DisabledInput, DateField, Edit, EditButton, List, TextField, TextInput, SimpleForm } from 'react-admin';
 
 export const SchoolList = (props) => (
     <List

@@ -2,7 +2,7 @@ import React from 'react';
 import jsonServerProvider from 'ra-data-json-server';
 import { Admin, Resource, fetchUtils, resolveBrowserLocale } from 'react-admin';
 import { SchoolList, SchoolEdit, SchoolCreate } from './reactAdminComponents/schools';
-import { MemberList } from './reactAdminComponents/members';
+import { MemberList, MemberEdit, MemberCreate } from './reactAdminComponents/members';
 import Dashboard from './reactAdminComponents/dashboard';
 import authProvider from './reactAdminComponents/authProvider';
 import frenchMessages from 'ra-language-french';
@@ -30,12 +30,12 @@ const dataProvider = jsonServerProvider('http://localhost:3000', httpClient);
 const getRessources = (role) => {
   if (role === 'admin') {
     return [
-      <Resource options={{ label: 'Membres' }} name="members" list={MemberList}/>,
+      <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} />,
     ];
   } else if (role === 'superAdmin') {
     return [
       <Resource options={{ label: 'Ecoles' }} name="schools" list={SchoolList} edit={SchoolEdit} create={SchoolCreate} />,
-      <Resource options={{ label: 'Membres' }} name="members" list={MemberList}/>,
+      <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} />,
     ];
   }
 }
