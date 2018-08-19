@@ -3,16 +3,21 @@ import db from '../db';
 import { authRequired } from '../utils/auth';
 
 router.get('/schools', authRequired(['superAdmin'], async (ctx, next, { admin, superAdmin }) => {
-  const count = await db.School.count();
-  const schools = await db.School.findByCriteria({
-    offset: +ctx.query._start,
-    limit: +ctx.query._end - ctx.query._start,
-    order: [[ctx.query._sort, ctx.query._order]],
-  });
+  if (ctx.query.id_like) {
+    const ids = ctx.query.id_like.split('|');
+    ctx.body = await db.School.findByIds(ids);
+  } else {
+    const count = await db.School.count();
+    const schools = await db.School.findByCriteria({
+      offset: +ctx.query._start,
+      limit: +ctx.query._end - ctx.query._start,
+      order: [[ctx.query._sort, ctx.query._order]],
+    });
 
-  ctx.set('Access-Control-Expose-Headers', 'X-Total-Count');
-  ctx.set('X-Total-Count', count);
-  ctx.body = schools;
+    ctx.set('Access-Control-Expose-Headers', 'X-Total-Count');
+    ctx.set('X-Total-Count', count);
+    ctx.body = schools;
+  }
 }));
 
 router.get('/schools/:id', authRequired(['superAdmin'], async (ctx, next, { admin, superAdmin }) => {

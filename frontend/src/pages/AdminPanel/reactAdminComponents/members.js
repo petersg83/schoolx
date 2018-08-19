@@ -1,20 +1,27 @@
 import React from 'react';
-import { Create, Datagrid, DateInput, DateField, DisabledInput, Edit, EditButton, List, TextField, TextInput, SimpleForm, } from 'react-admin';
+import { Create, Datagrid, DateInput, DateField, DisabledInput, Edit, EditButton, List, ReferenceField, TextField, TextInput, SimpleForm, } from 'react-admin';
 
-export const MemberList = (props) => (
+export const MemberList = (props) => {
+
+  return (
     <List
-      title="Membres"
-      {...props}
+    title="Membres"
+    {...props}
     >
-        <Datagrid>
-          <TextField source="firstName" label="Prénom" />
-          <TextField source="lastName" label="Nom" />
-          <DateField source="birthday" label="Date de naissance" />
-          <TextField source="id" />
-          <EditButton />
-        </Datagrid>
+      <Datagrid>
+        <TextField source="id" />
+        <TextField source="firstName" label="Prénom" />
+        <TextField source="lastName" label="Nom" />
+        <DateField source="birthday" label="Date de naissance" />
+        {props.permissions === 'superAdmin' &&  <ReferenceField label="Ecole" source="schoolId" reference="schools">
+          <TextField source="urlName" />
+        </ReferenceField>}
+        <EditButton />
+      </Datagrid>
     </List>
-);
+  );
+}
+
 
 const MemberTitle = ({ record }) => (<span>Membre {record ? `"${record.firstName} ${record.lastName}"` : ''}</span>);
 

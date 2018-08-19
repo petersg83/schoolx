@@ -14,7 +14,7 @@ SuperAdmin.authenticate = async ({ email, password }) => {
 };
 
 SuperAdmin.setAndgetNewJWT = async ({ superAdminId, email }) => {
-  const jwt = jwtFactory.sign({ email, role: 'superAdmin' }, config.jwtSecret);
+  const jwt = jwtFactory.sign({ email, role: 'superAdmin', subdomain: 'superAdmin' }, config.jwtSecret);
   await SuperAdmin.update({ jwt }, { where: { id: superAdminId } });
   return jwt;
 };

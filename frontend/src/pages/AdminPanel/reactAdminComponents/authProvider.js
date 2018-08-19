@@ -26,12 +26,14 @@ export default (type, params) => {
     .then(res => {
       localStorage.setItem('jwt', res.jwt);
       localStorage.setItem('role', jwtFactory.decode(res.jwt).role);
+      localStorage.setItem('subdomain', jwtFactory.decode(res.jwt).subdomain);
     })
   }
   // called when the user clicks on the logout button
   if (type === AUTH_LOGOUT) {
     localStorage.removeItem('jwt');
     localStorage.removeItem('role');
+    localStorage.removeItem('subdomain');
     return Promise.resolve();
   }
   // called when the API returns an error
@@ -40,6 +42,7 @@ export default (type, params) => {
     if (status === 401 || status === 403) {
       localStorage.removeItem('jwt');
       localStorage.removeItem('role');
+      localStorage.removeItem('subdomain');
       return Promise.reject();
     }
     return Promise.resolve();
