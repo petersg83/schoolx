@@ -5,6 +5,7 @@
   "dependencies": {
     "import": "^0.0.6",
     "jsonwebtoken": "^8.3.0",
+    "moment": "^2.22.2",
     "ra-data-json-server": "^2.2.0",
     "ra-language-english": "^2.2.0",
     "ra-language-french": "^2.2.0",
