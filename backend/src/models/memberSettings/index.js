@@ -1,5 +1,7 @@
 import { sequelize, Sequelize } from '../../database';
 
+const days =  ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
 const MemberSettings = sequelize.define('memberSettings', {
   id: {
     type: Sequelize.STRING,
@@ -10,8 +12,9 @@ const MemberSettings = sequelize.define('memberSettings', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  dayOff: {
-    type: Sequelize.ENUM('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'),
+  daysOff: {
+    type: Sequelize.JSONB,
+    defaultValue: [],
   },
   startAt: {
     type: Sequelize.DATE,
@@ -24,6 +27,13 @@ const MemberSettings = sequelize.define('memberSettings', {
   indexes: [{
     fields: ['memberId'],
   }],
+  validate: {
+    correctDaysOff: function() {
+      if (!this.daysOff || this.daysOff.some(day => !days.includes(day))) {
+        throw new Error("daysOff should be empty or an array of days. ex: ['monday', 'friday']");
+      }
+    },
+  },
 });
 
 export default MemberSettings;

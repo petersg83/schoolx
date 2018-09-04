@@ -7,6 +7,6 @@ Member.hasMany(MemberSettings, {
 });
 
 MemberSettings.belongsTo(Member, {
-  foreignKey: 'memberID',
+  foreignKey: 'memberId',
   as: 'member',
 });
