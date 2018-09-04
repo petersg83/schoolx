@@ -1,51 +1,105 @@
 import React from 'react';
-import { Create, Datagrid, DateInput, DateField, DisabledInput, Edit, EditButton, List, ReferenceField, TextField, TextInput, SimpleForm, } from 'react-admin';
+import moment from 'moment';
+import { ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, FormTab, List, required, ReferenceField, ReferenceManyField, TextField, TextInput, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout } from 'react-admin';
+import { periodsOverlap } from '../../../utils/dates';
 
-export const MemberList = (props) => {
-
-  return (
-    <List
-    title="Membres"
-    {...props}
-    >
-      <Datagrid>
-        <TextField source="id" />
-        <TextField source="firstName" label="Prénom" />
-        <TextField source="lastName" label="Nom" />
-        <DateField source="birthday" label="Date de naissance" />
-        {props.permissions === 'superAdmin' &&  <ReferenceField label="Ecole" source="schoolId" reference="schools">
-          <TextField source="urlName" />
-        </ReferenceField>}
-        <EditButton />
-      </Datagrid>
-    </List>
-  );
+const validateDates = (value) => {
+  if (periodsOverlap(value)) {
+    return 'Les périodes ne doivent pas se superposer';
+  }
 }
-
 
 const MemberTitle = ({ record }) => (<span>Membre {record ? `"${record.firstName} ${record.lastName}"` : ''}</span>);
 
+const dayOffChoices = [
+  { id: 'monday', name: 'Lundi' },
+  { id: 'tuesday', name: 'Mardi' },
+  { id: 'wednesday', name: 'Mercredi' },
+  { id: 'thursday', name: 'Jeudi' },
+  { id: 'friday', name: 'Vendredi' },
+  { id: 'saturday', name: 'Samedi' },
+  { id: 'sunday', name: 'Dimanche' },
+];
+
+const daysOffMap = {
+  monday: 'Lundi',
+  tuesday: 'Mardi',
+  wednesday: 'Mercredi',
+  thursday: 'Jeudi',
+  friday: 'Vendredi',
+  saturday: 'Samedi',
+  sunday: 'Dimanche',
+};
+
+export const MemberList = (props) => (
+  <List
+  title="Membres"
+  {...props}
+  >
+    <Datagrid>
+      <TextField source="firstName" label="Prénom"/>
+      <TextField source="lastName" label="Nom" />
+      <DateField source="birthday" label="Date de naissance" />
+      {props.permissions === 'superAdmin' &&  <ReferenceField label="Ecole" source="schoolId" reference="schools">
+        <TextField source="urlName" />
+      </ReferenceField>}
+      <EditButton />
+      <ShowButton />
+    </Datagrid>
+  </List>
+);
+
+const DaysOffField = ({ record }) => (<span>{record.daysOff.map(day => daysOffMap[day]).join(', ')}</span>);
+
+export const MemberShow = (props) => (
+  <Show title={<MemberTitle />} {...props}>
+    <TabbedShowLayout>
+      <Tab label="Résumé">
+        <TextField source="firstName" label="Prénom" />
+        <TextField source="lastName" label="Nom" type="url" />
+        <DateField source="birthday" label="Date de naissance" />
+      </Tab>
+      <Tab label="Jour off">
+        <ReferenceManyField reference="memberSettings" target="memberId" addLabel={false}>
+          <Datagrid>
+            <DaysOffField source="daysOff" label="Jours off" />
+            <DateField source="startAt" label="Du" />
+            <DateField source="endAt" label="Jusqu'au" />
+          </Datagrid>
+        </ReferenceManyField>
+      </Tab>
+    </TabbedShowLayout>
+  </Show>
+);
+
 export const MemberEdit = (props) => (
   <Edit title={<MemberTitle />} {...props}>
-    <SimpleForm>
-      <DisabledInput source="id" />
-      <TextInput source="firstName" label="Prénom" />
-      <TextInput source="lastName" label="Nom" type="url" />
-      <DateInput source="birthday" label="Date de naissance" />
-    </SimpleForm>
+    <TabbedForm redirect="show">
+      <FormTab label="Résumé">
+        <TextInput source="firstName" label="Prénom" validate={required()} />
+        <TextInput source="lastName" label="Nom" type="url" validate={required()} />
+        <DateInput source="birthday" label="Date de naissance" validate={required()} />
+      </FormTab>
+      <FormTab label="Jours off">
+        <ArrayInput source="memberSettings" label="Périodes de jours off" style={{ width: '100%' }} validate={validateDates}>
+          <SimpleFormIterator>
+            <SelectArrayInput label="Jours off" source="daysOff" choices={dayOffChoices} validate={required()} />
+            <DateInput source="startAt" label="Du" value={moment().format('YYYY-MM-DD')} validate={required()} />
+            <DateInput source="endAt" label="Jusqu'au" />
+          </SimpleFormIterator>
+        </ArrayInput>
+      </FormTab>
+    </TabbedForm>
   </Edit>
 );
 
-// <ReferenceInput label="User" source="userId" reference="users">
-//     <SelectInput optionText="name" />
-// </ReferenceInput>
-
 export const MemberCreate = (props) => (
   <Create {...props}>
-    <SimpleForm>
-      <TextInput source="firstName" label="Prénom" />
-      <TextInput source="lastName" label="Nom" type="url" />
-      <DateInput source="birthday" label="Date de naissance" />
+    <SimpleForm redirect="show">
+      <TextInput source="firstName" label="Prénom" validate={required()} />
+      <TextInput source="lastName" label="Nom" type="url" validate={required()} />
+      <DateInput source="birthday" label="Date de naissance" validate={required()} />
+      <SelectArrayInput label="Jours off" source="daysOff" choices={dayOffChoices} />
     </SimpleForm>
   </Create>
 );
