@@ -62,6 +62,7 @@ class LoginPage extends Component {
       password: '',
       showLoading: false
     };
+    this.timeouts = [];
   }
   onEmailChange = (e) => {
     this.setState({ login: e.target.value })
@@ -75,7 +76,7 @@ class LoginPage extends Component {
     e.preventDefault();
     // gather your data/credentials here
     const credentials = {
-      login: this.state.login,
+      username: this.state.login,
       password: this.state.password
     };
 
@@ -91,17 +92,19 @@ class LoginPage extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.timeouts.forEach((to) => clearTimeout(to));
+  }
+
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
     const { admin: { loading: prevLoading } } = prevProps;
     const { admin: { loading } } = this.props;
     // Loadng has stopped
-    if (prevLoading && !loading ) {
+    if (prevLoading && !loading) {
       const loadingTime = moment.duration(this.state.loadingStart - new Date());
       const remainingTime = loadingTime.asMilliseconds() > 500 ? 0 : 500 - loadingTime.asMilliseconds();
-      setTimeout(() => {
-        this.setState({ showLoading: false });
-      }, remainingTime)
+      this.timeouts.push(setTimeout(() => { this.setState({ showLoading: false }) }, remainingTime));
     }
   }
 
