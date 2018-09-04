@@ -3,6 +3,7 @@ import jsonServerProvider from 'ra-data-json-server';
 import { Admin, Resource, fetchUtils, resolveBrowserLocale } from 'react-admin';
 import { SchoolList, SchoolEdit, SchoolCreate } from './reactAdminComponents/schools';
 import { MemberList, MemberEdit, MemberCreate, MemberShow } from './reactAdminComponents/members';
+import LoginPage from './reactAdminComponents/LoginPage';
 import Dashboard from './reactAdminComponents/dashboard';
 import authProvider from './reactAdminComponents/authProvider';
 import frenchMessages from 'ra-language-french';
@@ -48,6 +49,7 @@ const AdminPanel = props => (<Admin
   dataProvider={dataProvider}
   dashboard={Dashboard}
   authProvider={authProvider}
+  loginPage={LoginPage}
 >
   {getRessources}
 </Admin>);
