@@ -3,6 +3,7 @@ import jsonServerProvider from 'ra-data-json-server';
 import { Admin, Resource, fetchUtils, resolveBrowserLocale } from 'react-admin';
 import { SchoolList, SchoolEdit, SchoolCreate } from './reactAdminComponents/schools';
 import { MemberList, MemberEdit, MemberCreate, MemberShow } from './reactAdminComponents/members';
+import { SchoolYearList, SchoolYearEdit, SchoolYearCreate } from './reactAdminComponents/schoolYears';
 import LoginPage from './reactAdminComponents/LoginPage';
 import Dashboard from './reactAdminComponents/dashboard';
 import authProvider from './reactAdminComponents/authProvider';
@@ -32,13 +33,13 @@ const getRessources = (role) => {
   if (role === 'admin') {
     return [
       <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
-      <Resource options={{ label: 'Paramètres Membre' }} name="memberSettings" />,
+      <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate}/>,
     ];
   } else if (role === 'superAdmin') {
     return [
       <Resource options={{ label: 'Ecoles' }} name="schools" list={SchoolList} edit={SchoolEdit} create={SchoolCreate} />,
       <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
-      <Resource options={{ label: 'Paramètres Membre' }} name="memberSettings" />,
+      <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate}/>,
     ];
   }
 }

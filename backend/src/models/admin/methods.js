@@ -3,6 +3,7 @@ import jwtFactory from 'jsonwebtoken';
 import _ from 'lodash';
 import Admin from './index';
 import School from '../school';
+import SchoolYear from '../schoolYear';
 import Member from '../member';
 import config from '../../config';
 
@@ -33,12 +34,22 @@ Admin.setAndgetNewJWT = async ({ adminId, email, schoolUrl }) => {
 
 Admin.prototype.canEditMembers = async function (memberIds = []) {
   const membersCount = await Member.count({
-    logging: console.log,
     where: {
       id: { $in: memberIds },
       schoolId: this.schoolId },
   });
   if (membersCount !== _.uniq(memberIds).length) {
     throw new Error("You don't have the authorization to edit those members");
+  }
+};
+
+Admin.prototype.canEditSchoolYears = async function (schoolYearsIds = []) {
+  const schoolYearsCount = await SchoolYear.count({
+    where: {
+      id: { $in: schoolYearsIds },
+      schoolId: this.schoolId },
+  });
+  if (schoolYearsCount !== _.uniq(schoolYearsIds).length) {
+    throw new Error("You don't have the authorization to edit those years");
   }
 };
