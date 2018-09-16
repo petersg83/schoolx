@@ -73,7 +73,7 @@ export const MemberShow = (props) => (
 );
 
 export const MemberEdit = (props) => (
-  <Edit title={<MemberTitle />} {...props}>
+  <Edit title={<MemberTitle />} undoable={false} {...props}>
     <TabbedForm redirect="show">
       <FormTab label="Résumé">
         <TextInput source="firstName" label="Prénom" validate={required()} />
@@ -94,7 +94,7 @@ export const MemberEdit = (props) => (
 );
 
 export const MemberCreate = (props) => (
-  <Create {...props}>
+  <Create {...props} undoable="false">
     <SimpleForm redirect="show">
       <TextInput source="firstName" label="Prénom" validate={required()} />
       <TextInput source="lastName" label="Nom" type="url" validate={required()} />
