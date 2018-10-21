@@ -49,7 +49,7 @@ export const MemberList = (props) => (
   </List>
 );
 
-const DaysOffField = ({ record }) => (<span>{record.daysOff.map(day => daysOffMap[day]).join(', ')}</span>);
+const DaysOffField = ({ record }) => <span>{record.daysOff.map(day => daysOffMap[day]).join(', ')}</span>;
 
 export const MemberShow = (props) => (
   <Show title={<MemberTitle />} {...props}>
