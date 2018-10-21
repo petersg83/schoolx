@@ -5,5 +5,6 @@ require('./routes/member');
 require('./routes/memberSettings');
 require('./routes/auth');
 require('./routes/schoolYear');
+require('./routes/admin');
 
 export default router;

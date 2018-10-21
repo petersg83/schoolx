@@ -27,7 +27,6 @@ const Admin = sequelize.define('admin', {
     type: Sequelize.STRING,
   }
 }, {
-  paranoid: true,
   indexes: [{
     fields: ['schoolId', 'email'],
     unique: true,

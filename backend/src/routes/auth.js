@@ -25,6 +25,7 @@ router.post('/login', async (ctx, next) => {
       password: params.password,
       schoolUrl: params.subdomain,
     });
+
     if (admin && !admin.jwt) {
       const jwt = await db.Admin.setAndgetNewJWT({ adminId: admin.id, email: params.email, schoolUrl: params.subdomain });
       ctx.body = { jwt };

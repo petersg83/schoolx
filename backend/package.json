@@ -23,6 +23,7 @@
     "koa-helmet": "^4.0.0",
     "koa-router": "^7.4.0",
     "lodash": "^4.17.10",
+    "nodemailer": "^4.6.8",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
     "rimraf": "^2.6.2",

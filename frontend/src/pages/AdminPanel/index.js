@@ -4,6 +4,7 @@ import { Admin, Resource, fetchUtils, resolveBrowserLocale } from 'react-admin';
 import { SchoolList, SchoolEdit, SchoolCreate } from './reactAdminComponents/schools';
 import { MemberList, MemberEdit, MemberCreate, MemberShow } from './reactAdminComponents/members';
 import { SchoolYearList, SchoolYearEdit, SchoolYearCreate } from './reactAdminComponents/schoolYears';
+import { AdminList, AdminEdit, AdminCreate } from './reactAdminComponents/admins';
 import LoginPage from './reactAdminComponents/LoginPage';
 import Dashboard from './reactAdminComponents/dashboard';
 import authProvider from './reactAdminComponents/authProvider';
@@ -32,12 +33,14 @@ const dataProvider = jsonServerProvider('http://localhost:3000', httpClient);
 const getRessources = (role) => {
   if (role === 'admin') {
     return [
-      <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
       <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate}/>,
+      <Resource options={{ label: 'Admins' }} name="admins" list={AdminList} edit={AdminEdit} create={AdminCreate}/>,
+      <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
     ];
   } else if (role === 'superAdmin') {
     return [
       <Resource options={{ label: 'Ecoles' }} name="schools" list={SchoolList} edit={SchoolEdit} create={SchoolCreate} />,
+      <Resource options={{ label: 'Admins' }} name="admins" list={AdminList} edit={AdminEdit} create={AdminCreate}/>,
       <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
       <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate}/>,
     ];

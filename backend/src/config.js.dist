@@ -6,4 +6,9 @@ export default {
     host: 'POSTGRES_HOST',
   },
   jwtSecret: 'JWT_SECRET',
+  mailAccount: {
+    service: 'gmail',
+    user: 'GMAIL_ADDRESS',
+    pass: 'GMAIL_PASSWORD',
+  },
 };

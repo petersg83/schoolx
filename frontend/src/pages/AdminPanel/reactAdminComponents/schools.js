@@ -28,10 +28,6 @@ export const SchoolEdit = (props) => (
   </Edit>
 );
 
-// <ReferenceInput label="User" source="userId" reference="users">
-//     <SelectInput optionText="name" />
-// </ReferenceInput>
-
 export const SchoolCreate = (props) => (
   <Create {...props}>
     <SimpleForm>

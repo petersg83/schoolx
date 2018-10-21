@@ -7,6 +7,9 @@ import SchoolYear from '../schoolYear';
 import Member from '../member';
 import config from '../../config';
 
+Admin.findById = (id) => Admin.findOne({ where: { id } });
+Admin.findByIdAndSchoolId = (id, schoolId) => Admin.findOne({ where: { id, schoolId } });
+
 Admin.authenticate = async ({ email, password, schoolUrl }) => {
   let isSuccess = false;
   const admin = await Admin.findOne({
@@ -20,7 +23,7 @@ Admin.authenticate = async ({ email, password, schoolUrl }) => {
     }],
   });
 
-  if (admin && admin.passwordHash && bcrypt.compare(password, admin.passwordHash)) {
+  if (admin && admin.passwordHash && bcrypt.compareSync(password, admin.passwordHash)) {
     isSuccess = true;
   }
   return isSuccess ? admin : null;

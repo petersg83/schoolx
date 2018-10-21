@@ -105,7 +105,6 @@ router.post('/schoolYears', authRequired(['superAdmin', 'admin'], async (ctx, ne
       ctx.status = 500;
     }
   }
-
 }));
 
 // DELETE
