@@ -37,6 +37,7 @@ const getRessources = (role) => {
       <Resource options={{ label: 'Admins' }} name="admins" list={AdminList} edit={AdminEdit} create={AdminCreate}/>,
       <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
       <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
+      <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
     ];
   } else if (role === 'superAdmin') {
     return [
@@ -45,6 +46,7 @@ const getRessources = (role) => {
       <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
       <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate}/>,
       <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
+      <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
     ];
   }
 }

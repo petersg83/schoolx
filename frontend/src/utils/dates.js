@@ -7,7 +7,7 @@ export const isValidPeriod = (period) => moment(period.startAt).isValid() &&
 
 export const periodsOverlap = (periods) => {
   if (!Array.isArray(periods) || !periods.every(isValidPeriod)) {
-    return;
+    return true;
   }
   let overlap = false;
 

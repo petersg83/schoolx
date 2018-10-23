@@ -4,6 +4,7 @@ import { ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, F
 import { periodsOverlap } from '../../../utils/dates';
 
 const validateDates = (value) => {
+  console.log('value', value);
   if (periodsOverlap(value)) {
     return 'Les périodes ne doivent pas se superposer';
   }
@@ -33,8 +34,8 @@ const daysOffMap = {
 
 export const MemberList = (props) => (
   <List
-  title="Membres"
-  {...props}
+    title="Membres"
+    {...props}
   >
     <Datagrid>
       <TextField source="firstName" label="Prénom"/>
@@ -50,6 +51,7 @@ export const MemberList = (props) => (
 );
 
 const DaysOffField = ({ record }) => <span>{record.daysOff.map(day => daysOffMap[day]).join(', ')}</span>;
+const EndAtField = ({ record }) => <span>{record.endAt ? moment(record.endAt).format('DD/MM/YYYY') : 'à définir'}</span>;
 
 export const MemberShow = (props) => (
   <Show title={<MemberTitle />} {...props}>
@@ -64,7 +66,15 @@ export const MemberShow = (props) => (
           <Datagrid>
             <DaysOffField source="daysOff" label="Jours off" />
             <DateField source="startAt" label="Du" />
-            <DateField source="endAt" label="Jusqu'au" />
+            <EndAtField source="endAt" label="Jusqu'au" />
+          </Datagrid>
+        </ReferenceManyField>
+      </Tab>
+      <Tab label="Périodes d'inscription">
+        <ReferenceManyField reference="memberPeriodsAtSchool" target="memberId" addLabel={false}>
+          <Datagrid>
+            <DateField source="startAt" label="Du" />
+            <EndAtField source="endAt" label="Jusqu'au" />
           </Datagrid>
         </ReferenceManyField>
       </Tab>
@@ -89,16 +99,25 @@ export const MemberEdit = (props) => (
           </SimpleFormIterator>
         </ArrayInput>
       </FormTab>
+      <FormTab label="Périodes d'inscription">
+        <ArrayInput source="memberPeriodsAtSchool" label="Périodes où le membre est inscrit à l'école" style={{ width: '100%' }} validate={validateDates}>
+          <SimpleFormIterator>
+            <DateInput source="startAt" label="Du" value={moment().format('YYYY-MM-DD')} validate={required()} />
+            <DateInput source="endAt" label="Jusqu'au" />
+          </SimpleFormIterator>
+        </ArrayInput>
+      </FormTab>
     </TabbedForm>
   </Edit>
 );
 
 export const MemberCreate = (props) => (
-  <Create {...props} undoable="false">
+  <Create {...props} title="Ajouter un membre à l'école" undoable="false">
     <SimpleForm redirect="show">
       <TextInput source="firstName" label="Prénom" validate={required()} />
       <TextInput source="lastName" label="Nom" type="url" validate={required()} />
       <DateInput source="birthday" label="Date de naissance" validate={required()} />
+      <DateInput source="arrivalDate" label="Date d'arrivée" />
       <SelectArrayInput label="Jours off" source="daysOff" choices={dayOffChoices} />
     </SimpleForm>
   </Create>

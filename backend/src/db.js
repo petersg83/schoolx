@@ -34,9 +34,9 @@ db.MemberSettings = require('./models/memberSettings').default;
 require('./models/memberSettings/methods');
 require('./models/memberSettings/relations');
 
-db.MemberYear = require('./models/memberYear').default;
-require('./models/memberYear/methods');
-require('./models/memberYear/relations');
+db.MemberPeriodsAtSchool = require('./models/memberPeriodsAtSchool').default;
+require('./models/memberPeriodsAtSchool/methods');
+require('./models/memberPeriodsAtSchool/relations');
 
 db.SpecialMemberDay = require('./models/specialMemberDay').default;
 require('./models/specialMemberDay/methods');

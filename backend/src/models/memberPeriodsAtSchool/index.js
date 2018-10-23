@@ -1,6 +1,6 @@
 import { sequelize, Sequelize } from '../../database';
 
-const MemberYear = sequelize.define('memberYear', {
+const MemberPeriodsAtSchool = sequelize.define('memberPeriodsAtSchool', {
   id: {
     type: Sequelize.STRING,
     primaryKey: true,
@@ -18,10 +18,9 @@ const MemberYear = sequelize.define('memberYear', {
     type: Sequelize.DATE,
   },
 }, {
-  paranoid: true,
   indexes: [{
     fields: ['memberId'],
   }],
 });
 
-export default MemberYear;
+export default MemberPeriodsAtSchool;

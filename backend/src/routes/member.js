@@ -45,7 +45,7 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
   const t = await db.sequelize.transaction();
 
   try {
-    if (periodsOverlap(ctx.request.body.memberSettings)) {
+    if (periodsOverlap(ctx.request.body.memberSettings) || periodsOverlap(ctx.request.body.memberPeriodsAtSchool)) {
       throw new Error('Overlap');
     }
     if (admin) {
@@ -54,6 +54,7 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
       throw new Error('Auth error');
     }
 
+    // member
     await db.Member.update({
       firstName: ctx.request.body.firstName,
       lastName: ctx.request.body.lastName,
@@ -62,6 +63,8 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
       where: { id: ctx.params.id },
       transaction: t,
     });
+
+    // memberSettings
     const existingMemberSettings = await db.MemberSettings.findMemberSettingsForMember(ctx.params.id);
     const memberSettingsToAdd = ctx.request.body.memberSettings.filter(ms => !ms.id);
     memberSettingsToAdd.forEach((ms) => { ms.memberId = ctx.params.id; });
@@ -79,6 +82,16 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
       });
     }
     await db.MemberSettings.bulkCreate(memberSettingsToAdd, { transaction: t });
+
+    // memberPeriodsAtSchool
+    await db.MemberPeriodsAtSchool.destroy({
+      where: { memberId: ctx.params.id },
+      transaction: t,
+    });
+    const memberPeriodsAtSchoolToAdd = ctx.request.body.memberPeriodsAtSchool.map(mp => ({ ...mp, memberId: ctx.params.id }));
+
+    await db.MemberPeriodsAtSchool.bulkCreate(memberPeriodsAtSchoolToAdd, { transaction: t });
+
     await t.commit();
     ctx.body = await db.Member.findById(ctx.params.id);
   } catch (e) {
@@ -86,7 +99,7 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
     await t.rollback();
     if (e.message === 'Overlap') {
       ctx.status = 409;
-      ctx.body = { status: 409, message: 'Les périodes entrées ne doivent pas se superposer' };
+      ctx.body = { status: 409, message: 'Les périodes entrées (jours off ou périodes d\'inscription) ne doivent pas se superposer' };
     } else if (e.message === 'Auth error') {
       ctx.status = 403;
       ctx.body = { status: 403, message: 'You are neither an admin or a superAdmin. You can\'t perform this action' };
@@ -99,13 +112,14 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
 // CREATE
 router.post('/members/', authRequired(['superAdmin', 'admin'], async (ctx, next, { admin, superAdmin }) => {
   if (admin) {
-      ctx.body = await db.Member.createWithSettings({
-        firstName: ctx.request.body.firstName,
-        lastName: ctx.request.body.lastName,
-        birthday: ctx.request.body.birthday,
-        schoolId: admin.schoolId,
-        daysOff: ctx.request.body.daysOff,
-      });
+    ctx.body = await db.Member.createWithSettingsAndPeriods({
+      firstName: ctx.request.body.firstName,
+      lastName: ctx.request.body.lastName,
+      birthday: ctx.request.body.birthday,
+      schoolId: admin.schoolId,
+      daysOff: ctx.request.body.daysOff,
+      arrivalDate: ctx.request.body.arrivalDate,
+    });
   } else if (superAdmin) {
     console.log('Feature not available yet'); // TODO
   }
