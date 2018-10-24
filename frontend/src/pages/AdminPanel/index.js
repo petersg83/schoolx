@@ -1,15 +1,18 @@
 import React from 'react';
 import jsonServerProvider from 'ra-data-json-server';
-import { Admin, Resource, fetchUtils, resolveBrowserLocale } from 'react-admin';
+import { Layout, Admin, Resource, fetchUtils, resolveBrowserLocale } from 'react-admin';
+import { Route } from 'react-router-dom';
 import { SchoolList, SchoolEdit, SchoolCreate } from './reactAdminComponents/schools';
 import { MemberList, MemberEdit, MemberCreate, MemberShow } from './reactAdminComponents/members';
 import { SchoolYearList, SchoolYearEdit, SchoolYearCreate } from './reactAdminComponents/schoolYears';
 import { AdminList, AdminEdit, AdminCreate } from './reactAdminComponents/admins';
 import LoginPage from './reactAdminComponents/LoginPage';
+import CalendarPage from './reactAdminComponents/CalendarPage';
 import Dashboard from './reactAdminComponents/dashboard';
 import authProvider from './reactAdminComponents/authProvider';
 import frenchMessages from 'ra-language-french';
 import englishMessages from 'ra-language-english';
+import Menu from './menu'
 
 frenchMessages.ra.auth.username = 'email';
 
@@ -29,6 +32,10 @@ const httpClient = (url, options = {}) => {
 }
 
 const dataProvider = jsonServerProvider('http://localhost:3000', httpClient);
+
+const CustomRoutes = [
+  <Route exact path="/calendar" options={{ label: 'Calendrier' }} component={CalendarPage} />,
+];
 
 const getRessources = (role) => {
   if (role === 'admin') {
@@ -51,6 +58,8 @@ const getRessources = (role) => {
   }
 }
 
+const MyLayout = props => <Layout {...props} menu={Menu} />;
+
 const AdminPanel = props => (<Admin
   locale={resolveBrowserLocale()}
   i18nProvider={i18nProvider}
@@ -58,6 +67,8 @@ const AdminPanel = props => (<Admin
   dashboard={Dashboard}
   authProvider={authProvider}
   loginPage={LoginPage}
+  customRoutes={CustomRoutes}
+  appLayout={MyLayout}
 >
   {getRessources}
 </Admin>);
