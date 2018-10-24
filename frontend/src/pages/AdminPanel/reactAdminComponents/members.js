@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, FormTab, List, required, ReferenceField, ReferenceManyField, TextField, TextInput, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout } from 'react-admin';
+import { ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, Filter, FormTab, List, required, ReferenceField, ReferenceManyField, TextField, TextInput, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout } from 'react-admin';
 import { periodsOverlap } from '../../../utils/dates';
 
 const validateDates = (value) => {
@@ -32,9 +32,16 @@ const daysOffMap = {
   sunday: 'Dimanche',
 };
 
+const MemberFilter = (props) => (
+    <Filter {...props}>
+        <TextInput label="Search" source="q" alwaysOn />
+    </Filter>
+);
+
 export const MemberList = (props) => (
   <List
     title="Membres"
+    filters={<MemberFilter />}
     {...props}
   >
     <Datagrid>

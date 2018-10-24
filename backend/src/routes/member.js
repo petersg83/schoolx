@@ -3,12 +3,28 @@ import db from '../db';
 import { authRequired } from '../utils/auth';
 import { periodsOverlap } from '../utils/dates';
 
-// READ MANY
+// READ MANY & search
 router.get('/members', authRequired(['superAdmin', 'admin'], async (ctx, next, { admin, superAdmin }) => {
+  const searchWhereQuery = {};
+
+  if (ctx.query.q) {
+    const queryWords = ctx.query.q.split(' ');
+    searchWhereQuery.$and = [];
+    queryWords.forEach((qw) => {
+      searchWhereQuery.$and.push({ $or: [
+        { firstName: { $iLike: `%${qw}%` } },
+        { lastName: { $iLike: `%${qw}%` } },
+      ]});
+    });
+  }
+
   if (admin) {
     const count = await db.Member.count({ where: { schoolId: admin.schoolId } });
     const members = await db.Member.findAll({
-      where: { schoolId: admin.schoolId },
+      where: {
+        schoolId: admin.schoolId,
+        ...searchWhereQuery,
+      },
       offset: +ctx.query._start,
       limit: +ctx.query._end - ctx.query._start,
       order: [[ctx.query._sort, ctx.query._order]],
@@ -20,6 +36,9 @@ router.get('/members', authRequired(['superAdmin', 'admin'], async (ctx, next, {
   } else if (superAdmin) {
     const count = await db.Member.count();
     const members = await db.Member.findAll({
+      where: {
+        ...searchWhereQuery,
+      },
       offset: +ctx.query._start,
       limit: +ctx.query._end - ctx.query._start,
       order: [[ctx.query._sort, ctx.query._order]],
