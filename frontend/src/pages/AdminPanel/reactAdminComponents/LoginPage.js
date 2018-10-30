@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
+import config from '../../../config';
 
 document.body.style.margin = "0px";
 
@@ -60,7 +61,8 @@ class LoginPage extends Component {
     this.state = {
       login: '',
       password: '',
-      showLoading: false
+      showLoading: false,
+      schoolName: '',
     };
     this.timeouts = [];
   }
@@ -92,6 +94,23 @@ class LoginPage extends Component {
     }
   }
 
+  componentDidMount() {
+    fetch(`${config.apiEndpoint}/getSchoolName`, { method: 'GET' })
+    .then((res) => {
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        throw new Error('Aucune école trouvée pour cette url');
+      }
+    })
+    .then((res) => {
+      this.setState({ schoolName: res.schoolName });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  }
+
   componentWillUnmount() {
     this.timeouts.forEach((to) => clearTimeout(to));
   }
@@ -116,19 +135,24 @@ class LoginPage extends Component {
           <Card className={classes.card}>
             <CardContent className={classes.cardContent}>
               <Typography gutterBottom variant="headline" component="h2">
-                Login
+                Connexion
               </Typography>
-              <TextField onChange={this.onEmailChange} name="login" className={classes.textField} type="email" placeholder="Email" required />
-              <br />
-              <TextField onChange={this.onPasswordChange} name="password" className={classes.textField} type="password" placeholder="Password" required />
-              <br />
-              <br />
-              {this.state.showLoading
-                ? <CircularProgress className={classes.progress} />
-                : <Button variant="contained" color="primary" className={classes.button} type="submit">
+              <Typography variant="subheading" gutterBottom>
+                {this.state.schoolName || "Aucune école ne correspond à cette url"}
+              </Typography>
+              {this.state.schoolName && <div>
+                <TextField onChange={this.onEmailChange} name="login" className={classes.textField} type="email" placeholder="Email" required />
+                <br />
+                <TextField onChange={this.onPasswordChange} name="password" className={classes.textField} type="password" placeholder="Password" required />
+                <br />
+                <br />
+                {this.state.showLoading
+                  ? <CircularProgress className={classes.progress} />
+                  : <Button variant="contained" color="primary" className={classes.button} type="submit">
                   Login
                   </Button>
-              }
+                }
+              </div>}
             </CardContent>
           </Card>
         </form>

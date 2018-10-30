@@ -36,3 +36,17 @@ router.post('/login', async (ctx, next) => {
     }
   }
 });
+
+router.get('/getSchoolName', async (ctx, next) => {
+  const subdomain = ctx.request.header.origin.split('//')[1].split('.')[0];
+  try {
+    if (subdomain === 'superadmin') {
+      ctx.body = { schoolName: 'Interface Administrateur' };
+    } else {
+      const schoolName = await db.School.getSchoolNameBySubdomain(subdomain);
+      ctx.body = { schoolName };
+    }
+  } catch (e) {
+    ctx.status = 404;
+  }
+});
