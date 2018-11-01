@@ -22,7 +22,6 @@ const SchoolYear = sequelize.define('schoolYear', {
     defaultValue: 0,
   }
 }, {
-  paranoid: true,
   indexes: [{
     fields: ['schoolId'],
   }],

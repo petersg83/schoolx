@@ -101,7 +101,7 @@ export const MemberEdit = (props) => (
         <ArrayInput source="memberSettings" label="Périodes de jours off" style={{ width: '100%' }} validate={validateDates}>
           <SimpleFormIterator>
             <SelectArrayInput label="Jours off" source="daysOff" choices={dayOffChoices} validate={required()} />
-            <DateInput source="startAt" label="Du" value={moment().format('YYYY-MM-DD')} validate={required()} />
+            <DateInput source="startAt" label="Du" value={moment().format('YYYY-MM-DD')} options={{ format: 'DD/MM/YYYY' }} validate={required()} />
             <DateInput source="endAt" label="Jusqu'au" />
           </SimpleFormIterator>
         </ArrayInput>
@@ -109,7 +109,7 @@ export const MemberEdit = (props) => (
       <FormTab label="Périodes d'inscription">
         <ArrayInput source="memberPeriodsAtSchool" label="Périodes où le membre est inscrit à l'école" style={{ width: '100%' }} validate={validateDates}>
           <SimpleFormIterator>
-            <DateInput source="startAt" label="Du" value={moment().format('YYYY-MM-DD')} validate={required()} />
+            <DateInput source="startAt" label="Du" value={moment().format('YYYY-MM-DD')} options={{ format: 'DD/MM/YYYY' }} validate={required()} />
             <DateInput source="endAt" label="Jusqu'au" />
           </SimpleFormIterator>
         </ArrayInput>

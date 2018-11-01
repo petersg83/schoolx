@@ -40,3 +40,5 @@ export const periodsOverlap = (periods) => {
 
   return overlap;
 };
+
+export const parseTime = (stringTime) => moment(0).add(+stringTime.split(':')[0], 'h').add(+stringTime.split(':')[1], 'm');

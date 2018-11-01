@@ -14,13 +14,13 @@ db.SchoolYear = require('./models/schoolYear').default;
 require('./models/schoolYear/methods');
 require('./models/schoolYear/relations');
 
-db.SchoolSettings = require('./models/schoolSettings').default;
-require('./models/schoolSettings/methods');
-require('./models/schoolSettings/relations');
+db.SchoolYearSettings = require('./models/schoolYearSettings').default;
+require('./models/schoolYearSettings/methods');
+require('./models/schoolYearSettings/relations');
 
-db.UsualOpenedDay = require('./models/usualOpenedDay').default;
-require('./models/usualOpenedDay/methods');
-require('./models/usualOpenedDay/relations');
+db.UsualOpenedDays = require('./models/usualOpenedDays').default;
+require('./models/usualOpenedDays/methods');
+require('./models/usualOpenedDays/relations');
 
 db.SpecialSchoolDay = require('./models/specialSchoolDay').default;
 require('./models/specialSchoolDay/methods');

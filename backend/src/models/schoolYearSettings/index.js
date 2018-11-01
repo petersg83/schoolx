@@ -1,12 +1,12 @@
 import { sequelize, Sequelize } from '../../database';
 
-const SchoolSettings = sequelize.define('schoolSettings', {
+const SchoolYearSettings = sequelize.define('schoolYearSettings', {
   id: {
     type: Sequelize.STRING,
     primaryKey: true,
     defaultValue: Sequelize.UUIDV4,
   },
-  schoolId: {
+  schoolYearId: {
     type: Sequelize.STRING,
     allowNull: false,
   },
@@ -23,10 +23,9 @@ const SchoolSettings = sequelize.define('schoolSettings', {
     type: Sequelize.DATE,
   },
 }, {
-  paranoid: true,
   indexes: [{
-    fields: ['schoolId'],
+    fields: ['schoolYearId'],
   }],
 });
 
-export default SchoolSettings;
+export default SchoolYearSettings;

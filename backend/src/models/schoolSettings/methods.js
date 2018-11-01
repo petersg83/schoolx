@@ -1,1 +1,0 @@
-import SchoolSettings from './index';

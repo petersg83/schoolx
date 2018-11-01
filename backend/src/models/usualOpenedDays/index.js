@@ -1,18 +1,18 @@
 import { sequelize, Sequelize } from '../../database';
 
-const UsualOpenedDay = sequelize.define('usualOpenedDay', {
+const UsualOpenedDays = sequelize.define('usualOpenedDays', {
   id: {
     type: Sequelize.STRING,
     primaryKey: true,
     defaultValue: Sequelize.UUIDV4,
   },
-  schoolSettingsId: {
+  schoolYearSettingsId: {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  name: {
-    type: Sequelize.ENUM('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'),
-    allowNull: false,
+  days: {
+    type: Sequelize.JSONB,
+    defaultValue: [],
   },
   openAt: {
     type: Sequelize.DATE,
@@ -23,17 +23,16 @@ const UsualOpenedDay = sequelize.define('usualOpenedDay', {
   maxArrivalTime: {
     type: Sequelize.DATE,
   },
-  minPresenceTimeBeforePartialAbsence: {
+  minTimeBefPartialAbsence: {
     type: Sequelize.DATE,
   },
-  minPresenceTimeBeforeTotalAbsence: {
+  minTimeBefTotalAbsence: {
     type: Sequelize.DATE,
   },
 }, {
-  paranoid: true,
   indexes: [{
-    fields: ['schoolSettingsId'],
+    fields: ['schoolYearSettingsId'],
   }],
 });
 
-export default UsualOpenedDay;
+export default UsualOpenedDays;

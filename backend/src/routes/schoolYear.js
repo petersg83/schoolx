@@ -42,6 +42,8 @@ router.get('/schoolYears/:id', authRequired(['superAdmin', 'admin'], async (ctx,
 
 // EDIT
 router.put('/schoolYears/:id', authRequired(['superAdmin', 'admin'], async (ctx, next, { admin, superAdmin }) => {
+  const t = await db.sequelize.transaction();
+
   const yearsAlreadyExisting =  await db.SchoolYear.findAllBySchoolId(admin.schoolId);
   const newYear = {
     startAt: ctx.request.body.startAt,
@@ -60,11 +62,28 @@ router.put('/schoolYears/:id', authRequired(['superAdmin', 'admin'], async (ctx,
     } else if (!superAdmin) {
       throw new Error('Auth error');
     }
-    await db.SchoolYear.update(newYear, { where: { id: ctx.params.id } });
+    await db.SchoolYear.update(newYear, { where: { id: ctx.params.id }, transaction: t });
+    await db.SchoolYearSettings.destroy({ where: { schoolYearId: ctx.params.id }, transaction: t });
 
+    for (let nss of ctx.request.body.schoolYearSettings) {
+      if (nss.usualOpenedDays.length) {
+        const createdSchoolYearSettings = await db.SchoolYearSettings.create({
+          schoolYearId: ctx.params.id,
+          startAt: nss.startAt,
+          endAt: nss.endAt,
+        }, {
+          transaction: t,
+        });
+        const usualOpenedDaysForThisNss = nss.usualOpenedDays.map(uod => ({ ...uod, schoolYearSettingsId: createdSchoolYearSettings.id }));
+        await db.UsualOpenedDays.bulkCreate(usualOpenedDaysForThisNss, { transaction: t });
+      }
+    }
+
+    await t.commit();
     ctx.body = await db.SchoolYear.findById(ctx.params.id);
   } catch (e) {
     console.log(`Can't edit schoolYear ${ctx.params.id} :` , e);
+    await t.rollback();
     if (e.message === 'Overlap') {
       ctx.status = 409;
       ctx.body = { status: 409, message: 'Les années entrées ne doivent pas se superposer' };
@@ -79,6 +98,7 @@ router.put('/schoolYears/:id', authRequired(['superAdmin', 'admin'], async (ctx,
 
 // CREATE
 router.post('/schoolYears', authRequired(['superAdmin', 'admin'], async (ctx, next, { admin, superAdmin }) => {
+  const t = await db.sequelize.transaction();
   try {
     if (admin) {
       const yearsAlreadyExisting =  await db.SchoolYear.findAllBySchoolId(admin.schoolId);
@@ -92,11 +112,30 @@ router.post('/schoolYears', authRequired(['superAdmin', 'admin'], async (ctx, ne
       if (periodsOverlap([...yearsAlreadyExisting, newYear])) {
         throw new Error('Overlap');
       }
-      ctx.body = await db.SchoolYear.create(newYear);
+      const schoolYear = await db.SchoolYear.create(newYear, { transaction: t });
+
+      for (let nss of ctx.request.body.schoolYearSettings) {
+        if (nss.usualOpenedDays.length) {
+          const createdSchoolYearSettings = await db.SchoolYearSettings.create({
+            schoolYearId: schoolYear.id,
+            startAt: nss.startAt,
+            endAt: nss.endAt,
+          }, {
+            transaction: t,
+          });
+          const usualOpenedDaysForThisNss = nss.usualOpenedDays.map(uod => ({ ...uod, schoolYearSettingsId: createdSchoolYearSettings.id }));
+          await db.UsualOpenedDays.bulkCreate(usualOpenedDaysForThisNss, { transaction: t });
+        }
+      }
+
+      await t.commit();
+      ctx.body = await db.SchoolYear.findById(schoolYear.id);
     } else if (superAdmin) {
       console.log('Feature not available yet'); // TODO
     }
   } catch (e) {
+    await t.rollback();
+
     if (e.message === 'Overlap') {
       ctx.status = 409;
       ctx.body = { status: 409, message: 'Les années ne doivent pas se superposer' };

@@ -4,7 +4,7 @@ import { Layout, Admin, Resource, fetchUtils, resolveBrowserLocale } from 'react
 import { Route } from 'react-router-dom';
 import { SchoolList, SchoolEdit, SchoolCreate } from './reactAdminComponents/schools';
 import { MemberList, MemberEdit, MemberCreate, MemberShow } from './reactAdminComponents/members';
-import { SchoolYearList, SchoolYearEdit, SchoolYearCreate } from './reactAdminComponents/schoolYears';
+import { SchoolYearList, SchoolYearEdit, SchoolYearCreate, SchoolYearShow } from './reactAdminComponents/schoolYears';
 import { AdminList, AdminEdit, AdminCreate } from './reactAdminComponents/admins';
 import LoginPage from './reactAdminComponents/LoginPage';
 import CalendarPage from './reactAdminComponents/CalendarPage';
@@ -40,8 +40,8 @@ const CustomRoutes = [
 const getRessources = (role) => {
   if (role === 'admin') {
     return [
-      <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate}/>,
-      <Resource options={{ label: 'Admins' }} name="admins" list={AdminList} edit={AdminEdit} create={AdminCreate}/>,
+      <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
+      <Resource options={{ label: 'Admins' }} name="admins" list={AdminList} edit={AdminEdit} create={AdminCreate} />,
       <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
       <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
       <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
@@ -49,9 +49,9 @@ const getRessources = (role) => {
   } else if (role === 'superAdmin') {
     return [
       <Resource options={{ label: 'Ecoles' }} name="schools" list={SchoolList} edit={SchoolEdit} create={SchoolCreate} />,
-      <Resource options={{ label: 'Admins' }} name="admins" list={AdminList} edit={AdminEdit} create={AdminCreate}/>,
+      <Resource options={{ label: 'Admins' }} name="admins" list={AdminList} edit={AdminEdit} create={AdminCreate} />,
       <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
-      <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate}/>,
+      <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
       <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
       <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
     ];
