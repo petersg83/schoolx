@@ -43,10 +43,12 @@ const DumbCalendarPage = (props) => {
     >
       <BigCalendar
         localizer={localizer}
-        events={[]}
+        events={props.events}
         startAccessor="start"
         endAccessor="end"
         messages={messages}
+        eventPropGetter={props.eventPropGetter}
+        onNavigate={props.onNavigate}
       />
     </div>;
   }

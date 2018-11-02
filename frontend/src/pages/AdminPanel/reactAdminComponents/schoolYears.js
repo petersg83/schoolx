@@ -113,6 +113,8 @@ export const SchoolYearEdit = (props) => (
   </Edit>
 );
 
+
+// TODO: verifier que l'arrayusualOpenedDays n'est pas vide
 export const SchoolYearCreate = (props) => (
   <Create title="Ajouter une nouvelle année"  {...props} undoable="false">
     <SimpleForm validate={validateEdit} redirect="list">

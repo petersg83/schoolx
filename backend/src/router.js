@@ -7,5 +7,6 @@ require('./routes/memberPeriodsAtSchool');
 require('./routes/auth');
 require('./routes/schoolYear');
 require('./routes/admin');
+require('./routes/calendar');
 
 export default router;

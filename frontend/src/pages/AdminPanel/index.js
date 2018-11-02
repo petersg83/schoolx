@@ -22,7 +22,7 @@ const messages = {
 }
 const i18nProvider = locale => messages[locale];
 
-const httpClient = (url, options = {}) => {
+export const httpClient = (url, options = {}) => {
   if (!options.headers) {
     options.headers = new Headers({ Accept: 'application/json' });
   }
