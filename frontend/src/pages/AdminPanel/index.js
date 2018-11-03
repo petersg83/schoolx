@@ -13,6 +13,7 @@ import authProvider from './reactAdminComponents/authProvider';
 import frenchMessages from 'ra-language-french';
 import englishMessages from 'ra-language-english';
 import Menu from './menu'
+import IntAndOutPage from './reactAdminComponents/InAndOutPage';
 
 frenchMessages.ra.auth.username = 'email';
 
@@ -35,6 +36,7 @@ const dataProvider = jsonServerProvider('http://localhost:3000', httpClient);
 
 const CustomRoutes = [
   <Route exact path="/calendar" options={{ label: 'Calendrier' }} component={CalendarPage} />,
+  <Route exact path="/inandout" component={IntAndOutPage} noLayout />,
 ];
 
 const getRessources = (role) => {
