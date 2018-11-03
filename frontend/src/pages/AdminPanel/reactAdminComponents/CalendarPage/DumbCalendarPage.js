@@ -88,13 +88,14 @@ const DumbCalendarPage = (props) => {
         </Tabs>
         {content}
         <Modal
-          isOpen={props.modalIsOpen}
+          isOpen={props.isModalOpen}
           onRequestClose={props.closeModal}
           style={customStyles}
           contentLabel="Example Modal"
           overlayClassName="Overlay"
         >
-          <CreateSSDForm date={props.selectedDate} onCancel={props.closeModal} afterSubmit={props.afterSubmitSomething} />
+          {props.modalType === 'createSSD' && <CreateSSDForm date={props.selectedDate} onCancel={props.closeModal} afterSubmit={props.afterSubmitSomething} />}
+          {props.modalType === 'modifySSD' && <CreateSSDForm date={props.selectedDate} onCancel={props.closeModal} afterSubmit={props.afterSubmitSomething} ssd={props.currentSSD} canDelete />}
         </Modal>
       </CardContent>
     </Card>

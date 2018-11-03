@@ -113,6 +113,9 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         <Button size="small" className={props.classes.button} onClick={props.onCancel}>
           Annuler
         </Button>
+        {props.canDelete && <Button variant="contained" onClick={props.onDelete} size="small" className={props.classes.button}>
+          Supprimer
+        </Button>}
         <Button variant="contained" type="submit" size="small" color='secondary' className={props.classes.button}>
           Sauvegarder
         </Button>

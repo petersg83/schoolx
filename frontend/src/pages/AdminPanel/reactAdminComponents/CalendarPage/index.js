@@ -1,5 +1,5 @@
 import DumbCalendarPage from './DumbCalendarPage';
-import { compose,lifecycle, withHandlers, withState } from 'recompose';
+import { compose,lifecycle, withHandlers, withState, withProps } from 'recompose';
 import moment from 'moment';
 import config from '../../../../config';
 import { httpClient } from '../../index';
@@ -7,7 +7,7 @@ import { httpClient } from '../../index';
 export default compose(
   withState('tabNumber', 'setTabNumber', 0),
   withState('events', 'setEvents', []),
-  withState('modalIsOpen', 'setModalIsOpen', false),
+  withState('modalType', 'setModalType', ''),
   withState('selectedDate', 'setSelectedDate', null),
   withHandlers({
     getSchoolEventFor: props => (currentDay) => {
@@ -49,11 +49,12 @@ export default compose(
           const openAt = ssd.openAt;
           const closeAt = ssd.closeAt;
           events.push({
-            title: ssd.isClosed ? 'Fermée' : 'Ouverte',
+            title: ssd.isClosed ? 'Fermée' : `Ouverte ${openAt} → ${closeAt}`,
             allDay: ssd.isClosed,
+            ssd,
             specialDay: ssd.isClosed ? 'closed' : 'modified',
-            start: ssd.isClosed ? moment(ssd.day) : new Date(moment(ssd.day).add(+openAt.split(':')[0], 'h').add(+openAt.split(':')[1], 'm')),
-            end: ssd.isClosed ? moment(ssd.day) : new Date(moment(ssd.day).add(+closeAt.split(':')[0], 'h').add(+closeAt.split(':')[1], 'm')),
+            start: ssd.isClosed ? new Date(moment(ssd.day)) : new Date(moment(ssd.day).add(+openAt.split(':')[0], 'h').add(+openAt.split(':')[1], 'm')),
+            end: ssd.isClosed ? new Date(moment(ssd.day)) : new Date(moment(ssd.day).add(+closeAt.split(':')[0], 'h').add(+closeAt.split(':')[1], 'm')),
           });
         }
 
@@ -75,9 +76,13 @@ export default compose(
     onNavigate: props => (date) => props.getSchoolEventFor(date),
     onSelectSlot: props => data => {
       props.setSelectedDate(moment(data.start));
-      props.setModalIsOpen(true);
+      if (props.events.find(e => e.specialDay && moment(e.ssd.day).isSame(moment(data.start), 'day'))) {
+        props.setModalType('modifySSD');
+      } else {
+        props.setModalType('createSSD');
+      }
     },
-    closeModal: props => () => props.setModalIsOpen(false),
+    closeModal: props => () => props.setModalType(''),
   }),
   withHandlers({
     afterSubmitSomething: props => () => {
@@ -90,4 +95,8 @@ export default compose(
       this.props.getSchoolEventFor(moment().toISOString());
     },
   }),
+  withProps(props => ({
+    isModalOpen: !!props.modalType,
+    currentSSD: props.modalType === 'modifySSD' ? props.events.find(e => e.specialDay && moment(e.ssd.day).isSame(moment(props.selectedDate), 'day')).ssd : null,
+  })),
 )(DumbCalendarPage);

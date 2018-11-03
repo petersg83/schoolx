@@ -37,7 +37,6 @@ const SpecialSchoolDay = sequelize.define('specialSchoolDay', {
     type: Sequelize.TEXT,
   }
 }, {
-  paranoid: true,
   indexes: [{
     fields: ['schoolId', 'day'],
     unique: true,

@@ -1,5 +1,5 @@
 import DumbCreateSSDForm from './DumbCreateSSDForm';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import config from '../../../../../config';
 import { httpClient } from '../../../index';
 
@@ -11,6 +11,19 @@ export default compose(
   withState('minTimeBefPartialAbsence', 'setMinTimeBefPartialAbsence', ''),
   withState('minTimeBefTotalAbsence', 'setMinTimeBefTotalAbsence', ''),
   withState('note', 'setNote', ''),
+  lifecycle({
+    componentDidMount() {
+      if (this.props.ssd) {
+        this.props.setIsClosed(this.props.ssd.isClosed);
+        this.props.setOpenAt(this.props.ssd.openAt || '');
+        this.props.setCloseAt(this.props.ssd.closeAt || '');
+        this.props.setMaxArrivalTime(this.props.ssd.maxArrivalTime || '');
+        this.props.setMinTimeBefPartialAbsence(this.props.ssd.minTimeBefPartialAbsence || '');
+        this.props.setMinTimeBefTotalAbsence(this.props.ssd.minTimeBefTotalAbsence || '');
+        this.props.setNote(this.props.ssd.note || '');
+      }
+    },
+  }),
   withHandlers({
     onIsClosedChange: props => e => props.setIsClosed(!e.target.checked),
     onOpenAtChange: props => e => {
@@ -29,9 +42,31 @@ export default compose(
       props.setMinTimeBefTotalAbsence(e.target.value);
     },
     onNoteChange: props => e => props.setNote(e.target.value),
+    onDelete: props => () => {
+      httpClient(`${config.apiEndpoint}/specialSchoolDay`, {
+        method: 'DELETE',
+        headers: new Headers({
+          Accept: 'application/json',
+          ContentType: 'application/json',
+        }),
+        body: JSON.stringify({
+          day: props.date.toISOString(),
+        }),
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json;
+        } else {
+          throw new Error('Une erreur inconnue s\'est produite. Si elle persiste, contactez le créateur à contact@pierre-noel.fr');
+        }
+      })
+      .then((res) => {
+        props.afterSubmit();
+      });
+    },
     onSubmit: props => () => {
       httpClient(`${config.apiEndpoint}/specialSchoolDay`, {
-        method: 'POST',
+        method: 'PUT',
         headers: new Headers({
           Accept: 'application/json',
           ContentType: 'application/json',
@@ -56,7 +91,7 @@ export default compose(
       })
       .then((res) => {
         props.afterSubmit();
-      })
+      });
     },
   }),
 )(DumbCreateSSDForm);

@@ -23,7 +23,6 @@ const MemberSettings = sequelize.define('memberSettings', {
     type: Sequelize.DATE,
   },
 }, {
-  paranoid: true,
   indexes: [{
     fields: ['memberId'],
   }],
