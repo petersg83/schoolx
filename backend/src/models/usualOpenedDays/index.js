@@ -15,19 +15,19 @@ const UsualOpenedDays = sequelize.define('usualOpenedDays', {
     defaultValue: [],
   },
   openAt: {
-    type: Sequelize.DATE,
+    type: Sequelize.STRING,
   },
   closeAt: {
-    type: Sequelize.DATE,
+    type: Sequelize.STRING,
   },
   maxArrivalTime: {
-    type: Sequelize.DATE,
+    type: Sequelize.STRING,
   },
   minTimeBefPartialAbsence: {
-    type: Sequelize.DATE,
+    type: Sequelize.STRING,
   },
   minTimeBefTotalAbsence: {
-    type: Sequelize.DATE,
+    type: Sequelize.STRING,
   },
 }, {
   indexes: [{

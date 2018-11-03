@@ -7,6 +7,8 @@ import { httpClient } from '../../index';
 export default compose(
   withState('tabNumber', 'setTabNumber', 0),
   withState('events', 'setEvents', []),
+  withState('modalIsOpen', 'setModalIsOpen', false),
+  withState('selectedDate', 'setSelectedDate', null),
   withHandlers({
     getSchoolEventFor: props => (currentDay) => {
       httpClient(`${config.apiEndpoint}/schoolEvents?currentDay=${moment(currentDay).valueOf()}`)
@@ -30,12 +32,12 @@ export default compose(
                 sys.usualOpenedDays
                   .filter(uod => uod.days.includes(dayIteration.locale('en').format('dddd').toLowerCase()))
                   .forEach((uod) => {
-                    const openAt = moment(uod.openAt);
-                    const closeAt = moment(uod.closeAt);
+                    const openAt = uod.openAt;
+                    const closeAt = uod.closeAt;
                     events.push({
                       title: 'Ouverte',
-                      start: new Date(moment(dayIteration).add(openAt.get('hour'), 'h').add(openAt.get('minutes'), 'm')),
-                      end: new Date(moment(dayIteration).add(closeAt.get('hour'), 'h').add(closeAt.get('minutes'), 'm')),
+                      start: new Date(moment(dayIteration).add(+openAt.split(':')[0], 'h').add(+openAt.split(':')[1], 'm')),
+                      end: new Date(moment(dayIteration).add(+closeAt.split(':')[0], 'h').add(+closeAt.split(':')[1], 'm')),
                     });
                   });
                 }
@@ -44,14 +46,17 @@ export default compose(
           }
         }
         for (let ssd of res.specialSchoolDays) {
-          const openAt = moment(ssd.openAt);
-          const closeAt = moment(ssd.closeAt);
+          const openAt = ssd.openAt;
+          const closeAt = ssd.closeAt;
           events.push({
-            title: 'Ouverte',
-            start: new Date(moment(ssd.day).add(openAt.get('hour'), 'h').add(openAt.get('minutes'), 'm')),
-            end: new Date(moment(ssd.day).add(closeAt.get('hour'), 'h').add(closeAt.get('minutes'), 'm')),
+            title: ssd.isClosed ? 'Fermée' : 'Ouverte',
+            allDay: ssd.isClosed,
+            specialDay: ssd.isClosed ? 'closed' : 'modified',
+            start: new Date(moment(ssd.day).add(+openAt.split(':')[0], 'h').add(+openAt.split(':')[1], 'm')),
+            end: new Date(moment(ssd.day).add(+closeAt.split(':')[0], 'h').add(+closeAt.split(':')[1], 'm')),
           });
         }
+
         props.setEvents(events);
       });
     },
@@ -60,15 +65,25 @@ export default compose(
     onClickOnTab: props => (e, tabNumber) => props.setTabNumber(tabNumber),
     eventPropGetter: props => (event, start, end, isSelected) => ({
       style: {
-        backgroundColor: 'green',
-        // borderRadius: '0px',
-        // opacity: 0.8,
-        // color: 'black',
-        // border: '0px',
-        // display: 'block'
+        backgroundColor: event.specialDay
+        ? event.specialDay === 'closed'
+          ? 'red'
+          : 'orange'
+        : 'green',
       }
     }),
     onNavigate: props => (date) => props.getSchoolEventFor(date),
+    onSelectSlot: props => data => {
+      props.setSelectedDate(moment(data.start));
+      props.setModalIsOpen(true);
+    },
+    closeModal: props => () => props.setModalIsOpen(false),
+  }),
+  withHandlers({
+    afterSubmitSomething: props => () => {
+      props.closeModal();
+      props.getSchoolEventFor(props.selectedDate);
+    }
   }),
   lifecycle({
     componentDidMount() {

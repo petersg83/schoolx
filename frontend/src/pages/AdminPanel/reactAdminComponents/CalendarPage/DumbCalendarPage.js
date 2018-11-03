@@ -8,6 +8,9 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/fr';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import Modal from 'react-modal';
+
+import CreateSSDForm from './CreateSSDForm';
 
 moment.locale('fr');
 const localizer = BigCalendar.momentLocalizer(moment);
@@ -25,6 +28,21 @@ const messages = {
   event: 'événement', // Or anything you want
   showMore: total => `+ ${total} événement(s) supplémentaire(s)`,
 };
+
+const customStyles = {
+  content : {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    height: 'auto',
+    width: '400px',
+  }
+};
+
+Modal.setAppElement('#root');
 
 const DumbCalendarPage = (props) => {
   let content;
@@ -49,6 +67,8 @@ const DumbCalendarPage = (props) => {
         messages={messages}
         eventPropGetter={props.eventPropGetter}
         onNavigate={props.onNavigate}
+        onSelectSlot={props.onSelectSlot}
+        selectable
       />
     </div>;
   }
@@ -67,6 +87,15 @@ const DumbCalendarPage = (props) => {
           <Tab label="Présence" />
         </Tabs>
         {content}
+        <Modal
+          isOpen={props.modalIsOpen}
+          onRequestClose={props.closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+          overlayClassName="Overlay"
+        >
+          <CreateSSDForm date={props.selectedDate} onCancel={props.closeModal} afterSubmit={props.afterSubmitSomething} />
+        </Modal>
       </CardContent>
     </Card>
   );

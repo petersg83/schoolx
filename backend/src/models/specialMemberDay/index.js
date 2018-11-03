@@ -15,10 +15,10 @@ const SpecialMemberDay = sequelize.define('specialMemberDay', {
     allowNull: false,
   },
   arrivedAt: {
-    type: Sequelize.DATE,
+    type: Sequelize.STRING,
   },
   leftAt: {
-    type: Sequelize.DATE,
+    type: Sequelize.STRING,
   },
   justifiedDelay: {
     type: Sequelize.BOOLEAN,

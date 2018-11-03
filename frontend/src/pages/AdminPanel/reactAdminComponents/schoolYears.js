@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
-import { ArrayField, ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, FormTab, NumberField, NumberInput, List, required, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout, TextInput } from 'react-admin';
+import { ArrayField, ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, FormTab, NumberField, NumberInput, List, required, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout, TextField, TextInput } from 'react-admin';
 
 const validateEdit = (values) => {
   const errors = {};
@@ -50,7 +50,6 @@ export const SchoolYearList = (props) => (
 );
 
 const DaysField = ({ record }) => <span>{record.days.map(day => daysMap[day]).join(', ')}</span>;
-const TimeField = props => <span>{moment(props.record[props.source]).tz('Atlantic/Canary').format('HH:mm')}</span>; // TODO: s'abstraire de la tz
 const EndAtField = ({ record }) => <span>{record.endAt ? moment(record.endAt).format('DD/MM/YYYY') : 'à définir'}</span>;
 
 export const SchoolYearShow = (props) => (
@@ -69,11 +68,11 @@ export const SchoolYearShow = (props) => (
             <ArrayField source="usualOpenedDays" label="Journées types" style={{ width: '100%' }}>
               <Datagrid>
                 <DaysField label="Jours ouverts" source="days" />
-                <TimeField source="openAt" label="De" />
-                <TimeField source="closeAt" label="À" />
-                <TimeField source="maxArrivalTime" label="Heure d'arrivée max" />
-                <TimeField source="minTimeBefTotalAbsence" label="Absence partielle en dessous de" />
-                <TimeField source="minTimeBefPartialAbsence" label="Absence totale en dessous de" />
+                <TextField source="openAt" label="De" />
+                <TextField source="closeAt" label="À" />
+                <TextField source="maxArrivalTime" label="Heure d'arrivée max" />
+                <TextField source="minTimeBefTotalAbsence" label="Absence partielle en dessous de" />
+                <TextField source="minTimeBefPartialAbsence" label="Absence totale en dessous de" />
               </Datagrid>
             </ArrayField>
           </Datagrid>

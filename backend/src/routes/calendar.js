@@ -25,7 +25,6 @@ router.get('/schoolEvents', authRequired(['admin'], async (ctx, next, { admin, s
         },
         include: [{ model: db.UsualOpenedDays, as: 'usualOpenedDays' }],
       }],
-      logging: true,
     });
 
     const specialSchoolDays = await db.SpecialSchoolDay.findAll({
@@ -39,5 +38,33 @@ router.get('/schoolEvents', authRequired(['admin'], async (ctx, next, { admin, s
       schoolYears,
       specialSchoolDays,
     };
+  }
+}));
+
+router.post('/specialSchoolDay', authRequired(['admin'], async (ctx, next, { admin, superAdmin }) => {
+  const day = moment(ctx.request.body.day).startOf('day');
+
+  const alreadyExist = await db.SpecialSchoolDay.findOne({
+    where: {
+      schoolId: admin.schoolId,
+      day,
+    },
+  });
+
+  if (!alreadyExist) {
+    ctx.body = await db.SpecialSchoolDay.create({
+      schoolId: admin.schoolId,
+      isClosed: ctx.request.body.isClosed,
+      day,
+      openAt: ctx.request.body.isClosed ? null : ctx.request.body.openAt,
+      closeAt: ctx.request.body.isClosed ? null : ctx.request.body.closeAt,
+      maxArrivalTime: ctx.request.body.isClosed ? null : ctx.request.body.maxArrivalTime,
+      minTimeBefPartialAbsence: ctx.request.body.isClosed ? null : ctx.request.body.minTimeBefPartialAbsence,
+      minTimeBefTotalAbsence: ctx.request.body.isClosed ? null : ctx.request.body.minTimeBefTotalAbsence,
+      note: ctx.request.body.note,
+    });
+  } else {
+    ctx.status = 409;
+    ctx.body = { status: 409, message: 'Ce jour est déjà spécial' };
   }
 }));
