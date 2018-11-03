@@ -52,8 +52,8 @@ export default compose(
             title: ssd.isClosed ? 'Fermée' : 'Ouverte',
             allDay: ssd.isClosed,
             specialDay: ssd.isClosed ? 'closed' : 'modified',
-            start: new Date(moment(ssd.day).add(+openAt.split(':')[0], 'h').add(+openAt.split(':')[1], 'm')),
-            end: new Date(moment(ssd.day).add(+closeAt.split(':')[0], 'h').add(+closeAt.split(':')[1], 'm')),
+            start: ssd.isClosed ? moment(ssd.day) : new Date(moment(ssd.day).add(+openAt.split(':')[0], 'h').add(+openAt.split(':')[1], 'm')),
+            end: ssd.isClosed ? moment(ssd.day) : new Date(moment(ssd.day).add(+closeAt.split(':')[0], 'h').add(+closeAt.split(':')[1], 'm')),
           });
         }
 

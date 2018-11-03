@@ -31,13 +31,13 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
       <FormControlLabel
         control={
           <Switch
-            checked={props.schoolIsOpen}
-            onChange={props.onSchoolIsOpenChange}
-            value="schoolIsOpen"
-            color='primary'
+            checked={!props.isClosed}
+            onChange={props.onIsClosedChange}
+            value="isClosed"
+            color="secondary"
           />
         }
-        label={props.schoolIsOpen ? "École ouverte" : 'École fermée'}
+        label={props.isClosed ? "École fermée" : 'École ouverte'}
       />
       <TextField
         id="openAt"
@@ -46,7 +46,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         InputLabelProps={{ shrink: true }}
         inputProps={{ step: 300 }}
         className={props.classes.textField}
-        disabled={!props.schoolIsOpen}
+        disabled={props.isClosed}
         value={props.openAt}
         onChange={props.onOpenAtChange}
         required
@@ -58,7 +58,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         InputLabelProps={{ shrink: true }}
         inputProps={{ step: 300 }}
         className={props.classes.textField}
-        disabled={!props.schoolIsOpen}
+        disabled={props.isClosed}
         value={props.closeAt}
         onChange={props.onCloseAtChange}
         required
@@ -70,7 +70,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         InputLabelProps={{ shrink: true }}
         inputProps={{ step: 300 }}
         className={props.classes.textField}
-        disabled={!props.schoolIsOpen}
+        disabled={props.isClosed}
         value={props.maxArrivalTime}
         onChange={props.onMaxArrivalTimeChange}
         required
@@ -82,7 +82,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         InputLabelProps={{ shrink: true }}
         inputProps={{ step: 300 }}
         className={props.classes.textField}
-        disabled={!props.schoolIsOpen}
+        disabled={props.isClosed}
         value={props.minTimeBefPartialAbsence}
         onChange={props.onMinTimeBefPartialAbsenceChange}
         required
@@ -94,7 +94,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         InputLabelProps={{ shrink: true }}
         inputProps={{ step: 300 }}
         className={props.classes.textField}
-        disabled={!props.schoolIsOpen}
+        disabled={props.isClosed}
         value={props.minTimeBefTotalAbsence}
         onChange={props.onMinTimeBefTotalAbsenceChange}
         required
@@ -113,7 +113,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         <Button size="small" className={props.classes.button} onClick={props.onCancel}>
           Annuler
         </Button>
-        <Button variant="contained" type="submit" size="small" color='primary' className={props.classes.button}>
+        <Button variant="contained" type="submit" size="small" color='secondary' className={props.classes.button}>
           Sauvegarder
         </Button>
       </div>

@@ -4,7 +4,7 @@ import config from '../../../../../config';
 import { httpClient } from '../../../index';
 
 export default compose(
-  withState('schoolIsOpen', 'setSchoolIsOpen', true),
+  withState('isClosed', 'setIsClosed', false),
   withState('openAt', 'setOpenAt', ''),
   withState('closeAt', 'setCloseAt', ''),
   withState('maxArrivalTime', 'setMaxArrivalTime', ''),
@@ -12,7 +12,7 @@ export default compose(
   withState('minTimeBefTotalAbsence', 'setMinTimeBefTotalAbsence', ''),
   withState('note', 'setNote', ''),
   withHandlers({
-    onSchoolIsOpenChange: props => e => props.setSchoolIsOpen(e.target.checked),
+    onIsClosedChange: props => e => props.setIsClosed(!e.target.checked),
     onOpenAtChange: props => e => {
       props.setOpenAt(e.target.value);
     },
@@ -37,13 +37,13 @@ export default compose(
           ContentType: 'application/json',
         }),
         body: JSON.stringify({
-          isClosed: !props.schoolIsOpen,
+          isClosed: props.isClosed,
           day: props.date.toISOString(),
-          openAt: props.schoolIsOpen ? props.openAt : null,
-          closeAt: props.schoolIsOpen ? props.closeAt : null,
-          maxArrivalTime: props.schoolIsOpen ? props.maxArrivalTime : null,
-          minTimeBefPartialAbsence: props.schoolIsOpen ? props.minTimeBefPartialAbsence : null,
-          minTimeBefTotalAbsence: props.schoolIsOpen ? props.minTimeBefTotalAbsence : null,
+          openAt: props.isClosed ? null : props.openAt,
+          closeAt: props.isClosed ? null : props.closeAt,
+          maxArrivalTime: props.isClosed ? null : props.maxArrivalTime,
+          minTimeBefPartialAbsence: props.isClosed ? null : props.minTimeBefPartialAbsence,
+          minTimeBefTotalAbsence: props.isClosed ? null : props.minTimeBefTotalAbsence,
           note: props.note,
         }),
       })
