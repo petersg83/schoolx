@@ -28,6 +28,9 @@ const Member = sequelize.define('member', {
   jwt: {
     type: Sequelize.STRING,
   },
+  avatarPath: {
+    type: Sequelize.STRING,
+  }
 }, {
   paranoid: true,
   indexes: [{

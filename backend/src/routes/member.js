@@ -1,7 +1,10 @@
+import sharp from 'sharp';
 import router from '../koa-router';
 import db from '../db';
 import { authRequired } from '../utils/auth';
 import { periodsOverlap } from '../utils/dates';
+import uuid from 'uuid';
+
 
 // READ MANY & search
 router.get('/members', authRequired(['superAdmin', 'admin'], async (ctx, next, { admin, superAdmin }) => {
@@ -73,12 +76,23 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
       throw new Error('Auth error');
     }
 
-    // member
-    await db.Member.update({
+    const memberUpdates = {
       firstName: ctx.request.body.firstName,
       lastName: ctx.request.body.lastName,
-      birthday: ctx.request.body.birthday
-    }, {
+      birthday: ctx.request.body.birthday,
+    };
+
+    if (ctx.request.body.pictures) {
+      let avatarBuff = new Buffer(ctx.request.body.pictures.src.split(',')[1], 'base64');
+      const avatarPath = `src/public/avatars/${ctx.params.id}.${ctx.request.body.pictures.title.split('.').pop()}`;
+      await sharp(avatarBuff)
+        .resize({ width: 150, height: 200, options: { fit: 'outside' } })
+        .toFile(avatarPath);
+      memberUpdates.avatarPath = avatarPath.replace('src/public/avatars/', '');
+    }
+
+    // member
+    await db.Member.update(memberUpdates, {
       where: { id: ctx.params.id },
       transaction: t,
     });
@@ -131,14 +145,26 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
 // CREATE
 router.post('/members/', authRequired(['superAdmin', 'admin'], async (ctx, next, { admin, superAdmin }) => {
   if (admin) {
-    ctx.body = await db.Member.createWithSettingsAndPeriods({
+    const memberCreationData = {
+      id: uuid.v4(),
       firstName: ctx.request.body.firstName,
       lastName: ctx.request.body.lastName,
       birthday: ctx.request.body.birthday,
       schoolId: admin.schoolId,
       daysOff: ctx.request.body.daysOff,
       arrivalDate: ctx.request.body.arrivalDate,
-    });
+    };
+
+    if (ctx.request.body.pictures) {
+      let avatarBuff = new Buffer(ctx.request.body.pictures.src.split(',')[1], 'base64');
+      const avatarPath = `src/public/avatars/${memberCreationData.id}.${ctx.request.body.pictures.title.split('.').pop()}`;
+      await sharp(avatarBuff)
+        .resize({ width: 150, height: 200, options: { fit: 'outside' } })
+        .toFile(avatarPath);
+      memberCreationData.avatarPath = avatarPath.replace('src/public/avatars/', '');
+    }
+
+    ctx.body = await db.Member.createWithSettingsAndPeriods(memberCreationData);
   } else if (superAdmin) {
     console.log('Feature not available yet'); // TODO
   }

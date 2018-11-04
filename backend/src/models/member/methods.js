@@ -19,6 +19,7 @@ Member.createWithSettingsAndPeriods = memberWithSettingsAndPeriods => {
     lastName: memberWithSettingsAndPeriods.lastName,
     birthday: memberWithSettingsAndPeriods.birthday,
     schoolId: memberWithSettingsAndPeriods.schoolId,
+    avatarPath: memberWithSettingsAndPeriods.avatarPath,
   };
 
   if (memberWithSettingsAndPeriods.daysOff && memberWithSettingsAndPeriods.daysOff.length) {
@@ -33,8 +34,6 @@ Member.createWithSettingsAndPeriods = memberWithSettingsAndPeriods => {
       startAt: moment(memberWithSettingsAndPeriods.arrivalDate).startOf('date'),
     }];
   }
-
-  console.log('creationData', creationData);
 
   return Member.create(creationData, {
     include: [{ model: MemberSettings, as: 'memberSettings'}, { model: MemberPeriodsAtSchool, as: 'memberPeriodsAtSchool'}],

@@ -32,7 +32,40 @@ export const httpClient = (url, options = {}) => {
   return fetchUtils.fetchJson(url, options);
 }
 
+
+const convertFileToBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file.rawFile);
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+});
+
+const addUploadFeature = requestHandler => (type, resource, params) => {
+  if ((type === 'UPDATE' || type === 'CREATE') && resource === 'members') {
+    console.log('data', params.data);
+    if (params.data.pictures) {
+
+      return convertFileToBase64(params.data.pictures)
+        .then(picture64 => ({
+          src: picture64,
+          title: `${params.data.pictures.title}`,
+        }))
+        .then(transformedNewPicture => requestHandler(type, resource, {
+          ...params,
+          data: {
+            ...params.data,
+            pictures: transformedNewPicture,
+          },
+        }));
+    }
+  }
+  // for other request types and resources, fall back to the default request handler
+  return requestHandler(type, resource, params);
+};
+
 const dataProvider = jsonServerProvider('http://localhost:3000', httpClient);
+const uploadCapableDataProvider = addUploadFeature(dataProvider);
 
 const CustomRoutes = [
   <Route exact path="/calendar" options={{ label: 'Calendrier' }} component={CalendarPage} />,
@@ -65,7 +98,7 @@ const MyLayout = props => <Layout {...props} menu={Menu} />;
 const AdminPanel = props => (<Admin
   locale={resolveBrowserLocale()}
   i18nProvider={i18nProvider}
-  dataProvider={dataProvider}
+  dataProvider={uploadCapableDataProvider}
   dashboard={Dashboard}
   authProvider={authProvider}
   loginPage={LoginPage}

@@ -1,5 +1,6 @@
 backend/node_modules/
 backend/dist/
+backend/src/public/avatars
 backend/src/config.js
 
 frontend/node_modules/
