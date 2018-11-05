@@ -2,6 +2,8 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import config from '../../../../config';
 
 const styles = theme => ({
   root: {
@@ -9,22 +11,27 @@ const styles = theme => ({
     marginBottom: '100px',
   },
   paper: {
-    height: 200,
+    height: 230,
     width: 150,
   },
 });
 
 const DumbIntAndOutPage = (props) => {
 
+  const memberTiles = props.members.map(member => (
+    <Grid key={member.id} item>
+      <Paper className={props.classes.paper}>
+        <div style={{ textAlign: 'center' }}>
+          <img alt={member.firstName} style={{ maxWidth: '150px', maxHeight: '200px', borderRadius: '4px 4px 0 0' }} src={`${config.apiEndpoint}/public/${member.avatarPath ? `avatars/${member.avatarPath}` : 'default/defaultPic.png'}`} />
+          <Typography variant='subheading' gutterBottom>{member.firstName}</Typography>
+        </div>
+      </Paper>
+    </Grid>
+  ));
+
   return (
     <Grid container justify="center" className={props.classes.root} spacing={16}>
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(value => (
-        <Grid key={value} item>
-          <Paper className={props.classes.paper}>
-            <p>je suis le membre</p>
-          </Paper>
-        </Grid>
-      ))}
+      {memberTiles}
     </Grid>
   );
 };

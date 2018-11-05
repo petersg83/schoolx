@@ -2,6 +2,7 @@ import moment from 'moment';
 import Member from './index';
 import MemberSettings from '../memberSettings';
 import MemberPeriodsAtSchool from '../memberPeriodsAtSchool';
+import SpecialMemberDay from '../specialMemberDay';
 
 Member.findById = (id) => Member.findOne({
   where: { id },
@@ -12,6 +13,48 @@ Member.findByIdAndSchoolId = (id, schoolId) => Member.findOne({
   where: { id, schoolId },
   include: [{ model: MemberSettings, as: 'memberSettings'}, { model: MemberPeriodsAtSchool, as: 'memberPeriodsAtSchool'}],
 });
+
+Member.getTodaysInAndOutMembers = (schoolId) => {
+  const today = moment().startOf('day');
+
+  return Member.findAll({
+    attributes: { exclude: ['jwt', 'passwordHash'] },
+    where: {
+      schoolId,
+    },
+    include: [{
+      model: MemberPeriodsAtSchool,
+      as: 'memberPeriodsAtSchool',
+      where: {
+        startAt: { $lte: new Date(today) },
+        $or: [{
+          endAt: { $gte: new Date(today) },
+        }, {
+          endAt: null,
+        }],
+      },
+    }, {
+      model: MemberSettings,
+      as: 'memberSettings',
+      required: false,
+      where: {
+        startAt: { $lte: new Date(today) },
+        $or: [{
+          endAt: { $gte: new Date(today) },
+        }, {
+          endAt: null,
+        }]
+      },
+    }, {
+      model: SpecialMemberDay,
+      as: 'specialMemberDays',
+      required: false,
+      where: {
+        day: new Date(today),
+      },
+    }],
+  });
+};
 
 Member.createWithSettingsAndPeriods = memberWithSettingsAndPeriods => {
   const creationData = {

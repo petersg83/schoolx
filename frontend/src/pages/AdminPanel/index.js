@@ -32,7 +32,6 @@ export const httpClient = (url, options = {}) => {
   return fetchUtils.fetchJson(url, options);
 }
 
-
 const convertFileToBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file.rawFile);
