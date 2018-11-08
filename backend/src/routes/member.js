@@ -86,7 +86,7 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
       let avatarBuff = new Buffer(ctx.request.body.pictures.src.split(',')[1], 'base64');
       const avatarPath = `src/public/avatars/${ctx.params.id}.${ctx.request.body.pictures.title.split('.').pop()}`;
       await sharp(avatarBuff)
-        .resize({ width: 150, height: 200, options: { fit: 'outside' } })
+        .resize({ width: 170, height: 200, options: { fit: 'outside' } })
         .toFile(avatarPath);
       memberUpdates.avatarPath = avatarPath.replace('src/public/avatars/', '');
     }
@@ -159,7 +159,7 @@ router.post('/members/', authRequired(['superAdmin', 'admin'], async (ctx, next,
       let avatarBuff = new Buffer(ctx.request.body.pictures.src.split(',')[1], 'base64');
       const avatarPath = `src/public/avatars/${memberCreationData.id}.${ctx.request.body.pictures.title.split('.').pop()}`;
       await sharp(avatarBuff)
-        .resize({ width: 150, height: 200, options: { fit: 'outside' } })
+        .resize({ width: 170, height: 200, options: { fit: 'outside' } })
         .toFile(avatarPath);
       memberCreationData.avatarPath = avatarPath.replace('src/public/avatars/', '');
     }

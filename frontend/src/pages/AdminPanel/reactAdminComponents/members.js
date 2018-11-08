@@ -34,8 +34,8 @@ const daysOffMap = {
 
 const DaysOffField = ({ record }) => <span>{record.daysOff.map(day => daysOffMap[day]).join(', ')}</span>;
 const EndAtField = ({ record }) => <span>{record.endAt ? moment(record.endAt).format('DD/MM/YYYY') : 'à définir'}</span>;
-const AvatarField = ({ record, fileName }) => record[fileName] ? <img alt={record.firstName} style={{ marginTop: '20px', maxWidth: '100px', maxHeight: '150px' }} src={`${config.apiEndpoint}/public/avatars/${record[fileName]}`} /> : null;
-const TinyAvatarField = ({ record, fileName }) => record[fileName] ? <img alt={record.firstName} style={{ maxWidth: '24px', maxHeight: '32px' }} src={`${config.apiEndpoint}/public/avatars/${record[fileName]}`} /> : null;
+const AvatarField = ({ record, fileName }) => record[fileName] ? <img alt={record.firstName} style={{ marginTop: '20px', maxWidth: '127px', maxHeight: '150px' }} src={`${config.apiEndpoint}/public/avatars/${record[fileName]}`} /> : null;
+const TinyAvatarField = ({ record, fileName }) => record[fileName] ? <img alt={record.firstName} style={{ maxWidth: '34px', maxHeight: '40px' }} src={`${config.apiEndpoint}/public/avatars/${record[fileName]}`} /> : null;
 
 const MemberFilter = (props) => (
     <Filter {...props}>

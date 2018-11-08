@@ -91,7 +91,7 @@ const DumbCalendarPage = (props) => {
           isOpen={props.isModalOpen}
           onRequestClose={props.closeModal}
           style={customStyles}
-          contentLabel="Example Modal"
+          contentLabel="Create Special Day"
           overlayClassName="Overlay"
         >
           {props.modalType === 'createSSD' && <CreateSSDForm date={props.selectedDate} onCancel={props.closeModal} afterSubmit={props.afterSubmitSomething} />}
