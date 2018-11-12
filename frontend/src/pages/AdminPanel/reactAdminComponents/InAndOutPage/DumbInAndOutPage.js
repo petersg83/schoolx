@@ -7,6 +7,8 @@ import Modal from 'react-modal';
 import green from '@material-ui/core/colors/green';
 import red from '@material-ui/core/colors/red';
 import Button from '@material-ui/core/Button';
+import moment from 'moment';
+import { PacmanLoader } from 'react-spinners';
 import config from '../../../../config';
 
 const styles = theme => ({
@@ -40,47 +42,83 @@ const modalStyle = {
   }
 };
 
-const DumbIntAndOutPage = (props) => {
-  const memberTiles = props.members.map(member => (
-    <Grid key={member.id} onClick={() => props.onClickOnTile(member.id)} style={{ cursor: 'pointer' }} item>
-      <Paper className={props.classes.paper} style={{
-        backgroundColor: member.memberState === 'toBeArrived'
-          ? 'white'
-          :  member.memberState === 'arrived'
-            ? '#4caf50'
-            : '#ff1744',
-        color: member.memberState === 'left' ? 'white' : 'black',
-      }} >
-        <div style={{ textAlign: 'center' }}>
-          <img alt={member.firstName} style={{ maxWidth: '170px', maxHeight: '200px', borderRadius: '4px 4px 0 0' }} src={`${config.apiEndpoint}/public/${member.avatarPath ? `avatars/${member.avatarPath}` : 'default/defaultPic.png'}`} />
-          <Typography variant='subheading'>{member.firstName}</Typography>
-          <Typography variant='caption' gutterBottom>{member.memberTimeText}</Typography>
-        </div>
-      </Paper>
-    </Grid>
-  ));
+const DumbInAndOutPage = (props) => {
+  let content = null;
 
-  const memberTime = props.memberInModal && props.memberInModal.memberTimeText
-    ? <Typography variant='subheading' style={{ paddingBottom: '20px' }}>
-        {props.memberInModal.memberTimeText}
-      </Typography>
-    : <span style={{ height: '44px', display: 'block' }} />;
+  if (!props.firstLoadDone) {
+    content = <div style={{
+      height: window.innerHeight,
+      justifyContent: 'center',
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
+      <PacmanLoader color="#2196f3" />
+    </div>;
+  } else if (!props.isSchoolOpenToday) {
+    content = <div style={{
+      height: window.innerHeight,
+      justifyContent: 'center',
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
+      <Typography variant='title'>L'école est fermée aujourd'hui ({moment().format('dddd DD/MM/YYYY')})</Typography>
+    </div>;
+  } else {
+    const memberTiles = [];
+    props.members.forEach(member => {
+      let tileBackgroundColor = 'white';
+      switch (member.memberState) {
+        case 'isOff':
+          tileBackgroundColor = 'grey';
+          break;
+        case 'arrived':
+          tileBackgroundColor = '#4caf50';
+          break;
+        case 'left':
+          tileBackgroundColor = '#ff1744';
+          break;
+        case 'toBeArrived':
+        default:
+          tileBackgroundColor = 'white';
+      }
 
-  let inAndOutButton = null;
-  if (props.memberInModal && props.memberInModal.memberState === 'left') {
-    inAndOutButton = <Typography variant='body1' style={{ marginBottom: '50px' }}>
-       Horaires déjà entrés pour aujourd'hui
-     </Typography>
-  } else if (props.memberInModal) {
-    inAndOutButton = <MuiThemeProvider theme={theme}>
-      <Button variant="contained" color={props.memberInModal.memberState === 'toBeArrived' ? 'primary' : 'secondary'} size="large">
-        {props.memberInModal.memberState === 'toBeArrived' ? 'Entrer' : 'Sortir définitivement'}
-      </Button>
-    </MuiThemeProvider>;
-  }
+      memberTiles.push(
+        <Grid key={member.id} onClick={() => props.onClickOnTile(member.id)} style={{ cursor: 'pointer' }} item>
+          <Paper className={props.classes.paper} style={{ backgroundColor: tileBackgroundColor }}>
+            <div style={{ textAlign: 'center' }}>
+              <img alt={member.firstName} style={{ maxWidth: '170px', maxHeight: '200px', borderRadius: '4px 4px 0 0' }} src={`${config.apiEndpoint}/public/${member.avatarPath ? `avatars/${member.avatarPath}` : 'default/defaultPic.png'}`} />
+              <div>
+                <Typography variant='subheading'>{member.firstName}</Typography>
+                {member.memberTimeText && <Typography variant='caption' gutterBottom>{member.memberTimeText}</Typography>}
+              </div>
+            </div>
+          </Paper>
+        </Grid>
+      );
+    });
 
-  return (
-    <div>
+    const memberTime = props.memberInModal && props.memberInModal.memberTimeText
+      ? <Typography variant='subheading' style={{ paddingBottom: '20px' }}>
+          {props.memberInModal.memberTimeText}
+        </Typography>
+      : <span style={{ height: '44px', display: 'block' }} />;
+
+    let inAndOutButton = null;
+    if (props.memberInModal && props.memberInModal.memberState === 'left') {
+      inAndOutButton = <Typography variant='body1' style={{ marginBottom: '50px' }}>
+         Horaires déjà entrés pour aujourd'hui
+       </Typography>
+    } else if (props.memberInModal) {
+      inAndOutButton = <MuiThemeProvider theme={theme}>
+        <Button variant="contained" color={props.memberInModal.memberState === 'toBeArrived' ? 'primary' : 'secondary'} size="large">
+          {props.memberInModal.memberState === 'toBeArrived' ? 'Entrer' : 'Sortir définitivement'}
+        </Button>
+      </MuiThemeProvider>;
+    }
+
+    content = <div>
       <Grid container justify="center" className={props.classes.root} spacing={16}>
         {memberTiles}
       </Grid>
@@ -109,8 +147,10 @@ const DumbIntAndOutPage = (props) => {
           </div>
         </div>}
       </Modal>
-    </div>
-  );
+    </div>;
+  }
+
+  return content;
 };
 
-export default withStyles(styles)(DumbIntAndOutPage);
+export default withStyles(styles)(DumbInAndOutPage);
