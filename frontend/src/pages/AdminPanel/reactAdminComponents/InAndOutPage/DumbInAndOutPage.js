@@ -13,7 +13,6 @@ import config from '../../../../config';
 
 const styles = theme => ({
   root: {
-    marginTop: '100px',
     marginBottom: '100px',
   },
   paper: {
@@ -71,6 +70,7 @@ const DumbInAndOutPage = (props) => {
       let tileBackgroundColor = 'white';
       switch (member.memberState) {
         case 'isOff':
+        case 'inHoliday':
           tileBackgroundColor = 'grey';
           break;
         case 'arrived':
@@ -99,7 +99,11 @@ const DumbInAndOutPage = (props) => {
       );
     });
 
-    const memberTime = props.memberInModal && props.memberInModal.memberTimeText
+    const memberTime = props.memberInModal &&
+      props.memberInModal.memberTimeText &&
+      props.memberInModal.memberState === 'left' &&
+      props.memberInModal.memberState === 'toBeArrived' &&
+      props.memberInModal.memberState === 'arrived'
       ? <Typography variant='subheading' style={{ paddingBottom: '20px' }}>
           {props.memberInModal.memberTimeText}
         </Typography>
@@ -110,15 +114,38 @@ const DumbInAndOutPage = (props) => {
       inAndOutButton = <Typography variant='body1' style={{ marginBottom: '50px' }}>
          Horaires déjà entrés pour aujourd'hui
        </Typography>
-    } else if (props.memberInModal) {
+    } else if (props.memberInModal && props.memberInModal.memberState === 'toBeArrived') {
       inAndOutButton = <MuiThemeProvider theme={theme}>
-        <Button variant="contained" color={props.memberInModal.memberState === 'toBeArrived' ? 'primary' : 'secondary'} size="large">
-          {props.memberInModal.memberState === 'toBeArrived' ? 'Entrer' : 'Sortir définitivement'}
+        <Button variant="contained" color="primary" size="large" onClick={props.memberInModalEnters}>
+          Entrer
         </Button>
       </MuiThemeProvider>;
+    } else if (props.memberInModal && props.memberInModal.memberState === 'arrived') {
+      inAndOutButton = <MuiThemeProvider theme={theme}>
+        <Button variant="contained" color="secondary" size="large" onClick={props.memberInModalLeaves}>
+          Sortir définitivement
+        </Button>
+      </MuiThemeProvider>;
+    } else if (props.memberInModal && props.memberInModal.memberState === 'inHoliday') {
+      inAndOutButton = <Typography variant='body1' style={{ marginBottom: '50px' }}>
+         {props.memberInModal.firstName} est en congé aujourd'hui
+       </Typography>
+    } else if (props.memberInModal && props.memberInModal.memberState === 'isOff') {
+      inAndOutButton = <Typography variant='body1' style={{ marginBottom: '50px' }}>
+         {props.memberInModal.firstName} est en jour off aujourd'hui
+       </Typography>
     }
 
     content = <div>
+    <Typography variant='title' style={{ marginTop: '20px', textAlign: 'center' }}>
+       {props.todaySettings && props.todaySettings.schoolName}
+     </Typography>
+     <Typography variant='caption' style={{ marginTop: '5px', textAlign: 'center' }}>
+        {props.time.format('dddd DD/MM/YYYY')} | {props.todaySettings && props.todaySettings.openAt} → {props.todaySettings && props.todaySettings.closeAt}
+      </Typography>
+      <Typography variant='subheading' style={{ marginTop: '5px', marginBottom: '20px', textAlign: 'center' }}>
+         {props.time.format('HH:mm:ss')}
+       </Typography>
       <Grid container justify="center" className={props.classes.root} spacing={16}>
         {memberTiles}
       </Grid>

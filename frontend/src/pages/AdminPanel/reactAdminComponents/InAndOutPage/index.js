@@ -10,11 +10,11 @@ export default compose(
   withState('memberShownInModalId', 'setMemberShownInModalId', null),
   withState('timer', 'setTimer', null),
   withState('time', 'setTime', moment()),
-  withState('isSchoolOpenToday', 'setIsSchoolOpenToday', false),
   withState('firstLoadDone', 'setFirstLoadDone', false),
+  withState('todaySettings', 'setTodaySetting', {}),
   withHandlers({
     getMembers: props => () => {
-      httpClient(`${config.apiEndpoint}/isSchoolOpenToday`, {
+      httpClient(`${config.apiEndpoint}/todaySettings`, {
         method: 'GET',
       })
       .then((res) => {
@@ -25,8 +25,8 @@ export default compose(
         }
       })
       .then(res => {
-        if (!res.isSchoolOpenToday) {
-          props.setIsSchoolOpenToday(false);
+        props.setTodaySetting(res);
+        if (res.isClosed) {
           props.setFirstLoadDone(true);
         } else {
           httpClient(`${config.apiEndpoint}/inandout`, {
@@ -46,13 +46,15 @@ export default compose(
             members.forEach((m) => {
               membersMap[m.id] = m;
               const isOff = !m.memberSettings.every(ms => !ms.daysOff.includes(today.locale('en').format('dddd').toLowerCase()));
+              m.specialMemberDay = m.specialMemberDays[0];
 
               if (isOff) {
                 m.memberState = 'isOff';
                 m.memberTimeText = 'jour off';
+              } else if (m.specialMemberDay && m.specialMemberDay.holiday) {
+                m.memberState = 'inHoliday';
+                m.memberTimeText = 'congé';
               } else {
-                m.specialMemberDay = m.specialMemberDays[0];
-
                 let memberState = 'toBeArrived';
                 if (m.specialMemberDay && m.specialMemberDay.arrivedAt && !m.specialMemberDay.leftAt) {
                   memberState = 'arrived';
@@ -62,10 +64,10 @@ export default compose(
 
                 let memberTimeText = '';
                 if (m.specialMemberDay && m.specialMemberDay.arrivedAt) {
-                  memberTimeText += moment(m.specialMemberDay.arrivedAt).format('HH:mm');
+                  memberTimeText += m.specialMemberDay.arrivedAt;
                   memberTimeText += ' → ';
                   if (m.specialMemberDay.leftAt) {
-                    memberTimeText += moment(m.specialMemberDay.leftAt).format('HH:mm');
+                    memberTimeText += m.specialMemberDay.leftAt;
                   } else {
                     memberTimeText += '...';
                   }
@@ -76,7 +78,6 @@ export default compose(
               }
             });
 
-            props.setIsSchoolOpenToday(true);
             props.setMembers(members);
             props.setMembersMap(membersMap);
             props.setFirstLoadDone(true);
@@ -90,6 +91,34 @@ export default compose(
     onExitTile: props => () => {
       props.setMemberShownInModalId(null);
     },
+  }),
+  withHandlers({
+    memberInModalEnters: props => () => {
+      httpClient(`${config.apiEndpoint}/inandout/${props.memberShownInModalId}`, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'arrived' }),
+      }).then((res) => {
+        if (res.status === 200) {
+          props.getMembers();
+          props.setMemberShownInModalId(null);
+        } else {
+          throw new Error('Une erreur inconnue s\'est produite. Si elle persiste, contactez le créateur à contact@pierre-noel.fr');
+        }
+      });
+    },
+    memberInModalLeaves: props => () => {
+      httpClient(`${config.apiEndpoint}/inandout/${props.memberShownInModalId}`, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'left' }),
+      }).then((res) => {
+        if (res.status === 200) {
+          props.getMembers();
+          props.setMemberShownInModalId(null);
+        } else {
+          throw new Error('Une erreur inconnue s\'est produite. Si elle persiste, contactez le créateur à contact@pierre-noel.fr');
+        }
+      });
+    }
   }),
   lifecycle({
     componentDidMount() {
@@ -109,6 +138,7 @@ export default compose(
 
     return ({
       isModalOpen,
+      isSchoolOpenToday: !props.todaySettings.isClosed,
       memberInModal,
     });
   }),
