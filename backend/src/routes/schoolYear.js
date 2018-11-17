@@ -47,7 +47,7 @@ router.put('/schoolYears/:id', authRequired(['superAdmin', 'admin'], async (ctx,
   const yearsAlreadyExisting =  await db.SchoolYear.findAllBySchoolId(admin.schoolId);
   const newYear = {
     startAt: ctx.request.body.startAt,
-    endAt: ctx.request.body.endAt,
+    endAt: ctx.request.body.endAt || null,
     schoolId: admin.schoolId,
     nbOfDaysOfHolidays: ctx.request.body.nbOfDaysOfHolidays,
   };
@@ -70,7 +70,7 @@ router.put('/schoolYears/:id', authRequired(['superAdmin', 'admin'], async (ctx,
         const createdSchoolYearSettings = await db.SchoolYearSettings.create({
           schoolYearId: ctx.params.id,
           startAt: nss.startAt,
-          endAt: nss.endAt,
+          endAt: nss.endAt || null,
         }, {
           transaction: t,
         });
