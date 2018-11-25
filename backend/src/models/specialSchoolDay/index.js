@@ -20,18 +20,23 @@ const SpecialSchoolDay = sequelize.define('specialSchoolDay', {
   },
   openAt: {
     type: Sequelize.STRING,
+    allowNull: false,
   },
   closeAt: {
     type: Sequelize.STRING,
+    allowNull: false,
   },
   maxArrivalTime: {
     type: Sequelize.STRING,
+    allowNull: false,
   },
   minTimeBefPartialAbsence: {
     type: Sequelize.STRING,
+    allowNull: false,
   },
   minTimeBefTotalAbsence: {
     type: Sequelize.STRING,
+    allowNull: false,
   },
   note: {
     type: Sequelize.TEXT,

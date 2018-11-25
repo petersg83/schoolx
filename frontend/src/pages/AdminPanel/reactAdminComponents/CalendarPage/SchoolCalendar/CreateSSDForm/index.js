@@ -1,7 +1,7 @@
 import DumbCreateSSDForm from './DumbCreateSSDForm';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
-import config from '../../../../../config';
-import { httpClient } from '../../../index';
+import config from '../../../../../../config';
+import { httpClient } from '../../../../index';
 
 export default compose(
   withState('isClosed', 'setIsClosed', false),

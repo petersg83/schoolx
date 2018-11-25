@@ -1,5 +1,16 @@
 import moment from 'moment';
 
+export const getReadableTimeBetween = (t1, t2) => {
+  const minutesDiff = moment(t1).diff(moment(t2), 'minutes');
+  let result = '';
+  if (minutesDiff > 59) {
+    result += Math.floor(minutesDiff / 60) > 1 ? `${Math.floor(minutesDiff / 60)} heures et ` : `${Math.floor(minutesDiff / 60)} heure et `
+  }
+  result += minutesDiff % 60 > 1 ? `${minutesDiff % 60} minutes` : `${minutesDiff % 60} minute`;
+
+  return result;
+};
+
 export const isValidPeriod = (period) => moment(period.startAt).isValid() &&
   (moment(period.endAt).isValid() || !period.endAt) &&
   (moment(period.startAt).startOf('day').isSameOrBefore(moment(period.endAt).startOf('day')) || !period.endAt)

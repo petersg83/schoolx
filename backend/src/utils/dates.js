@@ -1,5 +1,35 @@
 import moment from 'moment';
 
+
+export const isStringTimeValid = (stringTime) => {
+  let isValid = false;
+  if (typeof stringTime === 'string' && stringTime.split(':').length === 2) {
+    const h = +stringTime.split(':')[0];
+    const m = +stringTime.split(':')[1];
+    isValid = Number.isInteger(h) && Number.isInteger(m) && h >= 0 && h < 24 && m >= 0 && m < 60;
+  }
+  if (!isValid) {
+    console.log('mince :', stringTime);
+  }
+  return isValid;
+};
+
+export const stringTimeToMinutes = (stringTime) => {
+  if (!isStringTimeValid(stringTime)) {
+    throw new Error('invalid string time provided to stringTimeToMinutes', stringTime);
+  }
+  return +stringTime.split(':')[0] * 60 + stringTime.split(':')[1];
+};
+
+export const isStringTimeStrictlyBefore = (t1, t2) => {
+  if (!isStringTimeValid(t1) || !isStringTimeValid(t2)) {
+    throw new Error('invalid string time provided to isStringTimeStrictlyBefore', t1, '-' , t2);
+  }
+
+  return +t1.split(':')[0] < +t2.split(':')[0] ||
+    (+t1.split(':')[0] === +t2.split(':')[0] && +t1.split(':')[1] < +t2.split(':')[1]);
+};
+
 export const isValidPeriod = (period) => moment(period.startAt).isValid() &&
   (moment(period.endAt).isValid() || !period.endAt) &&
   (moment(period.startAt).startOf('day').isSameOrBefore(moment(period.endAt).startOf('day')) || !period.endAt)
