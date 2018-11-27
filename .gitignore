@@ -3,9 +3,11 @@ backend/dist/
 backend/src/public/avatars
 backend/src/config.js
 
+
 frontend/node_modules/
 frontend/coverage
 frontend/build
+frontend/src/config.js
 
 .DS_Store
 .env.local

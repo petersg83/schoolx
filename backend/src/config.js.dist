@@ -11,4 +11,8 @@ export default {
     user: 'GMAIL_ADDRESS',
     pass: 'GMAIL_PASSWORD',
   },
+  defaultAdmin: {
+    email: 'ADMIN_EMAIL',
+    passwordHash: 'ADMIN_PASSWORD',
+  },
 };

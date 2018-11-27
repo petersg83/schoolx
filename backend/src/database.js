@@ -43,7 +43,7 @@ const operatorsAliases = {
 };
 
 export const sequelize = new Sequelize(config.postgres.database, config.postgres.username, config.postgres.password, {
-  host: config.postgres.localhost,
+  host: config.postgres.host,
   dialect: 'postgres',
   operatorsAliases,
   define: {
