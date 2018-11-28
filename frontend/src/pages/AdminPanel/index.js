@@ -14,6 +14,7 @@ import frenchMessages from 'ra-language-french';
 import englishMessages from 'ra-language-english';
 import Menu from './menu'
 import IntAndOutPage from './reactAdminComponents/InAndOutPage';
+import config from '../../config';
 
 frenchMessages.ra.auth.username = 'email';
 
@@ -63,7 +64,7 @@ const addUploadFeature = requestHandler => (type, resource, params) => {
   return requestHandler(type, resource, params);
 };
 
-const dataProvider = jsonServerProvider('http://localhost:3000', httpClient);
+const dataProvider = jsonServerProvider(config.apiEndpoint, httpClient);
 const uploadCapableDataProvider = addUploadFeature(dataProvider);
 
 const CustomRoutes = [
