@@ -98,11 +98,11 @@ export const SchoolYearEdit = (props) => (
             <ArrayInput source="usualOpenedDays" label="Journées types" style={{ width: '100%' }}>
               <SimpleFormIterator>
                 <SelectArrayInput label="Jours ouverts" source="days" choices={daysChoices} validate={required()} />
-                <TextInput source="openAt" label="De" validate={required()} />
-                <TextInput source="closeAt" label="À" validate={required()} />
-                <TextInput source="maxArrivalTime" label="Heure d'arrivée max" validate={required()} />
-                <TextInput source="minTimeBefTotalAbsence" label="Abscence partielle en dessous de" />
-                <TextInput source="minTimeBefPartialAbsence" label="Abscence totale en dessous de" validate={required()} />
+                <TextInput source="openAt" label="De" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
+                <TextInput source="closeAt" label="À" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
+                <TextInput source="maxArrivalTime" label="Heure d'arrivée max" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
+                <TextInput source="minTimeBefTotalAbsence" label="Abscence partielle en dessous de"  type="time" InputLabelProps={{ shrink: true }} />
+                <TextInput source="minTimeBefPartialAbsence" label="Abscence totale en dessous de" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
               </SimpleFormIterator>
             </ArrayInput>
           </SimpleFormIterator>
@@ -127,11 +127,11 @@ export const SchoolYearCreate = (props) => (
           <ArrayInput source="usualOpenedDays" label="Journées types" style={{ width: '100%' }}>
             <SimpleFormIterator>
               <SelectArrayInput label="Jours ouverts" source="days" choices={daysChoices} validate={required()} />
-              <TextInput source="openAt" label="De" validate={required()} />
-              <TextInput source="closeAt" label="À" validate={required()} />
-              <TextInput source="maxArrivalTime" label="Heure d'arrivée max" validate={required()} />
-              <TextInput source="minTimeBefTotalAbsence" label="Abscence partielle en dessous de" />
-              <TextInput source="minTimeBefPartialAbsence" label="Abscence totale en dessous de" validate={required()} />
+              <TextInput source="openAt" label="De" validate={required()} type="time"  InputLabelProps={{ shrink: true }} />
+              <TextInput source="closeAt" label="À" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
+              <TextInput source="maxArrivalTime" label="Heure d'arrivée max" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
+              <TextInput source="minTimeBefTotalAbsence" label="Abscence partielle en dessous de" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
+              <TextInput source="minTimeBefPartialAbsence" label="Abscence totale en dessous de" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
             </SimpleFormIterator>
           </ArrayInput>
         </SimpleFormIterator>

@@ -12,7 +12,6 @@
     "ra-language-french": "^2.2.0",
     "react": "^16.4.2",
     "react-admin": "^2.1.0",
-    "react-admin-date-inputs": "^1.1.0",
     "react-big-calendar": "^0.20.1",
     "react-dom": "^16.4.2",
     "react-modal": "^3.6.1",
