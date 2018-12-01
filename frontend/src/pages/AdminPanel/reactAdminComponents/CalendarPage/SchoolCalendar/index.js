@@ -3,6 +3,7 @@ import { compose, lifecycle, withHandlers, withState, withProps } from 'recompos
 import moment from 'moment';
 import config from '../../../../../config';
 import { httpClient } from '../../../index';
+import 'moment/locale/fr';
 
 export default compose(
   withState('schoolEvents', 'setSchoolEvents', []),
@@ -28,10 +29,10 @@ export default compose(
             dayIteration = moment(sys.startAt).startOf('day');
             const endDay = sys.endAt ? moment(sys.endAt).startOf('day') : lastDayOfCalendar;
             while (dayIteration.isSameOrBefore(endDay)) {
-              if (!res.specialSchoolDays.find(ssd => moment(ssd.day).isSame(dayIteration, 'day'))) {
+              if (!res.specialSchoolDays.find(ssd => moment(ssd.day).isSame(dayIteration, 'day'))) { // eslint-disable-line no-loop-func
                 sys.usualOpenedDays
-                  .filter(uod => uod.days.includes(dayIteration.locale('en').format('dddd').toLowerCase()))
-                  .forEach((uod) => {
+                  .filter(uod => uod.days.includes(dayIteration.locale('en').format('dddd').toLowerCase())) // eslint-disable-line no-loop-func
+                  .forEach((uod) => { // eslint-disable-line no-loop-func
                     const openAt = uod.openAt;
                     const closeAt = uod.closeAt;
                     schoolEvents.push({

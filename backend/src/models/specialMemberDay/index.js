@@ -33,7 +33,6 @@ const SpecialMemberDay = sequelize.define('specialMemberDay', {
     type: Sequelize.TEXT,
   },
 }, {
-  paranoid: true,
   indexes: [{
     fields: ['memberId', 'day'],
     unique: true,

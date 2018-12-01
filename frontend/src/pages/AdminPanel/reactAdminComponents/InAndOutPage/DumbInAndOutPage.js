@@ -85,7 +85,7 @@ const DumbInAndOutPage = (props) => {
       }
 
       memberTiles.push(
-        <Grid key={member.id} onClick={() => props.onClickOnTile(member.id)} style={{ cursor: 'pointer' }} item>
+        <Grid key={member.id} onClick={() => props.onClickOnTile(member.id)} style={{ cursor: 'pointer', WebkitTouchCallout: 'none', WebkitUserSelect: 'none', KhtmlUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none', userSelect: 'none' }} item>
           <Paper className={props.classes.paper} style={{ backgroundColor: tileBackgroundColor }}>
             <div style={{ textAlign: 'center' }}>
               <img alt={member.firstName} style={{ maxWidth: '170px', maxHeight: '200px', borderRadius: '4px 4px 0 0' }} src={`${config.apiEndpoint}/public/${member.avatarPath ? `avatars/${member.avatarPath}` : 'default/defaultPic.png'}`} />
@@ -101,9 +101,9 @@ const DumbInAndOutPage = (props) => {
 
     const memberTime = props.memberInModal &&
       props.memberInModal.memberTimeText &&
-      props.memberInModal.memberState === 'left' &&
-      props.memberInModal.memberState === 'toBeArrived' &&
-      props.memberInModal.memberState === 'arrived'
+      (props.memberInModal.memberState === 'left' ||
+      props.memberInModal.memberState === 'toBeArrived' ||
+      props.memberInModal.memberState === 'arrived')
       ? <Typography variant='subheading' style={{ paddingBottom: '20px' }}>
           {props.memberInModal.memberTimeText}
         </Typography>

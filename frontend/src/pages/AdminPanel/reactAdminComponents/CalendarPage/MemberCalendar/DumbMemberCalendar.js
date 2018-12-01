@@ -8,6 +8,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'moment/locale/fr';
+import ModifyMemberDayForm from './ModifyMemberDayForm';
 
 moment.locale('fr');
 const localizer = BigCalendar.momentLocalizer(moment);
@@ -57,6 +59,14 @@ const DumbMemberCalendar = (props) => {
         </Select>
       </FormControl>
     </div>
+    <Dialog
+      open={props.isModalOpen}
+      onClose={props.closeModal}
+    >
+      <DialogContent>
+        <ModifyMemberDayForm memberId={props.selectedMemberId} date={props.selectedDate} afterSubmit={props.afterSubmitSomething} currentDay={props.dayToBeModified} onCancel={props.closeModal} />
+      </DialogContent>
+    </Dialog>
   </div>;
 };
 

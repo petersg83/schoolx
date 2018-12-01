@@ -8,6 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
+import 'moment/locale/fr';
 
 const styles = theme => ({
   container: {
@@ -26,7 +27,7 @@ const styles = theme => ({
 
 const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
   <FormControl component="fieldset">
-    <FormLabel component="legend">{props.date && props.date.locale('fr').format('dddd DD/MM/YYYY')}</FormLabel>
+    <FormLabel component="legend" focused>{props.date && props.date.locale('fr').format('dddd DD/MM/YYYY')}</FormLabel>
     <FormGroup>
       <FormControlLabel
         control={
@@ -47,7 +48,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         inputProps={{ step: 300 }}
         className={props.classes.textField}
         disabled={props.isClosed}
-        value={props.openAt}
+        value={props.isClosed ? '' : props.openAt}
         onChange={props.onOpenAtChange}
         required
       />
@@ -59,7 +60,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         inputProps={{ step: 300 }}
         className={props.classes.textField}
         disabled={props.isClosed}
-        value={props.closeAt}
+        value={props.isClosed ? '' : props.closeAt}
         onChange={props.onCloseAtChange}
         required
       />
@@ -71,7 +72,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         inputProps={{ step: 300 }}
         className={props.classes.textField}
         disabled={props.isClosed}
-        value={props.maxArrivalTime}
+        value={props.isClosed ? '' : props.maxArrivalTime}
         onChange={props.onMaxArrivalTimeChange}
         required
       />
@@ -83,7 +84,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         inputProps={{ step: 300 }}
         className={props.classes.textField}
         disabled={props.isClosed}
-        value={props.minTimeBefPartialAbsence}
+        value={props.isClosed ? '' : props.minTimeBefPartialAbsence}
         onChange={props.onMinTimeBefPartialAbsenceChange}
         required
       />
@@ -95,7 +96,7 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         inputProps={{ step: 300 }}
         className={props.classes.textField}
         disabled={props.isClosed}
-        value={props.minTimeBefTotalAbsence}
+        value={props.isClosed ? '' : props.minTimeBefTotalAbsence}
         onChange={props.onMinTimeBefTotalAbsenceChange}
         required
       />

@@ -1,8 +1,5 @@
 import DumbCalendarPage from './DumbCalendarPage';
-import { compose,lifecycle, withHandlers, withState, withProps } from 'recompose';
-import moment from 'moment';
-import config from '../../../../config';
-import { httpClient } from '../../index';
+import { compose, withHandlers, withState } from 'recompose';
 
 export default compose(
   withState('tabNumber', 'setTabNumber', 0),

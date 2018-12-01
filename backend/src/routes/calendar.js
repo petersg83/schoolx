@@ -182,6 +182,42 @@ router.get('/memberEvents', authRequired(['admin'], async (ctx, next, { admin, s
   }
 }));
 
+router.put('/modifyMemberDay/:memberId', authRequired(['admin'], async (ctx, next, { admin, superAdmin }) => {
+  if (ctx.request.body.memberDay && ctx.request.body.date) {
+    admin.canEditMembers([ctx.params.memberId]);
+    const memberId = ctx.params.memberId;
+    const date = new Date (moment(ctx.request.body.date).startOf('day'));
+    const memberDay = ctx.request.body.memberDay;
+    if (
+      !memberDay.isInHoliday &&
+      !memberDay.arrivedAt &&
+      !memberDay.leftAt &&
+      !memberDay.isJustifiedDelay &&
+      !memberDay.isJustifiedAbsence &&
+      !memberDay.note
+    ) {
+      await db.SpecialMemberDay.destroy({
+        where: {
+          memberId,
+          day: date,
+        },
+      });
+    } else {
+      await db.SpecialMemberDay.upsert({
+        memberId,
+        day: date,
+        arrivedAt: memberDay.arrivedAt,
+        leftAt: memberDay.leftAt,
+        justifiedDelay: memberDay.isJustifiedDelay,
+        justifiedAbsence: memberDay.isJustifiedAbsence,
+        holiday: memberDay.isInHoliday,
+        note: memberDay.note,
+      });
+    }
+    ctx.body = {};
+  }
+}));
+
 router.get('/schoolEvents', authRequired(['admin'], async (ctx, next, { admin, superAdmin }) => {
   if (ctx.query.currentDay) {
     const fromDate = moment(+ctx.query.currentDay).startOf('month').subtract(2, 'months');

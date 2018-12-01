@@ -4,12 +4,13 @@ import moment from 'moment';
 import config from '../../../../../config';
 import { httpClient } from '../../../index';
 import { getReadableTimeBetween } from '../../../../../utils/dates';
+import 'moment/locale/fr';
 
 moment.locale('fr');
 
 export default compose(
   withState('memberEvents', 'setMemberEvents', []),
-  withState('modalType', 'setModalType', ''),
+  withState('dayToBeModified', 'setDayToBeModified', null),
   withState('selectedDate', 'setSelectedDate', null),
   withState('currentDate', 'setCurrentDate', moment().startOf('day')),
   withState('selectedMemberId', 'setSelectedMemberId', ''),
@@ -81,14 +82,14 @@ export default compose(
           }
 
           let delayEvent = null;
-          if (day.delay && !day.justifiedDelay) {
+          if (day.delay && day.arrivedAt && !day.justifiedDelay) {
             delayEvent = {
               title: `Retard de ${getReadableTimeBetween(memberArrivedDate, moment(day.day).startOf('day').add(+day.maxArrivalTime.split(':')[0], 'h').add(+day.maxArrivalTime.split(':')[1], 'm'))}`,
               color: 'DarkGray',
               start: memberArrivedDate,
               end: new Date(moment(memberArrivedDate).add(30, 'm')),
             };
-          } else if (day.delay && day.justifiedDelay) {
+          } else if (day.delay && day.arrivedAt && day.justifiedDelay) {
             delayEvent = {
               title: `Retard justifié de ${getReadableTimeBetween(memberArrivedDate, moment(day.day).startOf('day').add(+day.maxArrivalTime.split(':')[0], 'h').add(+day.maxArrivalTime.split(':')[1], 'm'))}`,
               color: 'MediumSeaGreen',
@@ -101,8 +102,6 @@ export default compose(
         }, []);
 
         props.setMemberEvents(events);
-        // props.setMembers(res.map(m => ({ id: m.id, firstName: m.firstName, lastName: m.lastName })));
-        // props.setSelectedMemberId(res[0] ? res[0].id : '');
       });
     },
   }),
@@ -132,57 +131,32 @@ export default compose(
       props.setCurrentDate(moment(date));
       props.getMemberDays(props.selectedMemberId, moment(date));
     },
-    // onSelectSlot: props => data => {
-    //   props.setSelectedDate(moment(data.start));
-    //   if (props.schoolEvents.find(e => e.specialDay && moment(e.ssd.day).isSame(moment(data.start), 'day'))) {
-    //     props.setModalType('modifySSD');
-    //   } else {
-    //     props.setModalType('createSSD');
-    //   }
-    // },
+    onSelectSlot: props => data => {
+      props.setSelectedDate(moment(data.start));
+      const dayToBeModified = props.memberEvents.find(e => moment(e.day).isSame(moment(data.start), 'day'))
+      if (dayToBeModified) {
+        props.setDayToBeModified(dayToBeModified);
+      }
+    },
     onSelectMember: props => e => {
       props.setSelectedMemberId(e.target.value);
       props.getMemberDays(e.target.value, props.currentDate);
     },
-    // closeModal: props => () => props.setModalType(''),
+    closeModal: props => () => props.setDayToBeModified(null),
   }),
-  // withHandlers({
-  //   afterSubmitSomething: props => () => {
-  //     props.closeModal();
-  //     props.getSchoolEventsFor(props.selectedDate);
-  //   }
-  // }),
+  withHandlers({
+    afterSubmitSomething: props => () => {
+      props.closeModal();
+      props.getMemberDays(props.selectedMemberId, props.currentDate);
+    }
+  }),
   lifecycle({
     componentDidMount() {
-      // this.props.getSchoolEventsFor(moment().toISOString());
       this.props.getMembers();
     },
   }),
-  // withProps(props => {
-  //   const currentDayEvent = props.schoolEvents.find(e => moment(e.start).isSame(moment(props.selectedDate), 'day'));
-  //   let ssdPrefilledForCreation = {};
-  //
-  //   if (currentDayEvent) {
-  //     ssdPrefilledForCreation = {
-  //       openAt: currentDayEvent.openAt,
-  //       closeAt: currentDayEvent.closeAt,
-  //       isClosed: currentDayEvent.isClosed,
-  //       maxArrivalTime: currentDayEvent.maxArrivalTime,
-  //       minTimeBefPartialAbsence: currentDayEvent.minTimeBefPartialAbsence,
-  //       minTimeBefTotalAbsence: currentDayEvent.minTimeBefTotalAbsence,
-  //     };
-  //   }
-  //
-  //   return {
-  //     events: props.schoolEvents,
-  //     isModalOpen: !!props.modalType,
-  //     currentSSD: props.modalType === 'modifySSD' ? props.schoolEvents.find(e => e.specialDay && moment(e.ssd.day).isSame(moment(props.selectedDate), 'day')).ssd : null,
-  //     ssdPrefilledForCreation,
-  //   };
-  // }
-  // ),
   withProps(props => ({
     events: props.memberEvents,
-    isModalOpen: false,
+    isModalOpen: !!props.dayToBeModified,
   })),
 )(DumbMemberCalendar);

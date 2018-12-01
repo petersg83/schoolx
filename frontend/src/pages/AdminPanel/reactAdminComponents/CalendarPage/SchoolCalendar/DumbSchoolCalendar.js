@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import CreateSSDForm from './CreateSSDForm';
+import 'moment/locale/fr';
 
 moment.locale('fr');
 const localizer = BigCalendar.momentLocalizer(moment);

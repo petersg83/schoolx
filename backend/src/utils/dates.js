@@ -8,9 +8,6 @@ export const isStringTimeValid = (stringTime) => {
     const m = +stringTime.split(':')[1];
     isValid = Number.isInteger(h) && Number.isInteger(m) && h >= 0 && h < 24 && m >= 0 && m < 60;
   }
-  if (!isValid) {
-    console.log('mince :', stringTime);
-  }
   return isValid;
 };
 

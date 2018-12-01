@@ -1,46 +1,23 @@
 import DumbCreateSSDForm from './DumbCreateSSDForm';
-import { compose, withHandlers, withState, lifecycle } from 'recompose';
+import { compose, withHandlers, withState } from 'recompose';
 import config from '../../../../../../config';
 import { httpClient } from '../../../../index';
 
 export default compose(
-  withState('isClosed', 'setIsClosed', false),
-  withState('openAt', 'setOpenAt', ''),
-  withState('closeAt', 'setCloseAt', ''),
-  withState('maxArrivalTime', 'setMaxArrivalTime', ''),
-  withState('minTimeBefPartialAbsence', 'setMinTimeBefPartialAbsence', ''),
-  withState('minTimeBefTotalAbsence', 'setMinTimeBefTotalAbsence', ''),
-  withState('note', 'setNote', ''),
-  lifecycle({
-    componentDidMount() {
-      if (this.props.ssd) {
-        this.props.setIsClosed(this.props.ssd.isClosed);
-        this.props.setOpenAt(this.props.ssd.openAt || '');
-        this.props.setCloseAt(this.props.ssd.closeAt || '');
-        this.props.setMaxArrivalTime(this.props.ssd.maxArrivalTime || '');
-        this.props.setMinTimeBefPartialAbsence(this.props.ssd.minTimeBefPartialAbsence || '');
-        this.props.setMinTimeBefTotalAbsence(this.props.ssd.minTimeBefTotalAbsence || '');
-        this.props.setNote(this.props.ssd.note || '');
-      }
-    },
-  }),
+  withState('isClosed', 'setIsClosed', props => (props.ssd && props.ssd.isClosed) || ''),
+  withState('openAt', 'setOpenAt', props => (props.ssd && props.ssd.openAt) || ''),
+  withState('closeAt', 'setCloseAt', props => (props.ssd && props.ssd.closeAt) || ''),
+  withState('maxArrivalTime', 'setMaxArrivalTime', props => (props.ssd && props.ssd.maxArrivalTime) || ''),
+  withState('minTimeBefPartialAbsence', 'setMinTimeBefPartialAbsence', props => (props.ssd && props.ssd.minTimeBefPartialAbsence) || ''),
+  withState('minTimeBefTotalAbsence', 'setMinTimeBefTotalAbsence', props => (props.ssd && props.ssd.minTimeBefTotalAbsence) || ''),
+  withState('note', 'setNote', props => (props.ssd && props.ssd.note) || ''),
   withHandlers({
     onIsClosedChange: props => e => props.setIsClosed(!e.target.checked),
-    onOpenAtChange: props => e => {
-      props.setOpenAt(e.target.value);
-    },
-    onCloseAtChange: props => e => {
-      props.setCloseAt(e.target.value);
-    },
-    onMaxArrivalTimeChange: props => e => {
-      props.setMaxArrivalTime(e.target.value);
-    },
-    onMinTimeBefPartialAbsenceChange: props => e => {
-      props.setMinTimeBefPartialAbsence(e.target.value);
-    },
-    onMinTimeBefTotalAbsenceChange: props => e => {
-      props.setMinTimeBefTotalAbsence(e.target.value);
-    },
+    onOpenAtChange: props => e => props.setOpenAt(e.target.value),
+    onCloseAtChange: props => e => props.setCloseAt(e.target.value),
+    onMaxArrivalTimeChange: props => e => props.setMaxArrivalTime(e.target.value),
+    onMinTimeBefPartialAbsenceChange: props => e => props.setMinTimeBefPartialAbsence(e.target.value),
+    onMinTimeBefTotalAbsenceChange: props => e => props.setMinTimeBefTotalAbsence(e.target.value),
     onNoteChange: props => e => props.setNote(e.target.value),
     onDelete: props => () => {
       httpClient(`${config.apiEndpoint}/specialSchoolDay`, {
