@@ -4,7 +4,7 @@ import config from '../../../../../../config';
 import { httpClient } from '../../../../index';
 
 export default compose(
-  withState('isClosed', 'setIsClosed', props => (props.ssd && props.ssd.isClosed) || ''),
+  withState('isClosed', 'setIsClosed', props => !!(props.ssd && props.ssd.isClosed)),
   withState('openAt', 'setOpenAt', props => (props.ssd && props.ssd.openAt) || ''),
   withState('closeAt', 'setCloseAt', props => (props.ssd && props.ssd.closeAt) || ''),
   withState('maxArrivalTime', 'setMaxArrivalTime', props => (props.ssd && props.ssd.maxArrivalTime) || ''),

@@ -47,10 +47,10 @@ const DumbSchoolCalendar = (props) => <div>
     open={props.isModalOpen}
     onClose={props.closeModal}
   >
-    <DialogContent>
+    {(props.modalType === 'createSSD' || props.modalType === 'modifySSD') && <DialogContent>
       {props.modalType === 'createSSD' && <CreateSSDForm date={props.selectedDate} onCancel={props.closeModal} afterSubmit={props.afterSubmitSomething} ssd={props.ssdPrefilledForCreation} />}
       {props.modalType === 'modifySSD' && <CreateSSDForm date={props.selectedDate} onCancel={props.closeModal} afterSubmit={props.afterSubmitSomething} ssd={props.currentSSD} canDelete />}
-    </DialogContent>
+    </DialogContent>}
   </Dialog>
 </div>;
 

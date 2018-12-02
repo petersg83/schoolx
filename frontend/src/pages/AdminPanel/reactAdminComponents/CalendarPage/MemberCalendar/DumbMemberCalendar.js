@@ -63,9 +63,9 @@ const DumbMemberCalendar = (props) => {
       open={props.isModalOpen}
       onClose={props.closeModal}
     >
-      <DialogContent>
+      {props.isModalOpen && <DialogContent>
         <ModifyMemberDayForm memberId={props.selectedMemberId} date={props.selectedDate} afterSubmit={props.afterSubmitSomething} currentDay={props.dayToBeModified} onCancel={props.closeModal} />
-      </DialogContent>
+      </DialogContent>}
     </Dialog>
   </div>;
 };

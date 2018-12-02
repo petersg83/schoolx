@@ -141,7 +141,7 @@ const DumbInAndOutPage = (props) => {
         open={props.isModalOpen}
         onClose={props.onExitTile}
       >
-        <DialogContent>
+        {props.memberInModal && <DialogContent>
           <Typography variant='headline' style={{ textAlign: 'center', paddingBottom: '10px' }} gutterBottom>
             {`${props.memberInModal ? props.memberInModal.firstName : ''} ${props.memberInModal ? props.memberInModal.lastName : ''}`}
           </Typography>
@@ -157,7 +157,7 @@ const DumbInAndOutPage = (props) => {
               </div>
             </div>
           </div>
-        </DialogContent>
+        </DialogContent>}
       </Dialog>
     </div>;
   }
