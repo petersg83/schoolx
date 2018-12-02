@@ -3,12 +3,13 @@ import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Modal from 'react-modal';
 import green from '@material-ui/core/colors/green';
 import red from '@material-ui/core/colors/red';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import { PacmanLoader } from 'react-spinners';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
 import config from '../../../../config';
 
 const styles = theme => ({
@@ -27,19 +28,6 @@ const theme = createMuiTheme({
     secondary: red,
   },
 });
-
-const modalStyle = {
-  content : {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    height: 'auto',
-    width: '400px',
-  }
-};
 
 const DumbInAndOutPage = (props) => {
   let content = null;
@@ -85,7 +73,7 @@ const DumbInAndOutPage = (props) => {
       }
 
       memberTiles.push(
-        <Grid key={member.id} onClick={() => props.onClickOnTile(member.id)} style={{ cursor: 'pointer', WebkitTouchCallout: 'none', WebkitUserSelect: 'none', KhtmlUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none', userSelect: 'none' }} item>
+        <Grid key={member.id} onClick={() => props.onClickOnTile(member.id)} style={{ cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }} item>
           <Paper className={props.classes.paper} style={{ backgroundColor: tileBackgroundColor }}>
             <div style={{ textAlign: 'center' }}>
               <img alt={member.firstName} style={{ maxWidth: '170px', maxHeight: '200px', borderRadius: '4px 4px 0 0' }} src={`${config.apiEndpoint}/public/${member.avatarPath ? `avatars/${member.avatarPath}` : 'default/defaultPic.png'}`} />
@@ -149,20 +137,17 @@ const DumbInAndOutPage = (props) => {
       <Grid container justify="center" className={props.classes.root} spacing={16}>
         {memberTiles}
       </Grid>
-      <Modal
-        isOpen={props.isModalOpen}
-        onRequestClose={props.onExitTile}
-        style={modalStyle}
-        contentLabel="inAndOutSubmit"
-        overlayClassName="Overlay"
+      <Dialog
+        open={props.isModalOpen}
+        onClose={props.onExitTile}
       >
-        {props.isModalOpen && <div>
+        <DialogContent>
           <Typography variant='headline' style={{ textAlign: 'center', paddingBottom: '10px' }} gutterBottom>
-            {`${props.memberInModal.firstName} ${props.memberInModal.lastName}`}
+            {`${props.memberInModal ? props.memberInModal.firstName : ''} ${props.memberInModal ? props.memberInModal.lastName : ''}`}
           </Typography>
           <div style={{ display: 'flex' }}>
-            <img alt={props.memberInModal.firstName} style={{ maxWidth: '170px', maxHeight: '200px', borderRadius: '4px' }} src={`${config.apiEndpoint}/public/${props.memberInModal.avatarPath ? `avatars/${props.memberInModal.avatarPath}` : 'default/defaultPic.png'}`} />
-            <div style={{ textAlign: 'center', paddingTop: '20px', paddingLeft: '20px', width: '100%' }}>
+            <img alt={props.memberInModal ? props.memberInModal.firstName : ''} style={{ maxWidth: '170px', maxHeight: '200px', borderRadius: '4px' }} src={`${config.apiEndpoint}/public/${props.memberInModal && props.memberInModal.avatarPath ? `avatars/${props.memberInModal.avatarPath}` : 'default/defaultPic.png'}`} />
+            <div style={{ textAlign: 'center', padding: '20px 20px 0 20px', width: '100%' }}>
               <Typography variant='title' gutterBottom>
                 {props.time.format('HH:mm:ss')}
               </Typography>
@@ -172,8 +157,8 @@ const DumbInAndOutPage = (props) => {
               </div>
             </div>
           </div>
-        </div>}
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </div>;
   }
 

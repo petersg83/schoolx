@@ -14,7 +14,6 @@
     "react-admin": "^2.1.0",
     "react-big-calendar": "^0.20.1",
     "react-dom": "^16.4.2",
-    "react-modal": "^3.6.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "react-spinners": "^0.4.7",

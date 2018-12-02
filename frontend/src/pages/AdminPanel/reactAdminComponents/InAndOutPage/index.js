@@ -133,13 +133,12 @@ export default compose(
     }
   }),
   withProps(props => {
-    const isModalOpen = !!(props.memberShownInModalId && props.membersMap[props.memberShownInModalId]);
     const memberInModal = props.membersMap[props.memberShownInModalId];
 
     return ({
-      isModalOpen,
+      isModalOpen: !!memberInModal,
       isSchoolOpenToday: !props.todaySettings.isClosed,
-      memberInModal,
+      memberInModal: memberInModal,
     });
   }),
 )(DumbInAndOutPage);
