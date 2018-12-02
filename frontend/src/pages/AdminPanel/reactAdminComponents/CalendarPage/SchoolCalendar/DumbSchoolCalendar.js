@@ -40,6 +40,7 @@ const DumbSchoolCalendar = (props) => <div>
       eventPropGetter={props.eventPropGetter}
       onNavigate={props.onNavigate}
       onSelectSlot={props.onSelectSlot}
+      onSelectEvent={props.onSelectSlot}
       selectable
     />
   </div>

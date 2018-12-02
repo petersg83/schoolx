@@ -44,6 +44,7 @@ const DumbMemberCalendar = (props) => {
         messages={messages}
         onNavigate={props.onNavigate}
         onSelectSlot={props.onSelectSlot}
+        onSelectEvent={props.onSelectSlot}
         eventPropGetter={props.eventPropGetter}
         selectable
       />

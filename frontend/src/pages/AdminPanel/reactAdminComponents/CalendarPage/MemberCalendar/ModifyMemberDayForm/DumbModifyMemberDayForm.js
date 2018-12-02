@@ -10,6 +10,7 @@ import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import Checkbox from '@material-ui/core/Checkbox';
 import { withStyles } from '@material-ui/core/styles';
 import 'moment/locale/fr';
 
@@ -73,7 +74,7 @@ const DumbModifyMemberDayForm = props => <form onSubmit={props.onSubmit}>
       />
       <FormControlLabel
         control={
-          <Switch
+          <Checkbox
             checked={!props.isInHoliday && props.isJustifiedDelay}
             onChange={props.onIsJustifiedDelayChange}
             value="isJustifiedDelay"
@@ -85,7 +86,7 @@ const DumbModifyMemberDayForm = props => <form onSubmit={props.onSubmit}>
       />
       <FormControlLabel
         control={
-          <Switch
+          <Checkbox
             checked={!props.isInHoliday && props.isJustifiedAbsence}
             onChange={props.onIsJustifiedAbsenceChange}
             value="isJustifiedAbsence"
