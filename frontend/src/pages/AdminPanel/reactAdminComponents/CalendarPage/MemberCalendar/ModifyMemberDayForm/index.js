@@ -18,7 +18,8 @@ export default compose(
     onIsJustifiedAbsenceChange: props => e => props.setIsJustifiedAbsenceChange(e.target.checked),
     onNoteChange: props => e => props.setNote(e.target.value),
     onIsInHolidayChange: props => e => props.setIsInHoliday(e.target.checked),
-    onSubmit: props => () => {
+    onSubmit: props => (e) => {
+      e.preventDefault();
       httpClient(`${config.apiEndpoint}/modifyMemberDay/${props.memberId}`, {
         method: 'PUT',
         headers: new Headers({

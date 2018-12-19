@@ -15,11 +15,11 @@ Member.findByIdAndSchoolId = (id, schoolId) => Member.findOne({
   include: [{ model: MemberSettings, as: 'memberSettings'}, { model: MemberPeriodsAtSchool, as: 'memberPeriodsAtSchool'}],
 });
 
-Member.getTodaysInAndOutMembers = async (schoolId) => {
-  const today = moment().startOf('day');
-  const schoolIsOpenToday = await School.isSchoolOpenOn(schoolId, today);
+Member.getInAndOutMembersForSchoolAndDay = async (schoolId, date) => {
+  const day = moment(date).startOf('day');
+  const schoolIsOpenThisday = await School.isSchoolOpenOn(schoolId, day);
 
-  if (!schoolIsOpenToday) {
+  if (!schoolIsOpenThisday) {
     return [];
   } else {
     return Member.findAll({
@@ -31,9 +31,9 @@ Member.getTodaysInAndOutMembers = async (schoolId) => {
         model: MemberPeriodsAtSchool,
         as: 'memberPeriodsAtSchool',
         where: {
-          startAt: { $lte: new Date(today) },
+          startAt: { $lte: new Date(day) },
           $or: [{
-            endAt: { $gte: new Date(today) },
+            endAt: { $gte: new Date(day) },
           }, {
             endAt: null,
           }],
@@ -43,9 +43,9 @@ Member.getTodaysInAndOutMembers = async (schoolId) => {
         as: 'memberSettings',
         required: false,
         where: {
-          startAt: { $lte: new Date(today) },
+          startAt: { $lte: new Date(day) },
           $or: [{
-            endAt: { $gte: new Date(today) },
+            endAt: { $gte: new Date(day) },
           }, {
             endAt: null,
           }]
@@ -55,12 +55,14 @@ Member.getTodaysInAndOutMembers = async (schoolId) => {
         as: 'specialMemberDays',
         required: false,
         where: {
-          day: new Date(today),
+          day: new Date(day),
         },
       }],
     });
   }
 };
+
+Member.getTodaysInAndOutMembers = (schoolId) => Member.getInAndOutMembersForSchoolAndDay(schoolId, moment());
 
 Member.createWithSettingsAndPeriods = memberWithSettingsAndPeriods => {
   const creationData = {

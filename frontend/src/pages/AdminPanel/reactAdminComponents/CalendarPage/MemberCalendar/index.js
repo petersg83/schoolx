@@ -133,7 +133,7 @@ export default compose(
     },
     onSelectSlot: props => data => {
       props.setSelectedDate(moment(data.start));
-      const dayToBeModified = props.memberEvents.find(e => moment(e.day).isSame(moment(data.start), 'day'))
+      const dayToBeModified = props.memberEvents.find(e => e.day && moment(e.day).isSame(moment(data.start), 'day'))
       if (dayToBeModified) {
         props.setDayToBeModified(dayToBeModified);
       }
