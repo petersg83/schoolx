@@ -1,159 +1,71 @@
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Checkbox from '@material-ui/core/Checkbox';
-import SaveIcon from '@material-ui/icons/Save';
-import { withStyles } from '@material-ui/core/styles';
+import MemberDayRow from './MemberDayRow';
 import moment from 'moment';
 import 'moment/locale/fr';
 
-const styles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-  },
-  textField: {
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
-    marginRight: '30px',
-  },
-  checkbox: {
-    marginRight: '30px',
-  },
-  switch: {
-    marginRight: '30px',
-  },
-  button: {
-    margin: theme.spacing.unit,
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit,
-  },
-  iconSmall: {
-    fontSize: 20,
-  },
-});
-
 const DumbDaySumUp = (props) => {
-  return <div style={{ marginTop: '20px' }}>
-    <div style={{ marginBottom: '20px' }}>
-      <FormControl>
-        <TextField
-          id="date"
-          label="Jour"
-          type="date"
-          defaultValue={moment().format('YYYY-MM-DD')}
-          InputLabelProps={{ shrink: true }}
-        />
-      </FormControl>
-    </div>
-    <table>
+
+  let content;
+
+  if (props.isSchoolOpen && props.membersDay.length) {
+    const memberDayRows = props.membersDay && props.membersDay.map(md => <MemberDayRow memberDay={md} key={`md-${md.memberId}`}/>);
+    content = <table style={{ borderSpacing: '0px', borderCollapse: 'collapse' }}>
       <thead>
         <tr>
-          <td><Typography variant="title" style={{ padding: '0px 20px' }}>Nom</Typography></td>
-          <td><Typography variant="title" style={{ padding: '0px 20px' }}>Actuellement</Typography></td>
-          <td><Typography variant="title" style={{ padding: '0px 20px' }}>Modifier</Typography></td>
+          <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Nom</Typography></td>
+          <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Heures</Typography></td>
+          <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Résumé</Typography></td>
+          <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Note</Typography></td>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td style={{ padding: '0px 20px' }}><Typography variant="body2">Pierre Noël</Typography></td>
-          <td style={{ padding: '0px 20px' }}><Typography variant="body2">Présent 10:25 → 16:30</Typography></td>
-          <td style={{ padding: '0px 20px' }}>
-            <form onSubmit={props.onSubmit}>
-            <FormControl component="fieldset">
-              <FormGroup style={{ flexDirection: 'row' }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={props.isInHoliday}
-                      onChange={props.onIsInHolidayChange}
-                      value="isInHoliday"
-                      color="secondary"
-                    />
-                  }
-                  className={props.classes.switch}
-                  label="En congé"
-                />
-                <TextField
-                  id="arrivedAt"
-                  label="Arrivé à"
-                  type="time"
-                  InputLabelProps={{ shrink: true }}
-                  inputProps={{ step: 300 }}
-                  className={props.classes.textField}
-                  value={props.isInHoliday ? '' : props.arrivedAt}
-                  onChange={props.onArrivedAtChange}
-                  disabled={props.isInHoliday}
-                  InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
-                />
-                <TextField
-                  id="leftAt"
-                  label="Parti à"
-                  type="time"
-                  InputLabelProps={{ shrink: true }}
-                  inputProps={{ step: 300 }}
-                  className={props.classes.textField}
-                  value={props.isInHoliday ? '' : props.leftAt}
-                  onChange={props.onLeftAtChange}
-                  disabled={props.isInHoliday}
-                  InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={!props.isInHoliday && props.isJustifiedDelay}
-                      onChange={props.onIsJustifiedDelayChange}
-                      value="isJustifiedDelay"
-                      color="secondary"
-                    />
-                  }
-                  className={props.classes.checkbox}
-                  label="Retard justifié"
-                  disabled={props.isInHoliday}
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={!props.isInHoliday && props.isJustifiedAbsence}
-                      onChange={props.onIsJustifiedAbsenceChange}
-                      value="isJustifiedAbsence"
-                      color="secondary"
-                    />
-                  }
-                  className={props.classes.checkbox}
-                  label="Absence justifiée"
-                  disabled={props.isInHoliday}
-                />
-                <TextField
-                  id="note"
-                  label="Note"
-                  type="textArea"
-                  InputLabelProps={{ shrink: true }}
-                  inputProps={{ step: 300 }}
-                  className={props.classes.textField}
-                  value={props.note}
-                  onChange={props.onNoteChange}
-                />
-                <IconButton size="small" color='secondary' className={props.classes.iconSmall}>
-                  <SaveIcon />
-                </IconButton>
-              </FormGroup>
-            </FormControl>
-            </form>
-          </td>
-        </tr>
+        {memberDayRows}
       </tbody>
     </table>
+  } else if (props.isSchoolOpen && !props.membersDay.length) {
+    content = <Typography>Aucun membre n'était attendu ce jour.</Typography>;
+  } else if (!props.isSchoolOpen) {
+    content = <Typography>École fermée ce jour.</Typography>;
+  }
+
+  return <div style={{ marginTop: '20px' }}>
+    <div style={{ marginBottom: '20px' }}>
+      <FormControl style={{ flexDirection: 'row', display: 'flex' }}>
+        <FormGroup style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+          <TextField
+            id="date"
+            label="Jour"
+            type="date"
+            defaultValue={moment().format('YYYY-MM-DD')}
+            InputLabelProps={{ shrink: true }}
+            onChange={e => props.onDateChange(e.target.value)}
+            style={{ marginRight: '20px' }}
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={props.isInHoliday}
+                onChange={props.onIsInHolidayChange}
+                value="isInHoliday"
+                color="secondary"
+              />
+            }
+            label="Mode édition"
+          />
+        </FormGroup>
+      </FormControl>
+    </div>
+    <Typography variant="caption" style={{ marginBottom: '10px' }}>{props.currentDate.format('dddd DD/MM/YYYY')}</Typography>
+    {content}
   </div>;
 };
 
 
 
-export default withStyles(styles)(DumbDaySumUp);
+export default DumbDaySumUp;

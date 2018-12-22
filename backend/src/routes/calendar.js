@@ -424,11 +424,12 @@ router.get('/membersDay', authRequired(['admin'], async (ctx, next, { admin, sup
         const memberSettings = member.memberSettings[0];
         const specialMemberDay = member.specialMemberDays[0];
         const memberDay = {
-          memberId: member.memberId,
+          memberId: member.id,
           firstName: member.firstName,
           lastName: member.lastName,
           arrivedAt: (specialMemberDay && specialMemberDay.arrivedAt) || '',
           leftAt: (specialMemberDay && specialMemberDay.leftAt) || '',
+          note: (specialMemberDay && specialMemberDay.note) || '',
         };
 
         if (memberSettings && memberSettings.daysOff.includes(momentDay.locale('en').format('dddd').toLowerCase())) {

@@ -41,7 +41,7 @@ export default compose(
           })
           .then((res) => {
             const today = moment();
-            const members = res.sort((m1, m2) => `${m1.firstName} ${m1.lastName}` < `${m2.firstName} ${m2.lastName}`);
+            const members = res.sort((m1, m2) => `${m1.firstName} ${m1.lastName}` < `${m2.firstName} ${m2.lastName}` ? -1 : 1);
             const membersMap = {};
             members.forEach((m) => {
               membersMap[m.id] = m;

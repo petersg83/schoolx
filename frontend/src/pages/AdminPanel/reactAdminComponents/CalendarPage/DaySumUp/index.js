@@ -9,7 +9,6 @@ export default compose(
   withState('membersDay', 'setMembersDay', []),
   withState('daySettings', 'setDaySettings', null),
   withState('isSchoolOpen', 'setIsSchoolOpen', false),
-  withState('firstLoadDone', 'setFirstLoadDone', false),
   withHandlers({
     getMembers: props => (date) => {
       httpClient(`${config.apiEndpoint}/membersDay?date=${moment(date).valueOf()}`, {
@@ -27,8 +26,10 @@ export default compose(
           props.setIsSchoolOpen(false);
         } else {
           props.setIsSchoolOpen(true);
-          const membersDay = res.membersDay.reduce((membersDay, day) => {
+          let membersDay = res.membersDay.reduce((membersDay, day) => {
             const event = Object.assign({}, day);
+            const today = moment().startOf('day');
+            const dayIsBeforeToday = moment(date).isSameOrBefore(today);
 
             if (day.dayType === 'holiday') {
               event.title = 'Vacances';
@@ -36,41 +37,44 @@ export default compose(
             } else if (day.dayType === 'dayOff') {
               event.title = 'Jour off';
               event.color = 'dimgray';
-            } else if (day.absence === 'total' && !day.justifiedAbsence) {
+            } else if (day.absence === 'total' && !day.justifiedAbsence && dayIsBeforeToday) {
               event.title = 'Absence totale';
               event.color = 'red';
-            } else if (day.absence === 'total' && day.justifiedAbsence) {
+            } else if (day.absence === 'total' && day.justifiedAbsence && dayIsBeforeToday) {
               event.title = 'Absence totale justifiée';
               event.color = 'limegreen';
-            } else if (day.absence === 'partial' && !day.justifiedDelay) {
+            } else if (day.absence === 'partial' && !day.justifiedDelay && dayIsBeforeToday) {
               event.title = 'Absence partielle';
               event.color = 'orange';
-            } else if (day.absence === 'partial' && day.justifiedDelay) {
+            } else if (day.absence === 'partial' && day.justifiedDelay && dayIsBeforeToday) {
               event.title = 'Absence partielle justifiée';
               event.color = 'MediumSeaGreen';
             } else if (day.absence === 'undefined') {
               event.title = 'Anomalie';
               event.color = 'hotpink';
-            } else if (!day.absence) {
+            } else if (!day.absence && dayIsBeforeToday) {
               event.title = 'Présent';
               event.color = 'green';
-            }
-
-            if (day.arrivedAt && day.leftAt) {
-              event.title += ` ${day.arrivedAt} → ${day.leftAt}`;
-            } else if (day.arrivedAt && !day.leftAt) {
-              event.title += ` ${day.arrivedAt} → ???`;
+            } else if (!dayIsBeforeToday) {
+              event.title = 'Pas encore arrivé';
+              event.color = 'white';
             }
 
             return [...membersDay, event];
           }, []);
 
+          membersDay.sort((m1, m2) => `${m1.firstName} ${m1.lastName}` < `${m2.firstName} ${m2.lastName}` ? -1 : 1);
           props.setMembersDay(membersDay);
           props.setDaySettings(res.daySettings);
-          console.log(membersDay);
+          props.setCurrentDate(moment(date));
         }
-        props.setFirstLoadDone(true);
       });
+    },
+  }),
+  withHandlers({
+    onDateChange: props => date => {
+      console.log('date', date);
+      props.getMembers(date);
     },
   }),
   lifecycle({
