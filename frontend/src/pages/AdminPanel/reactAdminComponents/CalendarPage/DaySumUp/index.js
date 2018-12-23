@@ -9,6 +9,7 @@ export default compose(
   withState('membersDay', 'setMembersDay', []),
   withState('daySettings', 'setDaySettings', null),
   withState('isSchoolOpen', 'setIsSchoolOpen', false),
+  withState('editMode', 'setEditMode', false),
   withHandlers({
     getMembers: props => (date) => {
       httpClient(`${config.apiEndpoint}/membersDay?date=${moment(date).valueOf()}`, {
@@ -49,6 +50,9 @@ export default compose(
             } else if (day.absence === 'partial' && day.justifiedDelay && dayIsBeforeToday) {
               event.title = 'Absence partielle justifiée';
               event.color = 'MediumSeaGreen';
+            } else if (day.absence === 'undefined' && moment(date).isSame(today, 'day')) {
+              event.title = 'En cours';
+              event.color = 'hotpink';
             } else if (day.absence === 'undefined') {
               event.title = 'Anomalie';
               event.color = 'hotpink';
@@ -64,18 +68,17 @@ export default compose(
           }, []);
 
           membersDay.sort((m1, m2) => `${m1.firstName} ${m1.lastName}` < `${m2.firstName} ${m2.lastName}` ? -1 : 1);
+          props.setCurrentDate(moment(date));
           props.setMembersDay(membersDay);
           props.setDaySettings(res.daySettings);
-          props.setCurrentDate(moment(date));
         }
       });
     },
   }),
   withHandlers({
-    onDateChange: props => date => {
-      console.log('date', date);
-      props.getMembers(date);
-    },
+    onDateChange: props => date => props.getMembers(date),
+    onEditModeChange: props => newValue => props.setEditMode(newValue),
+    afterChangingAMemberDay: props => () => props.getMembers(props.currentDate),
   }),
   lifecycle({
     componentDidMount() {

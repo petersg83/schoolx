@@ -14,20 +14,27 @@ const DumbDaySumUp = (props) => {
   let content;
 
   if (props.isSchoolOpen && props.membersDay.length) {
-    const memberDayRows = props.membersDay && props.membersDay.map(md => <MemberDayRow memberDay={md} key={`md-${md.memberId}`}/>);
-    content = <table style={{ borderSpacing: '0px', borderCollapse: 'collapse' }}>
-      <thead>
-        <tr>
-          <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Nom</Typography></td>
-          <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Heures</Typography></td>
-          <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Résumé</Typography></td>
-          <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Note</Typography></td>
-        </tr>
-      </thead>
-      <tbody>
-        {memberDayRows}
-      </tbody>
-    </table>
+    const memberDayRows = props.membersDay && props.membersDay.map(md => <MemberDayRow memberDay={md} key={`md-${md.memberId}`} editMode={props.editMode} date={props.currentDate} afterSubmit={props.afterChangingAMemberDay} />);
+    content = <div>
+      <Typography variant="caption" style={{ marginBottom: '10px' }}>
+        {props.daySettings && props.daySettings.openAt} → {props.daySettings && props.daySettings.closeAt}<br />
+        Retard à partir de {props.daySettings && props.daySettings.maxArrivalTime}<br />
+        Abs. partielle en dessous de {props.daySettings && props.daySettings.minTimeBefPartialAbsence.replace(':', 'h')}, totale en dessous de {props.daySettings && props.daySettings.minTimeBefTotalAbsence.replace(':', 'h')}
+      </Typography>
+      <table style={{ borderSpacing: '0px', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
+            <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Nom</Typography></td>
+            <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Heures</Typography></td>
+            <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Résumé</Typography></td>
+            <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>{props.editMode ? 'Informations' : 'Note'}</Typography></td>
+          </tr>
+        </thead>
+        <tbody>
+          {memberDayRows}
+        </tbody>
+      </table>
+    </div>;
   } else if (props.isSchoolOpen && !props.membersDay.length) {
     content = <Typography>Aucun membre n'était attendu ce jour.</Typography>;
   } else if (!props.isSchoolOpen) {
@@ -50,9 +57,9 @@ const DumbDaySumUp = (props) => {
           <FormControlLabel
             control={
               <Switch
-                checked={props.isInHoliday}
-                onChange={props.onIsInHolidayChange}
-                value="isInHoliday"
+                checked={props.editMode}
+                onChange={e => props.onEditModeChange(e.target.checked)}
+                value="editMode"
                 color="secondary"
               />
             }
