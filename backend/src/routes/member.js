@@ -121,7 +121,7 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
       where: { memberId: ctx.params.id },
       transaction: t,
     });
-    const memberPeriodsAtSchoolToAdd = ctx.request.body.memberPeriodsAtSchool.map(mp => ({ ...mp, memberId: ctx.params.id }));
+    const memberPeriodsAtSchoolToAdd = ctx.request.body.memberPeriodsAtSchool.map(mp => ({ ...mp, endAt: mp.endAt || null, memberId: ctx.params.id }));
 
     await db.MemberPeriodsAtSchool.bulkCreate(memberPeriodsAtSchoolToAdd, { transaction: t });
 

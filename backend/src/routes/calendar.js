@@ -92,7 +92,7 @@ router.get('/memberEvents', authRequired(['admin'], async (ctx, next, { admin, s
     for (let schoolYear of schoolYears) {
       for (let thisSchoolYearSettings of schoolYear.schoolYearSettings) {
         const day = moment(thisSchoolYearSettings.startAt).startOf('day');
-        const settingsEndAt = thisSchoolYearSettings.endAt ? moment(thisSchoolYearSettings.endAt).startOf('day') : moment(toDate);
+        const settingsEndAt = moment.min(moment(thisSchoolYearSettings.endAt || '9999-12-01').startOf('day'), moment(toDate), moment(schoolYear.endAt));
         while (day.isSameOrBefore(settingsEndAt)) {
           const usualOpenedDay = thisSchoolYearSettings.usualOpenedDays.find(uod => uod.days.includes(day.locale('en').format('dddd').toLowerCase()));
           const specialSchoolDay = specialSchoolDaysMap[day.toISOString()];
