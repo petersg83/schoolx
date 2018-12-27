@@ -1,5 +1,13 @@
 import moment from 'moment';
 
+export const minutesToTimeText = (minutes) => {
+  let text = `${minutes / 60}h${minutes % 60}`;
+  if (minutes / 60 < 10) {
+    text = '0'+text;
+  }
+  return text;
+};
+
 export const getReadableTimeBetween = (t1, t2) => {
   const minutesDiff = moment(t1).diff(moment(t2), 'minutes');
   let result = '';

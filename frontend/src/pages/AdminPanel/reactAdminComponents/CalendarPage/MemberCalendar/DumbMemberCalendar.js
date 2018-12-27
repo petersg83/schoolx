@@ -7,9 +7,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Divider from '@material-ui/core/Divider';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/fr';
 import ModifyMemberDayForm from './ModifyMemberDayForm';
+import MemberSumUp from './MemberSumUp';
 
 moment.locale('fr');
 const localizer = BigCalendar.momentLocalizer(moment);
@@ -60,6 +62,8 @@ const DumbMemberCalendar = (props) => {
         </Select>
       </FormControl>
     </div>
+    <Divider variant="middle" style={{ margin: '15px 0px' }} />
+    <MemberSumUp />
     <Dialog
       open={props.isModalOpen}
       onClose={props.closeModal}

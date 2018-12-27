@@ -5,6 +5,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import MemberDayRow from './MemberDayRow';
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -21,19 +26,19 @@ const DumbDaySumUp = (props) => {
         Retard à partir de {props.daySettings && props.daySettings.maxArrivalTime}<br />
         Abs. partielle en dessous de {props.daySettings && props.daySettings.minTimeBefPartialAbsence.replace(':', 'h')}, totale en dessous de {props.daySettings && props.daySettings.minTimeBefTotalAbsence.replace(':', 'h')}
       </Typography>
-      <table style={{ borderSpacing: '0px', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Nom</Typography></td>
-            <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Heures</Typography></td>
-            <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>Résumé</Typography></td>
-            <td><Typography variant="subheading" style={{ paddingRight: '20px', paddingLeft: '8px' }}>{props.editMode ? 'Informations' : 'Note'}</Typography></td>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Nom</TableCell>
+            <TableCell align="right">Heures</TableCell>
+            <TableCell align="right">Résumé</TableCell>
+            <TableCell align="right">{props.editMode ? 'Informations' : 'Note'}</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {memberDayRows}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>;
   } else if (props.isSchoolOpen && !props.membersDay.length) {
     content = <Typography>Aucun membre n'était attendu ce jour.</Typography>;

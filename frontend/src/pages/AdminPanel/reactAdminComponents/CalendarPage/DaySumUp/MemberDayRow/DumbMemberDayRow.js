@@ -8,6 +8,11 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import SaveIcon from '@material-ui/icons/Save';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import 'moment/locale/fr';
 
 export const DumbShowMemberDayRow = (props) => {
@@ -19,12 +24,14 @@ export const DumbShowMemberDayRow = (props) => {
     timeText += ` ${props.memberDay.arrivedAt} → ???`;
   }
 
-  return <tr>
-    <td style={{ paddingRight: '20px', paddingLeft: '8px' }}><Typography variant="body2">{props.memberDay.firstName} {props.memberDay.lastName}</Typography></td>
-    <td style={{ paddingRight: '20px', paddingLeft: '8px' }}><Typography variant="body2">{timeText}</Typography></td>
-    <td style={{ paddingRight: '20px', paddingLeft: '8px', backgroundColor: props.memberDay.color }}><Typography variant="body2">{props.memberDay.title}</Typography></td>
-    <td style={{ paddingRight: '20px', paddingLeft: '8px' }}><Typography variant="body2">{props.memberDay.note}</Typography></td>
-  </tr>;
+  return (
+    <TableRow>
+      <TableCell component="th" scope="row" style={{ width: '150px' }}>{props.memberDay.firstName} {props.memberDay.lastName}</TableCell>
+      <TableCell align="right" style={{ width: '100px' }}>{timeText}</TableCell>
+      <TableCell align="right" style={{ backgroundColor: props.memberDay.color, width: '100px' }}>{props.memberDay.title}</TableCell>
+      <TableCell align="right">{props.memberDay.note}</TableCell>
+    </TableRow>
+  );
 }
 
 export const DumbEditableMemberDayRow = (props) => {
@@ -36,83 +43,83 @@ export const DumbEditableMemberDayRow = (props) => {
     timeText += ` ${props.memberDay.arrivedAt} → ???`;
   }
 
-  return <tr>
-    <td style={{ paddingRight: '20px', paddingLeft: '8px' }}><Typography variant="body2">{props.memberDay.firstName} {props.memberDay.lastName}</Typography></td>
-    <td style={{ paddingRight: '20px', paddingLeft: '8px' }}><Typography variant="body2">{timeText}</Typography></td>
-    <td style={{ paddingRight: '20px', paddingLeft: '8px', backgroundColor: props.memberDay.color }}><Typography variant="body2">{props.memberDay.title}</Typography></td>
-    <td style={{ paddingRight: '20px', paddingLeft: '8px' }}>
+  return <TableRow>
+    <TableCell component="th" scope="row">{props.memberDay.firstName} {props.memberDay.lastName}</TableCell>
+    <TableCell align="right">{timeText}</TableCell>
+    <TableCell align="right" style={{ backgroundColor: props.memberDay.color }}>{props.memberDay.title}</TableCell>
+    <TableCell align="right">
       <form onSubmit={props.onSubmit}>
-      <FormControl component="fieldset">
-        <FormGroup style={{ flexDirection: 'row' }}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={props.isInHoliday}
-                onChange={props.onIsInHolidayChange}
-                value="isInHoliday"
-                color="secondary"
-              />
-            }
-            label="En congé"
-          />
-          <TextField
-            id="arrivedAt"
-            label="Arrivé à"
-            type="time"
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ step: 300 }}
-            value={props.arrivedAt}
-            onChange={props.onArrivedAtChange}
-            InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
-          />
-          <TextField
-            id="leftAt"
-            label="Parti à"
-            type="time"
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ step: 300 }}
-            value={props.leftAt}
-            onChange={props.onLeftAtChange}
-            InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={props.isJustifiedDelay}
-                onChange={props.onIsJustifiedDelayChange}
-                value="isJustifiedDelay"
-                color="secondary"
-              />
-            }
-            label="Retard justifié"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={props.isJustifiedAbsence}
-                onChange={props.onIsJustifiedAbsenceChange}
-                value="isJustifiedAbsence"
-                color="secondary"
-              />
-            }
-            label="Absence justifiée"
-          />
-          <TextField
-            id="note"
-            label="Note"
-            type="textArea"
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ step: 300 }}
-            value={props.note || ''}
-            onChange={props.onNoteChange}
-            InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
-          />
-          <IconButton size="small" type="submit" color='secondary' disabled={!props.rowChanged}>
-            <SaveIcon />
-          </IconButton>
-        </FormGroup>
-      </FormControl>
+        <FormControl component="fieldset">
+          <FormGroup style={{ flexDirection: 'row' }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={props.isInHoliday}
+                  onChange={props.onIsInHolidayChange}
+                  value="isInHoliday"
+                  color="secondary"
+                />
+              }
+              label="En congé"
+            />
+            <TextField
+              id="arrivedAt"
+              label="Arrivé à"
+              type="time"
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ step: 300 }}
+              value={props.arrivedAt}
+              onChange={props.onArrivedAtChange}
+              InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
+            />
+            <TextField
+              id="leftAt"
+              label="Parti à"
+              type="time"
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ step: 300 }}
+              value={props.leftAt}
+              onChange={props.onLeftAtChange}
+              InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={props.isJustifiedDelay}
+                  onChange={props.onIsJustifiedDelayChange}
+                  value="isJustifiedDelay"
+                  color="secondary"
+                />
+              }
+              label="Retard justifié"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={props.isJustifiedAbsence}
+                  onChange={props.onIsJustifiedAbsenceChange}
+                  value="isJustifiedAbsence"
+                  color="secondary"
+                />
+              }
+              label="Absence justifiée"
+            />
+            <TextField
+              id="note"
+              label="Note"
+              type="textArea"
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ step: 300 }}
+              value={props.note || ''}
+              onChange={props.onNoteChange}
+              InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
+            />
+            <IconButton size="small" type="submit" color='secondary' disabled={!props.rowChanged}>
+              <SaveIcon />
+            </IconButton>
+          </FormGroup>
+        </FormControl>
       </form>
-    </td>
-  </tr>;
+    </TableCell>
+  </TableRow>;
 };
