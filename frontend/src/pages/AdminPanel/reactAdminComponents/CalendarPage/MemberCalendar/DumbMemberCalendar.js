@@ -63,7 +63,7 @@ const DumbMemberCalendar = (props) => {
       </FormControl>
     </div>
     <Divider variant="middle" style={{ margin: '15px 0px' }} />
-    <MemberSumUp />
+    <MemberSumUp memberId={props.selectedMemberId} />
     <Dialog
       open={props.isModalOpen}
       onClose={props.closeModal}

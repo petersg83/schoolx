@@ -15,7 +15,7 @@ export const stringTimeToMinutes = (stringTime) => {
   if (!isStringTimeValid(stringTime)) {
     throw new Error('invalid string time provided to stringTimeToMinutes', stringTime);
   }
-  return +stringTime.split(':')[0] * 60 + stringTime.split(':')[1];
+  return (+stringTime.split(':')[0]) * 60 + (+stringTime.split(':')[1]);
 };
 
 export const isStringTimeStrictlyBefore = (t1, t2) => {

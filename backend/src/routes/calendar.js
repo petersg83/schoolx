@@ -9,173 +9,8 @@ router.get('/memberEvents', authRequired(['admin'], async (ctx, next, { admin, s
     admin.canEditMembers([ctx.query.memberId]);
     const fromDate = new Date(moment(+ctx.query.currentDay).startOf('month').subtract(2, 'months'));
     const toDate = new Date(moment(+ctx.query.currentDay).endOf('month').add(2, 'months'));
-    const currentDay = new Date(moment(+ctx.query.currentDay).startOf('day'));
 
-    const member = await db.Member.findOne({
-      where: { id: ctx.query.memberId },
-      include: [
-        {
-          model: db.MemberSettings,
-          as: 'memberSettings',
-          required: false,
-          where: {
-            $or: [
-              { startAt: { $between: [fromDate, toDate] } },
-              { endAt: { $between: [fromDate, toDate] } },
-              { startAt: { $lte: fromDate }, $or: [{ endAt: { $gte: toDate } }, { endAt: null }] },
-            ],
-          },
-        }, {
-          model: db.MemberPeriodsAtSchool,
-          as: 'memberPeriodsAtSchool',
-          required: false,
-          where: {
-            $or: [
-              { startAt: { $between: [fromDate, toDate] } },
-              { endAt: { $between: [fromDate, toDate] } },
-              { startAt: { $lte: fromDate }, $or: [{ endAt: { $gte: toDate } }, { endAt: null }] },
-            ],
-          },
-        }, {
-          model: db.SpecialMemberDay,
-          as: 'specialMemberDays',
-          required: false,
-          day: { $between: [fromDate, toDate] },
-        },
-      ],
-    });
-    if (!member) {
-      throw new Error("Le membre demandé n'existe pas");
-    }
-
-    const schoolYears = await db.SchoolYear.findAll({
-      where: {
-        schoolId: admin.schoolId,
-        $or: [
-          { startAt: { $between: [fromDate, toDate] } },
-          { endAt: { $between: [fromDate, toDate] } },
-          { startAt: { $lte: fromDate }, $or: [{ endAt: { $gte: toDate } }, { endAt: null }] },
-        ],
-      },
-      include: [{
-        model: db.SchoolYearSettings,
-        as: 'schoolYearSettings',
-        where: {
-          $or: [
-            { startAt: { $between: [fromDate, toDate] } },
-            { endAt: { $between: [fromDate, toDate] } },
-            { startAt: { $lte: fromDate }, $or: [{ endAt: { $gte: toDate } }, { endAt: null }] },
-          ],
-        },
-        include: [{
-          model: db.UsualOpenedDays,
-          as: 'usualOpenedDays',
-        }],
-      }],
-    });
-
-    const specialSchoolDays = await db.SpecialSchoolDay.findAll({
-      where: {
-        schoolId: admin.schoolId,
-        day: { $between: [fromDate, toDate] },
-      },
-    });
-
-    const specialSchoolDaysMap = {};
-    specialSchoolDays.forEach((ssd) => { specialSchoolDaysMap[moment(ssd.day).startOf('day').toISOString()] = ssd; });
-
-    const specialMemberDaysMap = {};
-    member.specialMemberDays.forEach((smd) => { specialMemberDaysMap[moment(smd.day).startOf('day').toISOString()] = smd; });
-
-    const memberDays = [];
-
-    for (let schoolYear of schoolYears) {
-      for (let thisSchoolYearSettings of schoolYear.schoolYearSettings) {
-        const day = moment(thisSchoolYearSettings.startAt).startOf('day');
-        const settingsEndAt = moment.min(moment(thisSchoolYearSettings.endAt || '9999-12-01').startOf('day'), moment(toDate), moment(schoolYear.endAt));
-        while (day.isSameOrBefore(settingsEndAt)) {
-          const usualOpenedDay = thisSchoolYearSettings.usualOpenedDays.find(uod => uod.days.includes(day.locale('en').format('dddd').toLowerCase()));
-          const specialSchoolDay = specialSchoolDaysMap[day.toISOString()];
-          const daySettings = specialSchoolDay || usualOpenedDay;
-          const memberPeriodAtSchool = member.memberPeriodsAtSchool.find(mpas => moment(mpas.startAt).startOf('day').isSameOrBefore(day) && (!mpas.endAt || moment(mpas.endAt).startOf('day').isSameOrAfter(day)));
-          if (daySettings && !daySettings.isClosed && memberPeriodAtSchool) {
-            const memberSettingsForThisDay = member.memberSettings.find(ms => moment(ms.startAt).startOf('day').isSameOrBefore(day) && (!ms.endAt || moment(ms.endAt).startOf('day').isSameOrAfter(day)));
-            const specialMemberDay = specialMemberDaysMap[day.toISOString()];
-            const memberDay = {
-              day: day.toISOString(),
-              arrivedAt: (specialMemberDay && specialMemberDay.arrivedAt) || '',
-              leftAt: (specialMemberDay && specialMemberDay.leftAt) || '',
-              schoolOpensAt: daySettings.openAt,
-              schoolClosesAt: daySettings.closeAt,
-              minTimeBefPartialAbsence: daySettings.minTimeBefPartialAbsence,
-              minTimeBefTotalAbsence: daySettings.minTimeBefTotalAbsence,
-              maxArrivalTime: daySettings.maxArrivalTime,
-            };
-            if (memberSettingsForThisDay && memberSettingsForThisDay.daysOff.includes(day.locale('en').format('dddd').toLowerCase())) {
-              Object.assign(memberDay, {
-                dayType: 'dayOff',
-                delay: false,
-                justifiedDelay: false,
-                absence: false,
-                justifiedAbsence: false,
-              });
-            } else if (specialMemberDay && specialMemberDay.holiday) {
-              Object.assign(memberDay, {
-                dayType: 'holiday',
-                delay: false,
-                justifiedDelay: false,
-                absence: false,
-                justifiedAbsence: false,
-                note: specialMemberDay.note,
-              });
-            } else if (specialMemberDay) {
-              Object.assign(memberDay, {
-                dayType: 'needed',
-                arrivedAt: specialMemberDay.arrivedAt || '',
-                leftAt: specialMemberDay.leftAt || '',
-                note: specialMemberDay.note,
-              });
-              memberDay.delay = memberDay.arrivedAt && isStringTimeStrictlyBefore(memberDay.maxArrivalTime, memberDay.arrivedAt);
-
-              if (!isStringTimeValid(memberDay.arrivedAt)) {
-                memberDay.absence = 'total';
-              } else if (!isStringTimeValid(memberDay.leftAt)) {
-                memberDay.absence = 'undefined';
-              } else {
-                const consideredArrivedAt = isStringTimeStrictlyBefore(memberDay.arrivedAt, daySettings.openAt)
-                  ? daySettings.openAt
-                  : isStringTimeStrictlyBefore(memberDay.arrivedAt, daySettings.closeAt) ? memberDay.arrivedAt : daySettings.closeAt;
-                const consideredLeftAt = isStringTimeStrictlyBefore(daySettings.closeAt, memberDay.leftAt)
-                  ? daySettings.closeAt
-                  : isStringTimeStrictlyBefore(memberDay.leftAt, daySettings.openAt) ? daySettings.openAt : memberDay.leftAt;
-
-                const timeSpent = (+consideredLeftAt.split(':')[0] - consideredArrivedAt.split(':')[0]) * 60 + consideredLeftAt.split(':')[1] - consideredArrivedAt.split(':')[1];
-                if (timeSpent < stringTimeToMinutes(memberDay.minTimeBefTotalAbsence)) {
-                  memberDay.absence = 'total';
-                } else if (timeSpent < stringTimeToMinutes(memberDay.minTimeBefPartialAbsence)) {
-                  memberDay.absence = 'partial';
-                } else {
-                  memberDay.absence = false;
-                }
-              }
-              memberDay.justifiedDelay = memberDay.delay && !!specialMemberDay.justifiedDelay;
-              memberDay.justifiedAbsence = memberDay.absence && !!specialMemberDay.justifiedAbsence;
-            } else if (day.isSameOrBefore(moment().startOf('day'))) {
-              Object.assign(memberDay, {
-                dayType: 'needed',
-                delay: true,
-                justifiedDelay: false,
-                absence: 'total',
-                justifiedAbsence: false,
-              });
-            }
-            memberDays.push(memberDay);
-          }
-          day.add(1, 'day');
-        }
-      }
-    }
-    ctx.body = memberDays.sort((md1, md2) => md1.day < md2.day);
+    ctx.body = await db.Member.getMemberDays(ctx.query.memberId, admin.schoolId, fromDate, toDate);
   } else {
     ctx.status = 400;
     ctx.body = { status: 400, message: "Bad request" };
@@ -494,6 +329,95 @@ router.get('/membersDay', authRequired(['admin'], async (ctx, next, { admin, sup
 
       ctx.body = { isSchoolOpen: true, membersDay, daySettings };
     }
+  } else {
+    ctx.status = 400;
+    ctx.body = { status: 400, message: "Bad request" };
+  }
+}));
+
+router.get('/memberSumUp', authRequired(['admin'], async (ctx, next, { admin }) => {
+  if (ctx.query.memberId && (ctx.query.currentYear || (ctx.query.from && ctx.query.to))) {
+    let from;
+    let to;
+    let today = new Date(moment().startOf('day'));
+
+    if (ctx.query.currentYear === 'true') {
+      const schoolYear = await db.SchoolYear.findOne({
+        where: {
+          schoolId: admin.schoolId,
+          startAt: { $lte: today },
+          $or: [{ endAt: { $gte: today } }, { endAt: null }],
+        },
+      });
+      if (schoolYear) {
+        from = new Date(moment(schoolYear.startAt).startOf('day'));
+        to = schoolYear.endAt ? new Date(moment.min(moment(schoolYear.endAt).startOf('day'), moment().startOf('day'))) : null;
+      }
+    }
+
+    if (!from || !to || isNaN(from) || isNaN(to)) {
+      from = new Date(moment(+ctx.query.from).startOf('day'));
+      to = new Date(moment(+ctx.query.to).startOf('day'));
+    }
+
+    if (!from || !to || isNaN(from) || isNaN(to)) {
+      throw new Error('"From" and "to" dates are missing');
+    }
+
+    const memberDays = await db.Member.getMemberDays(ctx.query.memberId, admin.schoolId, from, to);
+
+    const totalCounts = {
+      nbOfTotalAbsences: 0,
+      nbOfJustifiedTotalAbsences: 0,
+      nbOfPartialAbsences: 0,
+      nbOfJustifiedPartialAbsences: 0,
+      nbOfDelays: 0,
+      nbOfJustifiedDelays: 0,
+      nbOfTotalPresentDays: 0,
+      nbOfTotalPresentMinutes: 0,
+      nbOfHolidaysTaken: 0,
+      nbOfDayOffTaken: 0,
+      undefinedDays: 0,
+      totalNbOfNeededDays: memberDays.filter(md => md.dayType === 'needed').length,
+      totalNbOfOpenedDays: memberDays.length,
+      from: from.valueOf(),
+      to: to.valueOf(),
+    };
+
+    memberDays.forEach((md) => {
+      if (md.dayType === 'dayOff') {
+        totalCounts.nbOfDayOffTaken += 1;
+      } else if (md.dayType === 'holiday') {
+        totalCounts.nbOfHolidaysTaken += 1;
+      } else if (md.dayType === 'needed') {
+        if (md.delay) {
+          totalCounts.nbOfDelays += 1;
+          if (md.justifiedDelay) {
+            totalCounts.nbOfJustifiedDelays += 1;
+          }
+        }
+        if (md.absence === 'total') {
+          totalCounts.nbOfTotalAbsences += 1;
+          if (md.justifiedAbsence) {
+            totalCounts.nbOfJustifiedTotalAbsences += 1;
+          }
+        } else if (md.absence === 'partial') {
+          totalCounts.nbOfPartialAbsences += 1;
+          if (md.justifiedAbsence) {
+            totalCounts.nbOfJustifiedPartialAbsences += 1;
+          }
+        } else if (md.absence === 'undefined') {
+          totalCounts.undefinedDays += 1;
+        } else {
+          totalCounts.nbOfTotalPresentDays += 1;
+        }
+        if (md.arrivedAt && md.leftAt && isStringTimeValid(md.arrivedAt) && isStringTimeValid(md.leftAt)) {
+          totalCounts.nbOfTotalPresentMinutes += stringTimeToMinutes(md.leftAt) - stringTimeToMinutes(md.arrivedAt);
+        }
+      }
+    });
+
+    ctx.body = totalCounts;
   } else {
     ctx.status = 400;
     ctx.body = { status: 400, message: "Bad request" };

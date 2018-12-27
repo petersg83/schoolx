@@ -6,22 +6,18 @@ import TextField from '@material-ui/core/TextField';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import moment from 'moment';
 import 'moment/locale/fr';
 import { minutesToTimeText } from '../../../../../../utils/dates';
 
-
-
 const DumbMemberSumUp = (props) => {
-
-  const averagePresenceDayTimeText = props.nbOfTotalPresentDays
-    ? minutesToTimeText(Math.round(props.nbOfTotalPresentMinutes / props.nbOfTotalPresentDays))
+  const averagePresenceDayTimeText = props.totalNbOfNeededDays
+    ? minutesToTimeText(Math.round(props.nbOfTotalPresentMinutes / props.totalNbOfNeededDays))
     : '00h00';
 
   return <div style={{ display: 'flex' }}>
     <div style={{ flex: '1 1 auto' }}>
+      <Typography variant="caption" style={{ marginBottom: '10px' }}>Résumé du {props.from ? props.from.format('dddd DD/MM/YY') : '...'} au {props.to ? props.to.format('dddd DD/MM/YY') : '...'}</Typography>
       <FormControl style={{ flexDirection: 'row', display: 'flex' }}>
         <FormGroup style={{ flexDirection: 'row' }}>
           <TextField
@@ -44,26 +40,51 @@ const DumbMemberSumUp = (props) => {
           />
         </FormGroup>
       </FormControl>
-      <Typography variant="caption" style={{ marginTop: '10px' }}>Résumé du {props.from.format('dddd DD/MM/YY')} au {props.to.format('dddd DD/MM/YY')}</Typography>
     </div>
-    <div style={{ flex: '1 1 auto' }}>
-      <Table style={{ maxWidth: '450px' }}>
+    <div style={{ flex: '1 1 auto', minHeight: '450px' }}>
+    {props.unvalidDates
+      ? <Typography variant="caption">Impossible d'afficher le résumé de présence pour ce membre car les dates fournies ne sont pas valides</Typography>
+      : <Table style={{ maxWidth: '580px' }}>
         <TableBody>
           <TableRow>
-            <TableCell component="td" scope="row">Présence</TableCell>
-            <TableCell align="right">{props.nbOfTotalAbsences} jours (~{averagePresenceDayTimeText}/jour)</TableCell>
+            <TableCell component="td" scope="row">Total jours ouverts</TableCell>
+            <TableCell align="right">{props.totalNbOfOpenedDays} jours</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell component="td" scope="row">Retards</TableCell>
-            <TableCell align="right">{props.nbOfDelays}</TableCell>
+            <TableCell component="td" scope="row">Total jours membre attendu</TableCell>
+            <TableCell align="right">{props.totalNbOfNeededDays} jours</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell component="td" scope="row">Absences partielles</TableCell>
-            <TableCell align="right">{props.nbOfPartialAbsences}</TableCell>
+            <TableCell component="td" scope="row">Présence (temps minimum respecté)</TableCell>
+            <TableCell align="right">{props.nbOfTotalPresentDays} jours</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell component="td" scope="row">Absences totales</TableCell>
-            <TableCell align="right">{props.nbOfTotalAbsences}</TableCell>
+            <TableCell component="td" scope="row">Absences partielles NJ</TableCell>
+            <TableCell align="right">{props.nbOfPartialAbsences - props.nbOfJustifiedPartialAbsences}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="td" scope="row">Absences totales NJ</TableCell>
+            <TableCell align="right">{props.nbOfTotalAbsences - props.nbOfJustifiedPartialAbsences}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="td" scope="row">Retards NJ</TableCell>
+            <TableCell align="right">{props.nbOfDelays - props.nbOfJustifiedDelays}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="td" scope="row">Absences partielles J</TableCell>
+            <TableCell align="right">{props.nbOfJustifiedPartialAbsences}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="td" scope="row">Absences totales J</TableCell>
+            <TableCell align="right">{props.nbOfJustifiedPartialAbsences}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="td" scope="row">Retards J</TableCell>
+            <TableCell align="right">{props.nbOfJustifiedDelays}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="td" scope="row">Présence moyenne</TableCell>
+            <TableCell align="right">~{averagePresenceDayTimeText}/jour</TableCell>
           </TableRow>
           <TableRow>
             <TableCell component="td" scope="row">Congés pris</TableCell>
@@ -71,10 +92,10 @@ const DumbMemberSumUp = (props) => {
           </TableRow>
           <TableRow>
             <TableCell component="td" scope="row">Jours off pris</TableCell>
-            <TableCell align="right">{props.nbOfDayOfTaken} jours</TableCell>
+            <TableCell align="right">{props.nbOfDayOffTaken} jours</TableCell>
           </TableRow>
         </TableBody>
-      </Table>
+      </Table>}
     </div>
   </div>;
 };

@@ -1,9 +1,12 @@
 import moment from 'moment';
 
 export const minutesToTimeText = (minutes) => {
-  let text = `${minutes / 60}h${minutes % 60}`;
+  let text = `${Math.floor(minutes / 60)}h${minutes % 60}`;
   if (minutes / 60 < 10) {
     text = '0'+text;
+  }
+  if (minutes % 60 < 10) {
+    text = text.replace('h', 'h0');
   }
   return text;
 };
