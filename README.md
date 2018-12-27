@@ -16,7 +16,7 @@ A compléter 😬
 
 ## Éxecution avec pm2
 
-Dans le dossier `back`, faites la commande :
+Dans le dossier `back`, faites la commande :
 
 ```bash
 pm2 -n back start "yarn start"
