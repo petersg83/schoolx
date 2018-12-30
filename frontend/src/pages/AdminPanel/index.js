@@ -13,7 +13,11 @@ import authProvider from './reactAdminComponents/authProvider';
 import frenchMessages from 'ra-language-french';
 import englishMessages from 'ra-language-english';
 import Menu from './menu'
-import IntAndOutPage from './reactAdminComponents/InAndOutPage';
+import InAndOutPage from './reactAdminComponents/InAndOutPage';
+import SettingsPage from './reactAdminComponents/SettingsPage';
+import PeopleIcon from '@material-ui/icons/People';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import DateRangeIcon from '@material-ui/icons/DateRange';
 import config from '../../config';
 
 frenchMessages.ra.auth.username = 'email';
@@ -69,23 +73,24 @@ const uploadCapableDataProvider = addUploadFeature(dataProvider);
 
 const CustomRoutes = [
   <Route exact path="/calendar" options={{ label: 'Calendrier' }} component={CalendarPage} />,
-  <Route exact path="/inandout" component={IntAndOutPage} noLayout />,
+  <Route exact path="/settings" component={SettingsPage} options={{ label: 'Paramètres' }} />,
+  <Route exact path="/inandout" component={InAndOutPage} noLayout />,
 ];
 
-const getRessources = (role) => {
+const getResources = (role) => {
   if (role === 'admin') {
     return [
-      <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
-      <Resource options={{ label: 'Admins' }} name="admins" list={AdminList} edit={AdminEdit} create={AdminCreate} />,
-      <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
+      <Resource options={{ label: 'Années' }} name="schoolYears" icon={<DateRangeIcon />} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
+      <Resource options={{ label: 'Admins' }} name="admins" icon={<PermIdentityIcon />} list={AdminList} edit={AdminEdit} create={AdminCreate} />,
+      <Resource options={{ label: 'Membres' }} name="members" icon={<PeopleIcon />} list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
       <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
       <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
     ];
   } else if (role === 'superAdmin') {
     return [
-      <Resource options={{ label: 'Ecoles' }} name="schools" list={SchoolList} edit={SchoolEdit} create={SchoolCreate} />,
-      <Resource options={{ label: 'Admins' }} name="admins" list={AdminList} edit={AdminEdit} create={AdminCreate} />,
-      <Resource options={{ label: 'Membres' }} name="members" list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
+      <Resource options={{ label: 'Ecoles' }} name="schools" icon={<DateRangeIcon />} list={SchoolList} edit={SchoolEdit} create={SchoolCreate} />,
+      <Resource options={{ label: 'Admins' }} name="admins" icon={<PermIdentityIcon />} list={AdminList} edit={AdminEdit} create={AdminCreate} />,
+      <Resource options={{ label: 'Membres' }} name="members" icon={<PeopleIcon />} list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
       <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
       <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
       <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
@@ -105,7 +110,7 @@ const AdminPanel = props => (<Admin
   customRoutes={CustomRoutes}
   appLayout={MyLayout}
 >
-  {getRessources}
+  {getResources}
 </Admin>);
 
 export default AdminPanel;

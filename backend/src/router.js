@@ -9,5 +9,6 @@ require('./routes/schoolYear');
 require('./routes/admin');
 require('./routes/calendar');
 require('./routes/inAndOut');
+require('./routes/settings');
 
 export default router;

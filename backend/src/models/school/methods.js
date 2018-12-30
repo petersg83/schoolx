@@ -1,9 +1,11 @@
 import moment from 'moment';
+import jwtFactory from 'jsonwebtoken';
 import School from './index';
 import SchoolYear from '../schoolYear';
 import SchoolYearSettings from '../schoolYearSettings';
 import UsualOpenedDays from '../usualOpenedDays';
 import SpecialSchoolDay from '../specialSchoolDay';
+import config from '../../config';
 
 School.findById = (id, options = {}) => School.findOne({ where: { id }, transaction: options.transaction });
 School.findByIds = (ids, options = {}) => School.findAll({ where: { id: { $in: ids} }, transaction: options.transaction });
@@ -35,6 +37,12 @@ School.getSchoolIdBySubdomain = async urlName => {
   }
 
   return foundSchool.id;
+};
+
+School.setAndgetNewJWT = async (schoolId, transaction) => {
+  const jwt = jwtFactory.sign({ schoolId }, config.jwtSecret);
+  await School.update({ jwt }, { where: { id: schoolId }, transaction });
+  return jwt;
 };
 
 School.getSettingsForSchoolDay = async (schoolId, day) => {

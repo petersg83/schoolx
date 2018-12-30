@@ -14,6 +14,12 @@ const School = sequelize.define('school', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  accessCode: {
+    type: Sequelize.STRING,
+  },
+  jwt: {
+    type: Sequelize.STRING,
+  },
 }, {
   paranoid: true,
   indexes: [{
