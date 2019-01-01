@@ -20,23 +20,18 @@ const SpecialSchoolDay = sequelize.define('specialSchoolDay', {
   },
   openAt: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
   closeAt: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
   maxArrivalTime: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
   minTimeBefPartialAbsence: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
   minTimeBefTotalAbsence: {
     type: Sequelize.STRING,
-    allowNull: false,
   },
   note: {
     type: Sequelize.TEXT,
@@ -46,6 +41,19 @@ const SpecialSchoolDay = sequelize.define('specialSchoolDay', {
     fields: ['schoolId', 'day'],
     unique: true,
   }],
+  validate: {
+    isOpenWithNecessaryInfo() {
+      if (!this.isClosed && (
+        !this.openAt ||
+        !this.closeAt ||
+        !this.maxArrivalTime ||
+        !this.minTimeBefTotalAbsence ||
+        !this.minTimeBefPartialAbsence
+      )) {
+        throw new Error('One of this attribute is missing : openAt, closeAt, maxArrivalTime, minTimeBefPartialAbsence, minTimeBefTotalAbsence');
+      }
+    }
+  }
 });
 
 export default SpecialSchoolDay;
