@@ -8,9 +8,9 @@ router.put('/settings', authRequired(['admin'], async (ctx, next, { admin }) => 
     try {
       const newAccessCode = ctx.request.body.accessCode;
       const school = await db.School.findById(admin.schoolId);
-      if (newAccessCode !== school.accessCode) {
+      if (school && newAccessCode !== school.accessCode) {
         await db.School.update({
-          accessCode: ctx.request.body.accessCode,
+          accessCode: newAccessCode,
         }, {
           where: { id: admin.schoolId },
           transaction: t,
@@ -28,5 +28,11 @@ router.put('/settings', authRequired(['admin'], async (ctx, next, { admin }) => 
     ctx.status = 401;
     ctx.body = { status: 401, message: "l'access code est manquant" };
   }
+}));
 
+router.get('/settings', authRequired(['admin'], async (ctx, next, { admin }) => {
+  const school = await db.School.findById(admin.schoolId);
+  ctx.body = {
+    accessCode: school.accessCode,
+  };
 }));
