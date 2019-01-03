@@ -23,6 +23,9 @@ const DumbSettingsPage = (props) => {
             id="inAndOutPassword"
             value={props.accessCodeEdit}
             onChange={e => props.onAccessCodeEditChange(e.target.value)}
+            error={!!props.errors.accessCode}
+            helperText={props.errors.accessCode || ''}
+            style={props.errors.accessCode ? {} : { marginBottom: '20px' }}
           />
         </TableCell>
       </TableRow>
