@@ -80,24 +80,24 @@ const CustomRoutes = [
 const getResources = (role) => {
   if (role === 'admin') {
     return [
-      <Resource options={{ label: 'Années' }} name="schoolYears" icon={<DateRangeIcon />} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
-      <Resource options={{ label: 'Admins' }} name="admins" icon={<PermIdentityIcon />} list={AdminList} edit={AdminEdit} create={AdminCreate} />,
-      <Resource options={{ label: 'Membres' }} name="members" icon={<PeopleIcon />} list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
+      <Resource options={{ label: 'Années' }} name="schoolYears" icon={DateRangeIcon} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
+      <Resource options={{ label: 'Admins' }} name="admins" icon={PermIdentityIcon} list={AdminList} edit={AdminEdit} create={AdminCreate} />,
+      <Resource options={{ label: 'Membres' }} name="members" icon={PeopleIcon} list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
       <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
       <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
     ];
   } else if (role === 'superAdmin') {
     return [
-      <Resource options={{ label: 'Ecoles' }} name="schools" icon={<DateRangeIcon />} list={SchoolList} edit={SchoolEdit} create={SchoolCreate} />,
-      <Resource options={{ label: 'Admins' }} name="admins" icon={<PermIdentityIcon />} list={AdminList} edit={AdminEdit} create={AdminCreate} />,
-      <Resource options={{ label: 'Membres' }} name="members" icon={<PeopleIcon />} list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
+      <Resource options={{ label: 'Ecoles' }} name="schools" icon={DateRangeIcon} list={SchoolList} edit={SchoolEdit} create={SchoolCreate} />,
+      <Resource options={{ label: 'Admins' }} name="admins" icon={PermIdentityIcon} list={AdminList} edit={AdminEdit} create={AdminCreate} />,
+      <Resource options={{ label: 'Membres' }} name="members" icon={PeopleIcon} list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
       <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
       <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
       <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
     ];
   } else if (role === 'inandout') { // Needed to access inandout page when unauthenticated. Waiting for enhancement : https://github.com/marmelab/react-admin/issues/1647
     return [
-      <Resource options={{ label: 'Années' }} name="schoolYears" icon={<DateRangeIcon />} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
+      <Resource options={{ label: 'Années' }} name="schoolYears" icon={DateRangeIcon} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
     ];
   }
 }

@@ -137,11 +137,11 @@ const DumbInAndOutPage = (props) => {
       <Grid container justify="center" className={props.classes.root} spacing={16}>
         {memberTiles}
       </Grid>
-      <Dialog
+      {props.memberInModal && <Dialog
         open={props.isModalOpen}
         onClose={props.onExitTile}
       >
-        {props.memberInModal && <DialogContent>
+        <DialogContent>
           <Typography variant='headline' style={{ textAlign: 'center', paddingBottom: '10px' }} gutterBottom>
             {`${props.memberInModal ? props.memberInModal.firstName : ''} ${props.memberInModal ? props.memberInModal.lastName : ''}`}
           </Typography>
@@ -157,8 +157,8 @@ const DumbInAndOutPage = (props) => {
               </div>
             </div>
           </div>
-        </DialogContent>}
-      </Dialog>
+        </DialogContent>
+      </Dialog>}
     </div>;
   }
 
