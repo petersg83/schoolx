@@ -1,40 +1,31 @@
 import moment from 'moment';
 import router from '../koa-router';
 import db from '../db';
+import { inAndOutAuthRequired } from '../utils/auth';
 
 
-// TODO: sécuriser cet appel API
-router.get('/inandout', async (ctx, next) => {
+router.get('/inandout', inAndOutAuthRequired(async (ctx, next, school) => {
   try {
-    const subdomain = ctx.request.header.origin.split('//')[1].split('.')[0];
-    const schoolId = await db.School.getSchoolIdBySubdomain(subdomain);
-
-    ctx.body = await db.Member.getTodaysInAndOutMembers(schoolId);
+    ctx.body = await db.Member.getTodaysInAndOutMembers(school.id);
   } catch (e) {
     console.log(e);
     ctx.status = 500;
     ctx.body = { status: 500, message: e.message };
   }
-});
+}));
 
-// TODO: Sécuriser cette appel API
-router.get('/todaySettings', async (ctx, next) => {
-  const subdomain = ctx.request.header.origin.split('//')[1].split('.')[0];
-  const school = await db.School.getSchoolBySubdomain(subdomain);
+router.get('/todaySettings', inAndOutAuthRequired(async (ctx, next, school) => {
   const todaySettings = await db.School.getSettingsForSchoolDay(school.id, moment().toISOString());
 
   ctx.body = {
     ...todaySettings,
     schoolName: school.name,
   };
-});
+}));
 
-// TODO: Sécuriser cette appel API
-router.post('/inandout/:memberId', async (ctx, next) => {
-  const subdomain = ctx.request.header.origin.split('//')[1].split('.')[0];
-  const schoolId = await db.School.getSchoolIdBySubdomain(subdomain);
-  const member = db.Member.findByIdAndSchoolId(ctx.params.memberId, schoolId);
-  const isSchoolOpenToday = await db.School.isSchoolOpenOn(schoolId, moment().toISOString());
+router.post('/inandout/:memberId', inAndOutAuthRequired(async (ctx, next, school) => {
+  const member = db.Member.findByIdAndSchoolId(ctx.params.memberId, school.id);
+  const isSchoolOpenToday = await db.School.isSchoolOpenOn(school.id, moment().toISOString());
   const now = moment();
 
   try {
@@ -80,5 +71,18 @@ router.post('/inandout/:memberId', async (ctx, next) => {
       ctx.body = { status: 500, message: 'Action doesnt match database state for the specialMemberDay' };
     }
   }
+}));
 
+router.post('/inandoutlogin', async (ctx, next) => {
+  const params = ctx.request.body;
+  const subdomain = ctx.request.header.origin.split('//')[1].split('.')[0];
+  const schoolId = await db.School.getSchoolIdBySubdomain(subdomain);
+  const inandoutjwt = await db.School.getJWTByAccessCode(schoolId, params.accessCode);
+
+  if (inandoutjwt) {
+    ctx.body = { inandoutjwt };
+  } else {
+    ctx.status = 403;
+    ctx.body = { status: 403, message: 'Access code is incorrect' };
+  }
 });

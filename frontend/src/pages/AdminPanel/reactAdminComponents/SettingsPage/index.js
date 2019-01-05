@@ -39,7 +39,7 @@ export default compose(
           method: 'PUT',
           headers: new Headers({
             Accept: 'application/json',
-            ContentType: 'application/json',
+            'Content-Type': 'application/json',
           }),
           body: JSON.stringify({
             accessCode: props.accessCodeEdit,

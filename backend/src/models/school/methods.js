@@ -45,6 +45,17 @@ School.setAndgetNewJWT = async (schoolId, transaction) => {
   return jwt;
 };
 
+School.getJWTByAccessCode = async (schoolId, accessCode) => {
+  const school = await School.findOne({
+    where: {
+      id: schoolId,
+      accessCode,
+    },
+  });
+
+  return school && school.jwt;
+};
+
 School.getSettingsForSchoolDay = async (schoolId, day) => {
   const currentDay = moment(day).startOf('day');
   let settings = {

@@ -95,6 +95,10 @@ const getResources = (role) => {
       <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
       <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
     ];
+  } else if (role === 'inandout') { // Needed to access inandout page when unauthenticated. Waiting for enhancement : https://github.com/marmelab/react-admin/issues/1647
+    return [
+      <Resource options={{ label: 'Années' }} name="schoolYears" icon={<DateRangeIcon />} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
+    ];
   }
 }
 

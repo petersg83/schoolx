@@ -21,7 +21,7 @@ const styles = {
     height: '1px',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'url(background_plants.jpg)',
+    background: 'url(beach.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover'
   },

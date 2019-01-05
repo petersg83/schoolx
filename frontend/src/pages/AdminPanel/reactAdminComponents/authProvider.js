@@ -49,12 +49,18 @@ export default (type, params) => {
   }
   // called when the user navigates to a new location
   if (type === AUTH_CHECK) {
+    if (window.location.href.endsWith('/inandout')) { // Needed to access inandout page when unauthenticated. Waiting for enhancement : https://github.com/marmelab/react-admin/issues/1647
+      return Promise.resolve();
+    }
     return localStorage.getItem('jwt')
       ? Promise.resolve()
       : Promise.reject();
   }
 
   if (type === AUTH_GET_PERMISSIONS) {
+    if (window.location.hash.endsWith('/inandout')) { // Needed to access inandout page when unauthenticated. Waiting for enhancement : https://github.com/marmelab/react-admin/issues/1647
+      return Promise.resolve('inandout');
+    }
     const role = localStorage.getItem('role');
     return role ? Promise.resolve(role) : Promise.reject();
   }
