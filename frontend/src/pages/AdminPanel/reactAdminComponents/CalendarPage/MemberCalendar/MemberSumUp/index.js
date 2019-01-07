@@ -37,7 +37,6 @@ export default compose(
           }
         })
         .then((res) => {
-          console.log('res', res);
           props.setDatesSetFirstTime(true);
           props.setFrom(moment(res.from).startOf('day'));
           props.setTo(moment(res.to).startOf('day'));

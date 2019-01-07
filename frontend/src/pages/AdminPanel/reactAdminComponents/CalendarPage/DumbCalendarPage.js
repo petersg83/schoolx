@@ -7,11 +7,15 @@ import Tab from '@material-ui/core/Tab';
 import MemberCalendar from './MemberCalendar';
 import SchoolCalendar from './SchoolCalendar';
 import DaySumUp from './DaySumUp';
+import ExportPage from './ExportPage';
 
 const DumbCalendarPage = (props) => {
   let content;
 
   switch (props.tabNumber) {
+    case 3:
+      content = <ExportPage />;
+      break;
     case 2:
       content = <DaySumUp />;
       break;
@@ -36,6 +40,7 @@ const DumbCalendarPage = (props) => {
           <Tab label="Ecole" />
           <Tab label="Membres" />
           <Tab label="Jours" />
+          <Tab label="Exporter" />
         </Tabs>
         {content}
       </CardContent>

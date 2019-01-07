@@ -96,9 +96,10 @@ Member.createWithSettingsAndPeriods = memberWithSettingsAndPeriods => {
   });
 };
 
-Member.getMemberDays = async (memberId, schoolId, fromDate, toDate) => {
-  const member = await Member.findOne({
-    where: { id: memberId },
+Member.getMembersDays = async (schoolId, fromDate, toDate, membersIds = null, withDaySettings = false) => {
+  const membersIdsSearch = membersIds ? { id: { $in: membersIds } } : {};
+  const members = await Member.findAll({
+    where: { schoolId, ...membersIdsSearch },
     include: [
       {
         model: MemberSettings,
@@ -114,7 +115,6 @@ Member.getMemberDays = async (memberId, schoolId, fromDate, toDate) => {
       }, {
         model: MemberPeriodsAtSchool,
         as: 'memberPeriodsAtSchool',
-        required: false,
         where: {
           $or: [
             { startAt: { $between: [fromDate, toDate] } },
@@ -130,9 +130,6 @@ Member.getMemberDays = async (memberId, schoolId, fromDate, toDate) => {
       },
     ],
   });
-  if (!member) {
-    throw new Error("Le membre demandé n'existe pas");
-  }
 
   const schoolYears = await SchoolYear.findAll({
     where: {
@@ -170,10 +167,15 @@ Member.getMemberDays = async (memberId, schoolId, fromDate, toDate) => {
   const specialSchoolDaysMap = {};
   specialSchoolDays.forEach((ssd) => { specialSchoolDaysMap[moment(ssd.day).startOf('day').toISOString()] = ssd; });
 
-  const specialMemberDaysMap = {};
-  member.specialMemberDays.forEach((smd) => { specialMemberDaysMap[moment(smd.day).startOf('day').toISOString()] = smd; });
-
-  const memberDays = [];
+  const specialMembersDaysMap = {};
+  const membersDays = {};
+  members.forEach((member) => {
+    membersDays[member.id] = [];
+    specialMembersDaysMap[member.id] = {};
+    member.specialMemberDays.forEach((smd) => {
+      specialMembersDaysMap[member.id][moment(smd.day).startOf('day').toISOString()] = smd;
+    });
+  });
 
   for (let schoolYear of schoolYears) {
     for (let thisSchoolYearSettings of schoolYear.schoolYearSettings) {
@@ -183,83 +185,92 @@ Member.getMemberDays = async (memberId, schoolId, fromDate, toDate) => {
         const usualOpenedDay = thisSchoolYearSettings.usualOpenedDays.find(uod => uod.days.includes(day.locale('en').format('dddd').toLowerCase()));
         const specialSchoolDay = specialSchoolDaysMap[day.toISOString()];
         const daySettings = specialSchoolDay || usualOpenedDay;
-        const memberPeriodAtSchool = member.memberPeriodsAtSchool.find(mpas => moment(mpas.startAt).startOf('day').isSameOrBefore(day) && (!mpas.endAt || moment(mpas.endAt).startOf('day').isSameOrAfter(day)));
-        if (daySettings && !daySettings.isClosed && memberPeriodAtSchool) {
-          const memberSettingsForThisDay = member.memberSettings.find(ms => moment(ms.startAt).startOf('day').isSameOrBefore(day) && (!ms.endAt || moment(ms.endAt).startOf('day').isSameOrAfter(day)));
-          const specialMemberDay = specialMemberDaysMap[day.toISOString()];
-          const memberDay = {
-            day: day.toISOString(),
-            arrivedAt: (specialMemberDay && specialMemberDay.arrivedAt) || '',
-            leftAt: (specialMemberDay && specialMemberDay.leftAt) || '',
-            schoolOpensAt: daySettings.openAt,
-            schoolClosesAt: daySettings.closeAt,
-            minTimeBefPartialAbsence: daySettings.minTimeBefPartialAbsence,
-            minTimeBefTotalAbsence: daySettings.minTimeBefTotalAbsence,
-            maxArrivalTime: daySettings.maxArrivalTime,
-          };
-          if (memberSettingsForThisDay && memberSettingsForThisDay.daysOff.includes(day.locale('en').format('dddd').toLowerCase())) {
-            Object.assign(memberDay, {
-              dayType: 'dayOff',
-              delay: false,
-              justifiedDelay: false,
-              absence: false,
-              justifiedAbsence: false,
-            });
-          } else if (specialMemberDay && specialMemberDay.holiday) {
-            Object.assign(memberDay, {
-              dayType: 'holiday',
-              delay: false,
-              justifiedDelay: false,
-              absence: false,
-              justifiedAbsence: false,
-              note: specialMemberDay.note,
-            });
-          } else if (specialMemberDay) {
-            Object.assign(memberDay, {
-              dayType: 'needed',
-              arrivedAt: specialMemberDay.arrivedAt || '',
-              leftAt: specialMemberDay.leftAt || '',
-              note: specialMemberDay.note,
-            });
-            memberDay.delay = memberDay.arrivedAt && isStringTimeStrictlyBefore(memberDay.maxArrivalTime, memberDay.arrivedAt);
-
-            if (!isStringTimeValid(memberDay.arrivedAt)) {
-              memberDay.absence = 'total';
-            } else if (!isStringTimeValid(memberDay.leftAt)) {
-              memberDay.absence = 'undefined';
-            } else {
-              const consideredArrivedAt = isStringTimeStrictlyBefore(memberDay.arrivedAt, daySettings.openAt)
-                ? daySettings.openAt
-                : isStringTimeStrictlyBefore(memberDay.arrivedAt, daySettings.closeAt) ? memberDay.arrivedAt : daySettings.closeAt;
-              const consideredLeftAt = isStringTimeStrictlyBefore(daySettings.closeAt, memberDay.leftAt)
-                ? daySettings.closeAt
-                : isStringTimeStrictlyBefore(memberDay.leftAt, daySettings.openAt) ? daySettings.openAt : memberDay.leftAt;
-
-              const timeSpent = (+consideredLeftAt.split(':')[0] - consideredArrivedAt.split(':')[0]) * 60 + consideredLeftAt.split(':')[1] - consideredArrivedAt.split(':')[1];
-              if (timeSpent < stringTimeToMinutes(memberDay.minTimeBefTotalAbsence)) {
-                memberDay.absence = 'total';
-              } else if (timeSpent < stringTimeToMinutes(memberDay.minTimeBefPartialAbsence)) {
-                memberDay.absence = 'partial';
-              } else {
-                memberDay.absence = false;
-              }
+        for (let member of members) {
+          const memberPeriodAtSchool = member.memberPeriodsAtSchool.find(mpas => moment(mpas.startAt).startOf('day').isSameOrBefore(day) && (!mpas.endAt || moment(mpas.endAt).startOf('day').isSameOrAfter(day)));
+          if (daySettings && !daySettings.isClosed && memberPeriodAtSchool) {
+            const memberSettingsForThisDay = member.memberSettings.find(ms => moment(ms.startAt).startOf('day').isSameOrBefore(day) && (!ms.endAt || moment(ms.endAt).startOf('day').isSameOrAfter(day)));
+            const specialMemberDay = specialMembersDaysMap[member.id][day.toISOString()];
+            const memberDay = {
+              day: day.toISOString(),
+              arrivedAt: (specialMemberDay && specialMemberDay.arrivedAt) || '',
+              leftAt: (specialMemberDay && specialMemberDay.leftAt) || '',
+            };
+            if (withDaySettings) {
+              Object.assign(memberDay, {
+                schoolOpensAt: daySettings.openAt,
+                schoolClosesAt: daySettings.closeAt,
+                minTimeBefPartialAbsence: daySettings.minTimeBefPartialAbsence,
+                minTimeBefTotalAbsence: daySettings.minTimeBefTotalAbsence,
+                maxArrivalTime: daySettings.maxArrivalTime,
+              });
             }
-            memberDay.justifiedDelay = memberDay.delay && !!specialMemberDay.justifiedDelay;
-            memberDay.justifiedAbsence = memberDay.absence && !!specialMemberDay.justifiedAbsence;
-          } else if (day.isSameOrBefore(moment().startOf('day'))) {
-            Object.assign(memberDay, {
-              dayType: 'needed',
-              delay: true,
-              justifiedDelay: false,
-              absence: 'total',
-              justifiedAbsence: false,
-            });
+            if (memberSettingsForThisDay && memberSettingsForThisDay.daysOff.includes(day.locale('en').format('dddd').toLowerCase())) {
+              Object.assign(memberDay, {
+                dayType: 'dayOff',
+                delay: false,
+                justifiedDelay: false,
+                absence: false,
+                justifiedAbsence: false,
+              });
+            } else if (specialMemberDay && specialMemberDay.holiday) {
+              Object.assign(memberDay, {
+                dayType: 'holiday',
+                delay: false,
+                justifiedDelay: false,
+                absence: false,
+                justifiedAbsence: false,
+                note: specialMemberDay.note,
+              });
+            } else if (specialMemberDay) {
+              Object.assign(memberDay, {
+                dayType: 'needed',
+                arrivedAt: specialMemberDay.arrivedAt || '',
+                leftAt: specialMemberDay.leftAt || '',
+                note: specialMemberDay.note,
+              });
+              memberDay.delay = memberDay.arrivedAt && isStringTimeStrictlyBefore(daySettings.maxArrivalTime, memberDay.arrivedAt);
+
+              if (!isStringTimeValid(memberDay.arrivedAt)) {
+                memberDay.absence = 'total';
+              } else if (!isStringTimeValid(memberDay.leftAt)) {
+                memberDay.absence = 'undefined';
+              } else {
+                const consideredArrivedAt = isStringTimeStrictlyBefore(memberDay.arrivedAt, daySettings.openAt)
+                  ? daySettings.openAt
+                  : isStringTimeStrictlyBefore(memberDay.arrivedAt, daySettings.closeAt) ? memberDay.arrivedAt : daySettings.closeAt;
+                const consideredLeftAt = isStringTimeStrictlyBefore(daySettings.closeAt, memberDay.leftAt)
+                  ? daySettings.closeAt
+                  : isStringTimeStrictlyBefore(memberDay.leftAt, daySettings.openAt) ? daySettings.openAt : memberDay.leftAt;
+
+                const timeSpent = (+consideredLeftAt.split(':')[0] - consideredArrivedAt.split(':')[0]) * 60 + consideredLeftAt.split(':')[1] - consideredArrivedAt.split(':')[1];
+                if (timeSpent < stringTimeToMinutes(daySettings.minTimeBefTotalAbsence)) {
+                  memberDay.absence = 'total';
+                } else if (timeSpent < stringTimeToMinutes(daySettings.minTimeBefPartialAbsence)) {
+                  memberDay.absence = 'partial';
+                } else {
+                  memberDay.absence = false;
+                }
+              }
+              memberDay.justifiedDelay = memberDay.delay && !!specialMemberDay.justifiedDelay;
+              memberDay.justifiedAbsence = memberDay.absence && !!specialMemberDay.justifiedAbsence;
+            } else if (day.isSameOrBefore(moment().startOf('day'))) {
+              Object.assign(memberDay, {
+                dayType: 'needed',
+                delay: true,
+                justifiedDelay: false,
+                absence: 'total',
+                justifiedAbsence: false,
+              });
+            }
+            membersDays[member.id].push(memberDay);
           }
-          memberDays.push(memberDay);
         }
+
         day.add(1, 'day');
       }
     }
   }
-  return memberDays.sort((md1, md2) => md1.day < md2.day);
+
+  members.forEach(member => membersDays[member.id].sort((md1, md2) => md1.day < md2.day ? -1 : 1 ));
+  return membersDays;
 };

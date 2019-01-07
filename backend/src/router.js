@@ -10,5 +10,6 @@ require('./routes/admin');
 require('./routes/calendar');
 require('./routes/inAndOut');
 require('./routes/settings');
+require('./routes/export');
 
 export default router;

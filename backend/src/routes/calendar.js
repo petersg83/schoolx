@@ -10,7 +10,7 @@ router.get('/memberEvents', authRequired(['admin'], async (ctx, next, { admin, s
     const fromDate = new Date(moment(+ctx.query.currentDay).startOf('month').subtract(2, 'months'));
     const toDate = new Date(moment(+ctx.query.currentDay).endOf('month').add(2, 'months'));
 
-    ctx.body = await db.Member.getMemberDays(ctx.query.memberId, admin.schoolId, fromDate, toDate);
+    ctx.body = (await db.Member.getMembersDays(admin.schoolId, fromDate, toDate, [ctx.query.memberId], true))[ctx.query.memberId] || [];
   } else {
     ctx.status = 400;
     ctx.body = { status: 400, message: "Bad request" };
@@ -364,7 +364,7 @@ router.get('/memberSumUp', authRequired(['admin'], async (ctx, next, { admin }) 
       throw new Error('"From" and "to" dates are missing');
     }
 
-    const memberDays = await db.Member.getMemberDays(ctx.query.memberId, admin.schoolId, from, to);
+    const memberDays = (await db.Member.getMembersDays(admin.schoolId, from, to, [ctx.query.memberId]))[ctx.query.memberId] || [];
 
     const totalCounts = {
       nbOfTotalAbsences: 0,
