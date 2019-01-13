@@ -41,7 +41,8 @@ export default compose(
         props.afterSubmit();
       });
     },
-    onSubmit: props => () => {
+    onSubmit: props => (e) => {
+      e.preventDefault();
       httpClient(`${config.apiEndpoint}/specialSchoolDay`, {
         method: 'PUT',
         headers: new Headers({

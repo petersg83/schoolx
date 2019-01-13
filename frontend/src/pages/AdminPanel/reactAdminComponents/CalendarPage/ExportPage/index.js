@@ -15,7 +15,7 @@ export default compose(
         }
       })
       .then((res) => {
-        console.log('terminé');
+        window.open(res.downloadUrl);
       });
     },
   }),

@@ -303,7 +303,7 @@ router.get('/membersDay', authRequired(['admin'], async (ctx, next, { admin, sup
               ? daySettings.closeAt
               : isStringTimeStrictlyBefore(memberDay.leftAt, daySettings.openAt) ? daySettings.openAt : memberDay.leftAt;
 
-            const timeSpent = (+consideredLeftAt.split(':')[0] - consideredArrivedAt.split(':')[0]) * 60 + consideredLeftAt.split(':')[1] - consideredArrivedAt.split(':')[1];
+            const timeSpent = (+consideredLeftAt.split(':')[0] - consideredArrivedAt.split(':')[0]) * 60 + +consideredLeftAt.split(':')[1] - consideredArrivedAt.split(':')[1];
             if (timeSpent < stringTimeToMinutes(daySettings.minTimeBefTotalAbsence)) {
               memberDay.absence = 'total';
             } else if (timeSpent < stringTimeToMinutes(daySettings.minTimeBefPartialAbsence)) {

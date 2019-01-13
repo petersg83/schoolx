@@ -29,7 +29,7 @@ export const authRequired = (authorizedRoles, routeHandler) => async (ctx, next)
     return;
   }
 
-  await routeHandler(ctx, next, users);
+  return routeHandler(ctx, next, users);
 };
 
 export const inAndOutAuthRequired = (routeHandler) => async (ctx, next) => {

@@ -1,4 +1,5 @@
 export default {
+  apiEndpoint: 'API_ENDPOINT',
   postgres: {
     username: 'POSTGRES_USERNAME',
     password: 'POSTGRES_PASSWORD',
