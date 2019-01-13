@@ -2,7 +2,6 @@ import React from 'react';
 import { Create, Datagrid, DisabledInput, Edit, EditButton, List, ReferenceField, ReferenceInput, required, TextField, TextInput, SelectInput, SimpleForm } from 'react-admin';
 
 const validateEdit = (values) => {
-  console.log('coucou', values);
   const errors = {};
   if (values.password !== values.password2) {
     errors.password2 = ['Les mots de passe ne sont pas identiques'];
