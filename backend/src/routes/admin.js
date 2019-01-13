@@ -15,22 +15,24 @@ router.get('/admins', authRequired(['superAdmin', 'admin'], async (ctx, next, { 
       offset: +ctx.query._start,
       limit: +ctx.query._end - ctx.query._start,
       order: [[ctx.query._sort, ctx.query._order]],
+      attributes: ['id', 'schoolId', 'email'],
     });
 
     ctx.set('Access-Control-Expose-Headers', 'X-Total-Count');
     ctx.set('X-Total-Count', count);
-    ctx.body = admins.map(a => ({ id: a.id, schoolId: a.schoolId, email: a.email }));
+    ctx.body = admins;
   } else if (superAdmin) {
     const count = await db.Admin.count();
     const admins = await db.Admin.findAll({
       offset: +ctx.query._start,
       limit: +ctx.query._end - ctx.query._start,
       order: [[ctx.query._sort, ctx.query._order]],
+      attributes: ['id', 'schoolId', 'email'],
     });
 
     ctx.set('Access-Control-Expose-Headers', 'X-Total-Count');
     ctx.set('X-Total-Count', count);
-    ctx.body = admins.map(a => ({ id: a.id, schoolId: a.schoolId, email: a.email }));
+    ctx.body = admins;
   }
 }));
 
@@ -133,10 +135,20 @@ router.post('/admins', authRequired(['superAdmin', 'admin'], async (ctx, next, {
 // DELETE
 router.delete('/admins/:id', authRequired(['superAdmin', 'admin'], async (ctx, next, { admin, superAdmin }) => {
   if (admin) {
-    ctx.body = await db.Admin.findByIdAndSchoolId(ctx.params.id, admin.schoolId);
+    const adminFound = await db.Admin.findByIdAndSchoolId(ctx.params.id, admin.schoolId);
+    ctx.body = {
+      id: adminFound.id,
+      schoolId: adminFound.schoolId,
+      email: adminFound.email,
+    };
     await db.Admin.destroy({ where: { id: ctx.params.id, schoolId: admin.schoolId }});
   } else if (superAdmin) {
-    ctx.body = await db.Admin.findById(ctx.params.id);
+    const adminFound = await db.Admin.findById(ctx.params.id);
+    ctx.body = {
+      id: adminFound.id,
+      schoolId: adminFound.schoolId,
+      email: adminFound.email,
+    };
     await db.Admin.destroy({ where: { id: ctx.params.id }});
   }
 }));
