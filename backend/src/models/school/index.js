@@ -16,6 +16,7 @@ const School = sequelize.define('school', {
   },
   accessCode: {
     type: Sequelize.STRING,
+    defaultValue: '0123456789',
   },
   jwt: {
     type: Sequelize.STRING,
