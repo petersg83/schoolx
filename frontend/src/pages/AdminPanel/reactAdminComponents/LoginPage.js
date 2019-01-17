@@ -95,7 +95,11 @@ class LoginPage extends Component {
   }
 
   componentDidMount() {
-    fetch(`${config.apiEndpoint}/getSchoolName`, { method: 'GET' })
+    fetch(`${config.apiEndpoint}/getSchoolName`, {
+      headers: new Headers({
+        "Access-Control-Allow-Origin": "*.clickin.fr",
+      }),
+    })
     .then((res) => {
       if (res.status === 200) {
         return res.json();

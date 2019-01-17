@@ -30,7 +30,10 @@ const i18nProvider = locale => messages[locale];
 
 export const httpClient = (url, options = {}) => {
   if (!options.headers) {
-    options.headers = new Headers({ Accept: 'application/json' });
+    options.headers = new Headers({
+      Accept: 'application/json',
+      "Access-Control-Allow-Origin": "*.clickin.fr",
+    });
   }
   const jwt = localStorage.getItem('jwt');
   options.headers.set('Authorization', `Bearer ${jwt}`);

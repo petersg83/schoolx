@@ -22,6 +22,7 @@ export default compose(
         method: 'POST',
         headers: new Headers({
           Accept: 'application/json',
+          "Access-Control-Allow-Origin": "*.clickin.fr",
           'Content-Type': 'application/json',
         }),
         body: JSON.stringify({ accessCode: props.code }),
@@ -47,7 +48,11 @@ export default compose(
   }),
   lifecycle({
     componentDidMount() {
-      fetch(`${config.apiEndpoint}/getSchoolName`)
+      fetch(`${config.apiEndpoint}/getSchoolName`, {
+        headers: new Headers({
+          "Access-Control-Allow-Origin": "*.clickin.fr",
+        }),
+      })
       .then((res) => {
         if (res.status === 200) {
           return res.json();

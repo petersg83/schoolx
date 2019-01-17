@@ -18,6 +18,7 @@ export default compose(
         headers: new Headers({
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          "Access-Control-Allow-Origin": "*.clickin.fr",
           Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
         }),
       })
@@ -39,6 +40,7 @@ export default compose(
             method: 'GET',
             headers: new Headers({
               Accept: 'application/json',
+              "Access-Control-Allow-Origin": "*.clickin.fr",
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
             }),
@@ -111,6 +113,7 @@ export default compose(
         method: 'POST',
         headers: new Headers({
           Accept: 'application/json',
+          "Access-Control-Allow-Origin": "*.clickin.fr",
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
         }),
@@ -133,6 +136,7 @@ export default compose(
         method: 'POST',
         headers: new Headers({
           Accept: 'application/json',
+          "Access-Control-Allow-Origin": "*.clickin.fr",
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
         }),

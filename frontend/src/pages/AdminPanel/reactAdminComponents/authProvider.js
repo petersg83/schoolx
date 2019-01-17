@@ -7,7 +7,10 @@ export default (type, params) => {
   if (type === AUTH_LOGIN) {
     return fetch(`${config.apiEndpoint}/login`, {
       method: 'POST',
-      headers: new Headers({ 'Content-Type': 'application/json'}),
+      headers: new Headers({
+        'Content-Type': 'application/json';
+        "Access-Control-Allow-Origin": "*.clickin.fr",
+      }),
       body: JSON.stringify({
         email: params.username,
         password: params.password,
