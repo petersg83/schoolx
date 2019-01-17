@@ -12,9 +12,10 @@ const MyMenu = (props) => {
     <div>
       {props.hasDashboard &&
         <MenuItemLink key="dashboard" to="/" primaryText="Dashboard" onClick={props.onMenuClick} leftIcon={<DashboardIcon />} />}
-      {props.resources.filter(r => r.hasList).map(resource => (
-        <MenuItemLink key={`${resource.name}`} to={`/${resource.name}`} primaryText={resource.options.label || resource.name} onClick={props.onMenuClick} leftIcon={<resource.icon /> || <ViewListIcon />} />
-      ))}
+      {props.resources.filter(r => r.hasList).map(resource => {
+        const LeftIcon = resource.icon;
+        return <MenuItemLink key={`${resource.name}`} to={`/${resource.name}`} primaryText={resource.options.label || resource.name} onClick={props.onMenuClick} leftIcon={LeftIcon ? <LeftIcon /> : <ViewListIcon />} />;
+      })}
       <MenuItemLink to="/calendar" primaryText="Calendrier" onClick={props.onMenuClick} leftIcon={<TodayIcon />} />
       <MenuItemLink to="/settings" primaryText="Paramètres" onClick={props.onMenuClick} leftIcon={<SettingsIcon />} />
       <Responsive
