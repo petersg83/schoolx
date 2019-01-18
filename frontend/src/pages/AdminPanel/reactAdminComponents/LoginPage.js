@@ -52,7 +52,14 @@ const styles = {
     position: 'absolute',
     bottom: '0px',
     left: '50%'
-  }
+  },
+  inandoutLink: {
+    marginTop: '20px',
+  },
+  link: {
+    color: '#3f51b5',
+    textDecoration: 'none',
+  },
 };
 
 class LoginPage extends Component {
@@ -156,6 +163,13 @@ class LoginPage extends Component {
                   Login
                   </Button>
                 }
+                {this.state.schoolName && <div>
+                  <Typography className={classes.inandoutLink}>
+                    <a href="/#/inandout" className={classes.link}>
+                      Page d'entrées/sorties
+                    </a>
+                  </Typography>
+                </div>}
               </div>}
             </CardContent>
           </Card>
