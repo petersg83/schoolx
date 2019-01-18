@@ -107,7 +107,7 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
     for (const ms of memberSettingsToUpdate) {
       await db.MemberSettings.update({
         daysOff: ms.daysOff || [],
-        startAt: ms.startAt,
+        startAt: moment(ms.startAt).startOf('day').toDate(),
         endAt: ms.endAt || null,
       }, {
         where: { id: ms.id, memberId: ctx.params.id },
@@ -152,7 +152,7 @@ router.post('/members/', authRequired(['superAdmin', 'admin'], async (ctx, next,
       birthday: ctx.request.body.birthday,
       schoolId: admin.schoolId,
       daysOff: ctx.request.body.daysOff,
-      arrivalDate: ctx.request.body.arrivalDate,
+      arrivalDate: ctx.request.body.arrivalDate ? moment(ctx.request.body.arrivalDate).startOf('date').toDate() : null,
     };
 
     if (ctx.request.body.pictures) {

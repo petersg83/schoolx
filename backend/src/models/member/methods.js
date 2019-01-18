@@ -81,13 +81,13 @@ Member.createWithSettingsAndPeriods = memberWithSettingsAndPeriods => {
   if (memberWithSettingsAndPeriods.daysOff && memberWithSettingsAndPeriods.daysOff.length) {
     creationData.memberSettings = [{
       daysOff: memberWithSettingsAndPeriods.daysOff,
-      startAt: memberWithSettingsAndPeriods.arrivalDate || moment().startOf('date'),
+      startAt: moment(memberWithSettingsAndPeriods.arrivalDate).startOf('date').toDate() || moment().startOf('date').toDate(),
     }];
   }
 
   if (memberWithSettingsAndPeriods.arrivalDate) {
     creationData.memberPeriodsAtSchool = [{
-      startAt: moment(memberWithSettingsAndPeriods.arrivalDate).startOf('date'),
+      startAt: moment(memberWithSettingsAndPeriods.arrivalDate).startOf('date').toDate(),
     }];
   }
 

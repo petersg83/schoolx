@@ -1,3 +1,4 @@
+import moment from 'moment';
 import router from '../koa-router';
 import db from '../db';
 import { authRequired } from '../utils/auth';
@@ -46,8 +47,8 @@ router.put('/schoolYears/:id', authRequired(['superAdmin', 'admin'], async (ctx,
 
   const yearsAlreadyExisting =  await db.SchoolYear.findAllBySchoolId(admin.schoolId);
   const newYear = {
-    startAt: ctx.request.body.startAt,
-    endAt: ctx.request.body.endAt || null,
+    startAt: moment(ctx.request.body.startAt).startOf('day').toDate(),
+    endAt: ctx.request.body.endAt ? moment(ctx.request.body.endAt).startOf('day').toDate() : null,
     schoolId: admin.schoolId,
     nbOfDaysOfHolidays: ctx.request.body.nbOfDaysOfHolidays,
   };
@@ -103,8 +104,8 @@ router.post('/schoolYears', authRequired(['superAdmin', 'admin'], async (ctx, ne
     if (admin) {
       const yearsAlreadyExisting =  await db.SchoolYear.findAllBySchoolId(admin.schoolId);
       const newYear = {
-        startAt: ctx.request.body.startAt,
-        endAt: ctx.request.body.endAt,
+        startAt: moment(ctx.request.body.startAt).startOf('day').toDate(),
+        endAt: ctx.request.body.endAt ? moment(ctx.request.body.endAt).startOf('day').toDate() : null,
         schoolId: admin.schoolId,
         nbOfDaysOfHolidays: ctx.request.body.nbOfDaysOfHolidays,
       };
