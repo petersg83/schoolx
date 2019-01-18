@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.9.0",
+    "@material-ui/icons": "^3.0.2",
     "import": "^0.0.6",
     "jsonwebtoken": "^8.3.0",
     "moment": "^2.22.2",
