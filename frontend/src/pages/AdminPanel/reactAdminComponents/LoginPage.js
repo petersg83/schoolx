@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Link from '@material-ui/core/Link';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
@@ -53,10 +52,7 @@ const styles = {
     position: 'absolute',
     bottom: '0px',
     left: '50%'
-  },
-  inandoutLink: {
-    marginTop: '20px',
-  },
+  }
 };
 
 class LoginPage extends Component {
@@ -160,13 +156,6 @@ class LoginPage extends Component {
                   Login
                   </Button>
                 }
-                {this.state.schoolName && <div>
-                  <Typography className={classes.inandoutLink}>
-                    <Link href="/#/inandout">
-                      Page d'entrées/sorties
-                    </Link>
-                  </Typography>
-                </div>}
               </div>}
             </CardContent>
           </Card>
