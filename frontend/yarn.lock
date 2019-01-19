@@ -1153,7 +1153,7 @@ babel-register@^6.26.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.15"
 
-babel-runtime@6.26.0, babel-runtime@^6.18.0, babel-runtime@^6.22.0, babel-runtime@^6.26.0, babel-runtime@~6.26.0:
+babel-runtime@6.26.0, babel-runtime@^6.18.0, babel-runtime@^6.22.0, babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   dependencies:
@@ -3107,7 +3107,7 @@ follow-redirects@^1.0.0:
   dependencies:
     debug "^3.1.0"
 
-for-each@^0.3.2:
+for-each@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/for-each/-/for-each-0.3.3.tgz#69b447e88a0a5d32c3e7084f3f1710034b21376e"
   dependencies:
@@ -3430,7 +3430,7 @@ has-values@^1.0.0:
     is-number "^3.0.0"
     kind-of "^4.0.0"
 
-has@^1.0.1:
+has@^1.0.1, has@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/has/-/has-1.0.3.tgz#722d7cbfc1f6aa8241f16dd814e011e1f41e8796"
   dependencies:
@@ -4867,7 +4867,7 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-material-ui-chip-input@^1.0.0-beta.6:
+"material-ui-chip-input@1.0.0-beta.6 - 1.0.0-beta.8":
   version "1.0.0-beta.8"
   resolved "https://registry.yarnpkg.com/material-ui-chip-input/-/material-ui-chip-input-1.0.0-beta.8.tgz#1752aea40a0de723d39b3255d8df6622c61456a0"
   dependencies:
@@ -5195,14 +5195,14 @@ node-notifier@^5.0.2:
     shellwords "^0.1.1"
     which "^1.3.0"
 
-node-polyglot@2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/node-polyglot/-/node-polyglot-2.2.2.tgz#1a3f76d7392f836ea0823836ede817e6ea6ec26c"
+node-polyglot@^2.2.2:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/node-polyglot/-/node-polyglot-2.3.0.tgz#e97cc9354e87e648f04858647c6e3be38ad36ce1"
   dependencies:
-    for-each "^0.3.2"
-    has "^1.0.1"
+    for-each "^0.3.3"
+    has "^1.0.3"
     string.prototype.trim "^1.1.2"
-    warning "^3.0.0"
+    warning "^4.0.1"
 
 node-pre-gyp@^0.10.0:
   version "0.10.3"
@@ -6116,41 +6116,18 @@ querystringify@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.0.0.tgz#fa3ed6e68eb15159457c89b37bc6472833195755"
 
-ra-core@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/ra-core/-/ra-core-2.2.0.tgz#305a4890124651dd5dd492224b034a61a0cd2e38"
-  dependencies:
-    babel-runtime "~6.26.0"
-    classnames "~2.2.5"
-    inflection "~1.12.0"
-    lodash "~4.17.5"
-    node-polyglot "2.2.2"
-    prop-types "~15.6.1"
-    query-string "~5.1.1"
-    ra-language-english "^2.2.0"
-    react-redux "~5.0.7"
-    react-router "~4.2.0"
-    react-router-dom "~4.2.2"
-    react-router-redux "~5.0.0-alpha.9"
-    recompose "~0.26.0"
-    redux "~3.7.2"
-    redux-form "~7.4.0"
-    redux-saga "~0.16.0"
-    reselect "~3.0.0"
-    warning "~3.0.0"
-
-ra-core@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/ra-core/-/ra-core-2.4.1.tgz#6c09db110159cb851dd368b2b671379abef86c18"
+ra-core@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/ra-core/-/ra-core-2.6.1.tgz#553204b51e3380f8c590143c51811a92f8a93b97"
   dependencies:
     classnames "~2.2.5"
     date-fns "^1.29.0"
     inflection "~1.12.0"
     lodash "~4.17.5"
-    node-polyglot "2.2.2"
+    node-polyglot "^2.2.2"
     prop-types "~15.6.1"
     query-string "~5.1.1"
-    ra-language-english "^2.3.0"
+    ra-language-english "^2.6.1"
     react-redux "~5.0.7"
     react-router "~4.2.0"
     react-router-dom "~4.2.2"
@@ -6161,28 +6138,24 @@ ra-core@^2.4.1:
     redux-saga "~0.16.0"
     reselect "~3.0.0"
 
-ra-data-json-server@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/ra-data-json-server/-/ra-data-json-server-2.2.0.tgz#fb4265ad6a12c65d7c544fc0a88253f532e936b6"
+ra-data-json-server@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/ra-data-json-server/-/ra-data-json-server-2.6.1.tgz#ae27de15d4da4b0cd7caa95b16b036b8c50c25ae"
   dependencies:
     query-string "~5.1.1"
-    react-admin "^2.2.0"
+    ra-core "^2.6.1"
 
-ra-language-english@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/ra-language-english/-/ra-language-english-2.2.0.tgz#ec8e24170f8f39f87d9974110f66329bdfcb9ea6"
+ra-language-english@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/ra-language-english/-/ra-language-english-2.6.1.tgz#0d0c08f69c2ab3b93a8e4b1a57a08c8fbd14b513"
 
-ra-language-english@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/ra-language-english/-/ra-language-english-2.3.0.tgz#d25247bd148a57b02ff0480a66388220ee72ef16"
+ra-language-french@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/ra-language-french/-/ra-language-french-2.6.1.tgz#20da293367e2021e9e20d36c49ffbc15e10ccd8b"
 
-ra-language-french@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/ra-language-french/-/ra-language-french-2.2.0.tgz#f24157d99fa97072faae1f80717312faa2a3cad6"
-
-ra-ui-materialui@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/ra-ui-materialui/-/ra-ui-materialui-2.2.0.tgz#20d8c77f11ed2c001fe7a7552e6f2a60928c0e50"
+ra-ui-materialui@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/ra-ui-materialui/-/ra-ui-materialui-2.6.1.tgz#864d2800e0050d7f079ddabcfbf3c6e94c531ea3"
   dependencies:
     "@material-ui/core" "^1.4.0"
     "@material-ui/icons" "^1.0.0"
@@ -6190,32 +6163,10 @@ ra-ui-materialui@^2.2.0:
     classnames "~2.2.5"
     inflection "~1.12.0"
     lodash "~4.17.5"
+    material-ui-chip-input "1.0.0-beta.6 - 1.0.0-beta.8"
     papaparse "^4.1.4"
     prop-types "~15.6.1"
-    ra-core "^2.2.0"
-    react-autosuggest "^9.3.2"
-    react-dropzone "~4.0.1"
-    react-redux "~5.0.7"
-    react-router-dom "~4.2.2"
-    react-transition-group "^2.2.1"
-    recompose "~0.26.0"
-    redux "~3.7.2"
-    redux-form "~7.4.0"
-
-ra-ui-materialui@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/ra-ui-materialui/-/ra-ui-materialui-2.4.1.tgz#3f9dd524d84d3f41bfd72ad4f2700730861591ee"
-  dependencies:
-    "@material-ui/core" "^1.4.0"
-    "@material-ui/icons" "^1.0.0"
-    autosuggest-highlight "^3.1.1"
-    classnames "~2.2.5"
-    inflection "~1.12.0"
-    lodash "~4.17.5"
-    material-ui-chip-input "^1.0.0-beta.6"
-    papaparse "^4.1.4"
-    prop-types "~15.6.1"
-    ra-core "^2.4.1"
+    ra-core "^2.6.1"
     react-autosuggest "^9.4.2"
     react-dropzone "~4.0.1"
     react-headroom "^2.2.4"
@@ -6275,29 +6226,13 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-admin@^2.1.0:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/react-admin/-/react-admin-2.4.1.tgz#cdebdd76eac5a3d0cef9302c7230ffed22fafe11"
+react-admin@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/react-admin/-/react-admin-2.6.1.tgz#f1f5e603259d9800a72fcfe0b91c8059b07909bc"
   dependencies:
-    ra-core "^2.4.1"
-    ra-language-english "^2.3.0"
-    ra-ui-materialui "^2.4.1"
-
-react-admin@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/react-admin/-/react-admin-2.2.0.tgz#9b8e56bcf1c5065f6d8b98b97561129bb5e6fa1f"
-  dependencies:
-    ra-core "^2.2.0"
-    ra-language-english "^2.2.0"
-    ra-ui-materialui "^2.2.0"
-
-react-autosuggest@^9.3.2:
-  version "9.3.4"
-  resolved "https://registry.yarnpkg.com/react-autosuggest/-/react-autosuggest-9.3.4.tgz#e47ff800081b2f7c678165bfb7cc84b07f462336"
-  dependencies:
-    prop-types "^15.5.10"
-    react-autowhatever "^10.1.0"
-    shallow-equal "^1.0.0"
+    ra-core "^2.6.1"
+    ra-language-english "^2.6.1"
+    ra-ui-materialui "^2.6.1"
 
 react-autosuggest@^9.4.2:
   version "9.4.2"
@@ -6307,7 +6242,7 @@ react-autosuggest@^9.4.2:
     react-autowhatever "^10.1.2"
     shallow-equal "^1.0.0"
 
-react-autowhatever@^10.1.0, react-autowhatever@^10.1.2:
+react-autowhatever@^10.1.2:
   version "10.1.2"
   resolved "https://registry.yarnpkg.com/react-autowhatever/-/react-autowhatever-10.1.2.tgz#200ffc41373b2189e3f6140ac7bdb82363a79fd3"
   dependencies:
@@ -7955,7 +7890,7 @@ walker@~1.0.5:
   dependencies:
     makeerror "1.0.x"
 
-warning@^3.0.0, warning@~3.0.0:
+warning@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/warning/-/warning-3.0.0.tgz#32e5377cb572de4ab04753bdf8821c01ed605b7c"
   dependencies:

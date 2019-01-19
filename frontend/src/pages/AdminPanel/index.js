@@ -2,6 +2,9 @@ import React from 'react';
 import jsonServerProvider from 'ra-data-json-server';
 import { Layout, Admin, Resource, fetchUtils, resolveBrowserLocale } from 'react-admin';
 import { Route } from 'react-router-dom';
+import PeopleIcon from '@material-ui/icons/People';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import DateRangeIcon from '@material-ui/icons/DateRange';
 import { SchoolList, SchoolEdit, SchoolCreate } from './reactAdminComponents/schools';
 import { MemberList, MemberEdit, MemberCreate, MemberShow } from './reactAdminComponents/members';
 import { SchoolYearList, SchoolYearEdit, SchoolYearCreate, SchoolYearShow } from './reactAdminComponents/schoolYears';
@@ -15,9 +18,6 @@ import englishMessages from 'ra-language-english';
 import Menu from './menu'
 import InAndOutPage from './reactAdminComponents/InAndOutPage';
 import SettingsPage from './reactAdminComponents/SettingsPage';
-import PeopleIcon from '@material-ui/icons/People';
-import PermIdentityIcon from '@material-ui/icons/PermIdentity';
-import DateRangeIcon from '@material-ui/icons/DateRange';
 import config from '../../config';
 
 frenchMessages.ra.auth.username = 'email';

@@ -120,11 +120,11 @@ export const SchoolYearCreate = (props) => (
       <DateInput source="startAt" label="Du" validate={required()} />
       <DateInput source="endAt" label="Au" validate={required()} />
       <NumberInput source="nbOfDaysOfHolidays" label="Nb de jours de vacances" validate={required()} step={1}/>
-      <ArrayInput source="schoolYearSettings" label="Paramètres des journées" style={{ width: '100%' }}>
+      <ArrayInput source="schoolYearSettings" label="Paramètres des journées" validate={required()}  style={{ width: '100%' }}>
         <SimpleFormIterator>
           <DateInput source="startAt" label="Du" value={moment().format('YYYY-MM-DD')} validate={required()} />
           <DateInput source="endAt" label="Jusqu'au" />
-          <ArrayInput source="usualOpenedDays" label="Journées types" style={{ width: '100%' }}>
+          <ArrayInput source="usualOpenedDays" label="Journées types" validate={required()} style={{ width: '100%' }}>
             <SimpleFormIterator>
               <SelectArrayInput label="Jours ouverts" source="days" choices={daysChoices} validate={required()} />
               <TextInput source="openAt" label="De" validate={required()} type="time"  InputLabelProps={{ shrink: true }} />
