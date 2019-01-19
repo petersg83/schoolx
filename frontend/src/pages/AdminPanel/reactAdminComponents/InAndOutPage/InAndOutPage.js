@@ -160,9 +160,15 @@ export default compose(
       }, 200);
       this.props.setTimer(timer);
       this.props.getMembers();
+      window.oncontextmenu = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      };
     },
     componentWillUnmout() {
       clearInterval(this.props.timer);
+      window.oncontextmenu = null;
     }
   }),
   withProps(props => {
