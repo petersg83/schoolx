@@ -70,8 +70,8 @@ router.put('/schoolYears/:id', authRequired(['superAdmin', 'admin'], async (ctx,
       if (nss.usualOpenedDays.length) {
         const createdSchoolYearSettings = await db.SchoolYearSettings.create({
           schoolYearId: ctx.params.id,
-          startAt: nss.startAt,
-          endAt: nss.endAt || null,
+          startAt: moment(nss.startAt).startOf('day').toDate(),
+          endAt: nss.endAt ? moment(nss.endAt).startOf('day').toDate() : null,
         }, {
           transaction: t,
         });
@@ -119,8 +119,8 @@ router.post('/schoolYears', authRequired(['superAdmin', 'admin'], async (ctx, ne
         if (nss.usualOpenedDays.length) {
           const createdSchoolYearSettings = await db.SchoolYearSettings.create({
             schoolYearId: schoolYear.id,
-            startAt: nss.startAt,
-            endAt: nss.endAt,
+            startAt: moment(nss.startAt).startOf('day').toDate(),
+            endAt: nss.endAt ? moment(nss.endAt).startOf('day').toDate() : null,
           }, {
             transaction: t,
           });

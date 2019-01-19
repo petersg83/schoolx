@@ -66,11 +66,11 @@ router.get('/schoolEvents', authRequired(['admin'], async (ctx, next, { admin, s
         model: db.SchoolYearSettings,
         as: 'schoolYearSettings',
         where: {
-          startAt: { $lte: toDate.toISOString() },
+          startAt: { $lte: toDate.toDate() },
           $or: [{
             endAt: null,
           }, {
-            endAt: { $gte: fromDate.toISOString() },
+            endAt: { $gte: fromDate.toDate() },
           }],
         },
         include: [{ model: db.UsualOpenedDays, as: 'usualOpenedDays' }],
