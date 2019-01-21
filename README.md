@@ -42,7 +42,6 @@ $root nano /etc/postgresql/10/main/pg_hba.conf
 # host    all             all             ::0/0                md5
 $root exit
 sudo service postgresql restart
-
 ```
 
 ### Installer nginx
@@ -50,8 +49,6 @@ sudo service postgresql restart
 ```bash
 sudo apt install nginx
 ```
-
-
 
 ### Installer les certificats
 
@@ -66,7 +63,6 @@ sudo /opt/certbot-auto certonly \
     --server https://acme-v02.api.letsencrypt.org/directory \
     --manual -d *.clickin.fr -d clickin.fr # adapter avec votre adresse mail et votre ndd
 # hint: dans vos DNS c'est la ligne _acme-challenge.clickin.fr. 3600 TXT "CLE_DONNEE_PAR_CERBOT" en adaptant la clé et le ndd
-
 ```
 
 ### Créer une clée SSH & autorisation Github
@@ -86,8 +82,6 @@ cat ~/.ssh/id_rsa.pub
 ```
 
 Allez sur github et ajouter la clée affichée
-
-
 
 ### Installer yarn
 
@@ -136,6 +130,7 @@ http {
     tcp_nodelay on;
     keepalive_timeout 65;
     types_hash_max_size 2048;
+    client_max_body_size 5M;
 
     include /etc/nginx/mime.types;
     default_type application/octet-stream;
