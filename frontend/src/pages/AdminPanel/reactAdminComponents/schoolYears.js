@@ -71,8 +71,8 @@ export const SchoolYearShow = (props) => (
                 <TextField source="openAt" label="De" />
                 <TextField source="closeAt" label="À" />
                 <TextField source="maxArrivalTime" label="Heure d'arrivée max" />
-                <TextField source="minTimeBefTotalAbsence" label="Absence partielle en dessous de" />
-                <TextField source="minTimeBefPartialAbsence" label="Absence totale en dessous de" />
+                <TextField source="minTimeBefPartialAbsence" label="Absence partielle en dessous de" />
+                <TextField source="minTimeBefTotalAbsence" label="Absence totale en dessous de" />
               </Datagrid>
             </ArrayField>
           </Datagrid>
