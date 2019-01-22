@@ -76,7 +76,7 @@ const DumbMemberSumUp = (props) => {
           </TableRow>
           <TableRow>
             <TableCell component="td" scope="row">Absences totales J</TableCell>
-            <TableCell align="right">{props.nbOfJustifiedPartialAbsences}</TableCell>
+            <TableCell align="right">{props.nbOfJustifiedTotalAbsences}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell component="td" scope="row">Retards J</TableCell>
