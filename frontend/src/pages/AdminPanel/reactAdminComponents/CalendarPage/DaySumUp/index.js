@@ -44,10 +44,10 @@ export default compose(
             } else if (day.absence === 'total' && day.justifiedAbsence && dayIsBeforeToday) {
               event.title = 'Absence totale justifiée';
               event.color = 'limegreen';
-            } else if (day.absence === 'partial' && !day.justifiedDelay && dayIsBeforeToday) {
+            } else if (day.absence === 'partial' && !day.justifiedAbsence && dayIsBeforeToday) {
               event.title = 'Absence partielle';
               event.color = 'orange';
-            } else if (day.absence === 'partial' && day.justifiedDelay && dayIsBeforeToday) {
+            } else if (day.absence === 'partial' && day.justifiedAbsence && dayIsBeforeToday) {
               event.title = 'Absence partielle justifiée';
               event.color = 'MediumSeaGreen';
             } else if (day.absence === 'undefined' && moment(date).isSame(today, 'day')) {
