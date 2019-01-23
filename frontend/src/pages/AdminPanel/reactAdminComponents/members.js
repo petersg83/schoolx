@@ -98,7 +98,7 @@ export const MemberEdit = (props) => (
     <TabbedForm redirect="show">
       <FormTab label="Résumé">
         <AvatarField fileName="avatarPath"/>
-        <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} options={{ style: { width: '224px' } }} onDrop={(accepted, rejected) => console.log('mm', rejected)} placeholder={<p>Faites glisser le nouvel avatar ici<br />3Mo max</p>}>
+        <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} options={{ style: { width: '224px' } }} onDrop={(accepted, rejected) => console.log('mm', rejected)} placeholder={<p>Faites glisser le nouvel avatar ici<br />5Mo max</p>}>
           <ImageField source="src" title="title" />
         </ImageInput>
         <TextInput source="firstName" label="Prénom" validate={required()} />
@@ -129,7 +129,7 @@ export const MemberEdit = (props) => (
 export const MemberCreate = (props) => (
   <Create {...props} title="Ajouter un membre à l'école" undoable="false">
     <SimpleForm redirect="show">
-      <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} options={{ style: { width: '224px' } }} onDrop={(accepted, rejected) => console.log('mm', rejected)} placeholder={<p>Faites glisser le nouvel avatar ici<br />3Mo max</p>}>
+      <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} options={{ style: { width: '224px' } }} onDrop={(accepted, rejected) => console.log('mm', rejected)} placeholder={<p>Faites glisser le nouvel avatar ici<br />5Mo max</p>}>
         <ImageField source="src" title="title" />
       </ImageInput>
       <TextInput source="firstName" label="Prénom" validate={required()} />

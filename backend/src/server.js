@@ -19,7 +19,7 @@ app.use(bodyParser({
   extendTypes: {
     json: ['application/x-javascript'], // will parse application/x-javascript type body as a JSON string
   },
-  jsonLimit: '3mb',
+  jsonLimit: '6mb',
 }));
 
 app.use(async (context, next) => {
