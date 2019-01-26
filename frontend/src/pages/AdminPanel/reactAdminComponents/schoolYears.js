@@ -21,14 +21,26 @@ const daysChoices = [
 ];
 
 const daysMap = {
-  monday: 'Lundi',
-  tuesday: 'Mardi',
-  wednesday: 'Mercredi',
-  thursday: 'Jeudi',
-  friday: 'Vendredi',
-  saturday: 'Samedi',
-  sunday: 'Dimanche',
+  monday: 'lundi',
+  tuesday: 'mardi',
+  wednesday: 'mercredi',
+  thursday: 'jeudi',
+  friday: 'vendredi',
+  saturday: 'samedi',
+  sunday: 'dimanche',
 };
+
+const daysValueMap = {
+  monday: 0,
+  tuesday: 1,
+  wednesday: 2,
+  thursday: 3,
+  friday: 4,
+  saturday: 5,
+  sunday: 6,
+};
+
+const sortArrayOfDaysName = (a, b) => daysValueMap[a] > daysValueMap[b] ? 1 : -1;
 
 const getDateString = (date) => moment(date).format('DD/MM/YYYY');
 
@@ -49,7 +61,7 @@ export const SchoolYearList = (props) => (
   </List>
 );
 
-const DaysField = ({ record }) => <span>{record.days.map(day => daysMap[day]).join(', ')}</span>;
+const DaysField = ({ record }) => <span>{record.days.sort(sortArrayOfDaysName).map(day => daysMap[day]).join(', ')}</span>;
 const EndAtField = ({ record }) => <span>{record.endAt ? moment(record.endAt).format('DD/MM/YYYY') : 'à définir'}</span>;
 
 export const SchoolYearShow = (props) => (
