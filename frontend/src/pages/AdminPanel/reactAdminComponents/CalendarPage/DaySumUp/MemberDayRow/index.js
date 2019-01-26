@@ -57,22 +57,19 @@ export default compose(
   }),
   lifecycle({
     componentWillReceiveProps(nextProps) {
-      if (this.props.memberDay.justifiedDelay !== nextProps.memberDay.justifiedDelay) {
+      if (
+        (this.props.memberDay.justifiedDelay !== nextProps.memberDay.justifiedDelay) ||
+        (this.props.memberDay.justifiedAbsence !== nextProps.memberDay.justifiedAbsence) ||
+        (this.props.memberDay.dayType !== nextProps.memberDay.dayType) ||
+        (this.props.memberDay.note !== nextProps.memberDay.note) ||
+        (this.props.memberDay.arrivedAt !== nextProps.memberDay.arrivedAt) ||
+        (this.props.memberDay.leftAt !== nextProps.memberDay.leftAt)
+      ) {
         this.props.setIsJustifiedDelayChange(!!nextProps.memberDay.justifiedDelay);
-      }
-      if (this.props.memberDay.justifiedAbsence !== nextProps.memberDay.justifiedAbsence) {
         this.props.setIsJustifiedAbsenceChange(!!nextProps.memberDay.justifiedAbsence);
-      }
-      if (this.props.memberDay.dayType !== nextProps.memberDay.dayType) {
         this.props.setIsInHoliday(nextProps.memberDay.dayType === 'holiday');
-      }
-      if (this.props.memberDay.note !== nextProps.memberDay.note) {
         this.props.setNote(nextProps.memberDay.note || '');
-      }
-      if (this.props.memberDay.arrivedAt !== nextProps.memberDay.arrivedAt) {
         this.props.setArrivedAtChange(nextProps.memberDay.arrivedAt || '');
-      }
-      if (this.props.memberDay.leftAt !== nextProps.memberDay.leftAt) {
         this.props.setLeftAtChange(nextProps.memberDay.leftAt || '');
       }
     }
