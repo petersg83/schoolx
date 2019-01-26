@@ -61,6 +61,12 @@ router.get('/schoolEvents', authRequired(['admin'], async (ctx, next, { admin, s
     const schoolYears = await db.SchoolYear.findAll({
       where: {
         schoolId: admin.schoolId,
+        startAt: { $lte: toDate.toDate() },
+        $or: [{
+          endAt: null,
+        }, {
+          endAt: { $gte: fromDate.toDate() },
+        }],
       },
       include: [{
         model: db.SchoolYearSettings,
