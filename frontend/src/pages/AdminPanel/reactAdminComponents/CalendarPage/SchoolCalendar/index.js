@@ -27,7 +27,7 @@ export default compose(
         for (let sy of res.schoolYears) {
           for (let sys of sy.schoolYearSettings) {
             dayIteration = moment(sys.startAt).startOf('day');
-            const endDay = sys.endAt ? moment(sys.endAt).startOf('day') : lastDayOfCalendar;
+            const endDay = moment.min(sys.endAt ? moment(sys.endAt).startOf('day') : lastDayOfCalendar, moment(sy.endAt).startOf('day'));
             while (dayIteration.isSameOrBefore(endDay)) {
               if (!res.specialSchoolDays.find(ssd => moment(ssd.day).isSame(dayIteration, 'day'))) { // eslint-disable-line no-loop-func
                 sys.usualOpenedDays
@@ -53,16 +53,27 @@ export default compose(
           }
         }
         for (let ssd of res.specialSchoolDays) {
-          const openAt = ssd.openAt;
-          const closeAt = ssd.closeAt;
-          schoolEvents.push({
-            title: ssd.isClosed ? 'Fermée' : `Ouverte ${openAt} → ${closeAt}`,
-            allDay: ssd.isClosed,
-            ssd,
-            specialDay: ssd.isClosed ? 'closed' : 'modified',
-            start: ssd.isClosed ? new Date(moment(ssd.day)) : new Date(moment(ssd.day).add(+openAt.split(':')[0], 'h').add(+openAt.split(':')[1], 'm')),
-            end: ssd.isClosed ? new Date(moment(ssd.day)) : new Date(moment(ssd.day).add(+closeAt.split(':')[0], 'h').add(+closeAt.split(':')[1], 'm')),
-          });
+          let isInASchoolYear = false;
+          const ssdDayMoment = moment(ssd.day).startOf('day');
+          for (let sy of res.schoolYears) {
+            if (ssdDayMoment.isSameOrAfter(moment(sy.startAt).startOf('day')) &&
+              ssdDayMoment.isSameOrBefore(moment(sy.endAt).startOf('day'))
+            ) {
+              isInASchoolYear = true;
+            }
+          }
+          if (isInASchoolYear) {
+            const openAt = ssd.openAt;
+            const closeAt = ssd.closeAt;
+            schoolEvents.push({
+              title: ssd.isClosed ? 'Fermée' : `Ouverte ${openAt} → ${closeAt}`,
+              allDay: ssd.isClosed,
+              ssd,
+              specialDay: ssd.isClosed ? 'closed' : 'modified',
+              start: ssd.isClosed ? new Date(ssdDayMoment) : new Date(moment(ssd.day).add(+openAt.split(':')[0], 'h').add(+openAt.split(':')[1], 'm')),
+              end: ssd.isClosed ? new Date(ssdDayMoment) : new Date(moment(ssd.day).add(+closeAt.split(':')[0], 'h').add(+closeAt.split(':')[1], 'm')),
+            });
+          }
         }
 
         props.setSchoolEvents(schoolEvents);
