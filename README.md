@@ -293,6 +293,8 @@ mkdir -p ~/bin
 cd ~/bin
 curl https://doc-08-48-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/9fgopm5t5oemi6oc7k0js0pjhsndgc0p/1549130400000/15876260727594163214/*/0B3X9GlR6EmbnQ0FtZmJJUXEyRTA > gdrive
 chmod u+x gdrive
+echo "export PATH=\"\$PATH:\$HOME/bin\"" >> ~/.bashrc
+source ~/.bashrc
 gdrive about # follow the link and enter the verification code
 ```
 
@@ -311,7 +313,7 @@ nano config.sh # replace DIRECTORY_ID by the schoolxDirectoryId you stored and s
 ### Configurer crontab
 
 ```bash
-crontab -e # add add the end of the file the following line and adapt the path and the frequency :
+crontab -e # add add the end of the file the following line and adapt the path and the frequency:
 # 0 14,22 * * * bash ~/schoolx/backend/scripts/backup.sh
 ```
 
