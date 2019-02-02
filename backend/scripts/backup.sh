@@ -1,7 +1,7 @@
 #!/bin/bash
-source ./config.sh
+source ${0%/*}/config.sh
 
-fileName=schoolx_`date +%Y-%m-%d_%k:%M`.bak
+fileName=schoolx_`date +%Y-%m-%d_%H:%M`.bak
 
 mkdir -p ~/postgres/backups/schoolx/
 pg_dump schoolx > ~/postgres/backups/schoolx/$fileName
