@@ -5,6 +5,7 @@ backend/src/public/avatars/*
 backend/src/public/exports/*
 !backend/src/public/exports/.gitkeep
 backend/src/config.js
+backend/scripts/config.sh
 
 frontend/node_modules/
 frontend/coverage

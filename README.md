@@ -281,3 +281,38 @@ Dans le dossier `front`, faites les commandes :
 yarn build
 pm2 -n front start "serve -s build"
 ```
+
+## Backup avec gdrive
+
+Si vous souhaitez mettre des backups en place et les stocker en sécurité sur votre Google Drive (oui c'est pas très éthique tout ça...).
+
+### Installer gdrive
+
+```bash
+mkdir -p ~/bin
+cd ~/bin
+curl https://doc-08-48-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/9fgopm5t5oemi6oc7k0js0pjhsndgc0p/1549130400000/15876260727594163214/*/0B3X9GlR6EmbnQ0FtZmJJUXEyRTA > gdrive
+chmod u+x gdrive
+gdrive about # follow the link and enter the verification code
+```
+
+### Créer le dossier de sauvegarde
+
+```bash
+gdrive mkdir backups # store the backupsDirectoryId somewhere. Id ex: 1QI7qSIRO6Nj32G4TCM_OKz7-hoPr5d3F
+gdrive mkdir schoolx -p 1QI7qSIRO6Nj32G4TCM_OKz7-hoPr5d3F # replace the id with your backupsDirectoryId and store schoolxDirectoryId somewhere
+
+# Go to the schoolx project directory
+cd backend/scripts
+cp config.sh.dist config.sh
+nano config.sh # replace DIRECTORY_ID by the schoolxDirectoryId you stored and save
+```
+
+### Configurer crontab
+
+```bash
+crontab -e # add add the end of the file the following line and adapt the path and the frequency :
+# 0 14,22 * * * bash ~/schoolx/backend/scripts/backup.sh
+```
+
+
