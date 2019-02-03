@@ -313,8 +313,7 @@ nano config.sh # replace DIRECTORY_ID by the schoolxDirectoryId you stored and s
 ### Configurer crontab
 
 ```bash
-crontab -e # add add the end of the file the following line and adapt the path and the frequency:
+crontab -e # add the end of the file the following lines and adapt the paths and the frequency:
+# PATH=/usr/bin:/bin:/home/pierre/bin
 # 0 14,22 * * * bash ~/schoolx/backend/scripts/backup.sh
 ```
-
-
