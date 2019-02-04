@@ -9,6 +9,7 @@ export default compose(
   withState('memberShownInModalId', 'setMemberShownInModalId', null),
   withState('timer', 'setTimer', null),
   withState('time', 'setTime', moment()),
+  withState('refreshDateTime', 'setRefreshDateTime', moment().startOf('minute')),
   withState('firstLoadDone', 'setFirstLoadDone', false),
   withState('todaySettings', 'setTodaySetting', {}),
   withHandlers({
@@ -156,7 +157,11 @@ export default compose(
   lifecycle({
     componentDidMount() {
       const timer = setInterval(() => {
-        this.props.setTime(moment())
+        const now = moment();
+        if (!moment(this.props.time).startOf('minute').isSame(moment(now).startOf('minute'))) {
+          this.props.getMembers();
+        }
+        this.props.setTime(now);
       }, 200);
       this.props.setTimer(timer);
       this.props.getMembers();

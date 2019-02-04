@@ -65,6 +65,12 @@ School.getSettingsForSchoolDay = async (schoolId, day) => {
   const schoolYear = await SchoolYear.findOne({
     where: {
       schoolId: schoolId,
+      startAt: { $lte: new Date(currentDay) },
+      $or: [{
+        endAt: null,
+      }, {
+        endAt: { $gte: new Date(currentDay) },
+      }],
     },
     include: [{
       model: SchoolYearSettings,
