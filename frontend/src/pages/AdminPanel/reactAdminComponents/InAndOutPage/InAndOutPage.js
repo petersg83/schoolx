@@ -64,7 +64,7 @@ export default compose(
               const isOff = !m.memberSettings.every(ms => !ms.daysOff.includes(today.locale('en').format('dddd').toLowerCase()));
               m.specialMemberDay = m.specialMemberDays[0];
 
-              if (isOff) {
+              if (isOff && !m.specialMemberDay) {
                 m.memberState = 'isOff';
                 m.memberTimeText = 'jour off';
               } else if (m.specialMemberDay && m.specialMemberDay.holiday) {

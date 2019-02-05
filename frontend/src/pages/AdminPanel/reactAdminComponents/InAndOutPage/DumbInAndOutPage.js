@@ -102,13 +102,13 @@ const DumbInAndOutPage = (props) => {
       inAndOutButton = <Typography variant='body1' style={{ marginBottom: '50px' }}>
          Horaires déjà entrés pour aujourd'hui
        </Typography>
-    } else if (props.memberInModal && props.memberInModal.memberState === 'toBeArrived') {
+    } else if (props.memberInModal && ['toBeArrived', 'isOff'].includes(props.memberInModal.memberState)) {
       inAndOutButton = <MuiThemeProvider theme={theme}>
         <Button variant="contained" color="primary" size="large" onClick={props.memberInModalEnters}>
           Entrer
         </Button>
       </MuiThemeProvider>;
-    } else if (props.memberInModal && props.memberInModal.memberState === 'arrived') {
+    } else if (props.memberInModal && ['arrived', 'isOff'].includes(props.memberInModal.memberState)) {
       inAndOutButton = <MuiThemeProvider theme={theme}>
         <Button variant="contained" color="secondary" size="large" onClick={props.memberInModalLeaves}>
           Sortir définitivement
@@ -118,11 +118,12 @@ const DumbInAndOutPage = (props) => {
       inAndOutButton = <Typography variant='body1' style={{ marginBottom: '50px' }}>
          {props.memberInModal.firstName} est en congé aujourd'hui
        </Typography>
-    } else if (props.memberInModal && props.memberInModal.memberState === 'isOff') {
-      inAndOutButton = <Typography variant='body1' style={{ marginBottom: '50px' }}>
-         {props.memberInModal.firstName} est en jour off aujourd'hui
-       </Typography>
     }
+    //  else if (props.memberInModal && props.memberInModal.memberState === 'isOff') {
+    //   inAndOutButton = <Typography variant='body1' style={{ marginBottom: '50px' }}>
+    //      {props.memberInModal.firstName} est en jour off aujourd'hui
+    //    </Typography>
+    // }
 
     content = <div>
     <Typography variant='title' style={{ marginTop: '20px', textAlign: 'center' }}>
