@@ -59,7 +59,7 @@ sudo apt install git-core
 cd /opt
 sudo git clone https://github.com/certbot/certbot.git
 cd certbot && ./certbot-auto # entrer votre nnd et choisir de rediriger http vers https
-sudo /opt/certbot-auto certonly \
+sudo /opt/certbot/certbot-auto certonly \
     --server https://acme-v02.api.letsencrypt.org/directory \
     --manual -d *.clickin.fr -d clickin.fr # adapter avec votre adresse mail et votre ndd
 # hint: dans vos DNS c'est la ligne _acme-challenge.clickin.fr. 3600 TXT "CLE_DONNEE_PAR_CERBOT" en adaptant la clé et le ndd
