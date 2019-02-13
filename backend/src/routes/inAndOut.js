@@ -43,8 +43,8 @@ router.post('/inandout/:memberId', inAndOutAuthRequired(async (ctx, next, school
       },
     });
 
-    if (!currentSpecialMemberDay && ctx.request.body.action === 'arrived') {
-      db.SpecialMemberDay.create({
+    if ((!currentSpecialMemberDay || !currentSpecialMemberDay.openAt) && ctx.request.body.action === 'arrived') {
+      db.SpecialMemberDay.upsert({
         memberId: ctx.params.memberId,
         day: new Date(moment(now).startOf('day')),
         arrivedAt: moment(now).format('HH:mm'),
