@@ -107,6 +107,8 @@ nano config.js # modify with the correct api endpoint. ex: https://api.clickin.f
 cd ../../backend/src
 cp config.js.dist config.js
 nano config.js # modify with the  correct values (for password hash: https://www.bcrypt.fr/)
+cd ..
+yarn execute scripts/db-init.js # initiate the database
 ```
 
 ### Configurez nginx
