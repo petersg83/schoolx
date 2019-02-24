@@ -32,7 +32,7 @@ export const httpClient = (url, options = {}) => {
   if (!options.headers) {
     options.headers = new Headers({
       Accept: 'application/json',
-      "Access-Control-Allow-Origin": "*.clickin.fr",
+      "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
     });
   }
   const jwt = localStorage.getItem('jwt');

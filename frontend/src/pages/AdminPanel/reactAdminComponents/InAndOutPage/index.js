@@ -22,7 +22,7 @@ export default compose(
         method: 'POST',
         headers: new Headers({
           Accept: 'application/json',
-          "Access-Control-Allow-Origin": "*.clickin.fr",
+          "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
           'Content-Type': 'application/json',
         }),
         body: JSON.stringify({ accessCode: props.code }),
@@ -50,7 +50,7 @@ export default compose(
     componentDidMount() {
       fetch(`${config.apiEndpoint}/getSchoolName`, {
         headers: new Headers({
-          "Access-Control-Allow-Origin": "*.clickin.fr",
+          "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
         }),
       })
       .then((res) => {

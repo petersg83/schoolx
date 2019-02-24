@@ -104,7 +104,7 @@ class LoginPage extends Component {
   componentDidMount() {
     fetch(`${config.apiEndpoint}/getSchoolName`, {
       headers: new Headers({
-        "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
+        "access-control-allow-origin": config.domainName ? `*.${config.domainName}` : '*',
       }),
     })
     .then((res) => {
