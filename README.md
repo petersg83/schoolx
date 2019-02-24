@@ -99,7 +99,7 @@ cd schoolx/backend
 yarn install
 cd ../frontend
 yarn install
-npm install -g serve
+sudo npm install -g serve
 
 cd src
 cp config.js.dist config.js
