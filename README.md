@@ -99,7 +99,7 @@ cd schoolx/backend
 yarn install
 cd ../frontend
 yarn install
-npm install -g serve
+sudo npm install -g serve
 
 cd src
 cp config.js.dist config.js
@@ -269,13 +269,13 @@ sudo npm install -g pm2
 
 ## Éxecution avec pm2
 
-Dans le dossier `back`, faites la commande :
+Dans le dossier `backend`, faites la commande :
 
 ```bash
 pm2 -n back start "yarn start"
 ```
 
-Dans le dossier `front`, faites les commandes :
+Dans le dossier `frontend`, faites les commandes :
 
 ```bash
 yarn build
