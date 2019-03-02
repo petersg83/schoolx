@@ -1,5 +1,6 @@
 import moment from 'moment';
 import jwtFactory from 'jsonwebtoken';
+import uuid from 'uuid';
 import School from './index';
 import SchoolYear from '../schoolYear';
 import SchoolYearSettings from '../schoolYearSettings';
@@ -43,6 +44,17 @@ School.setAndgetNewJWT = async (schoolId, transaction) => {
   const jwt = jwtFactory.sign({ schoolId }, config.jwtSecret);
   await School.update({ jwt }, { where: { id: schoolId }, transaction });
   return jwt;
+};
+
+School.createSchool = ({ name, urlName }) => {
+  const schoolId = uuid.v4();
+  return School.create({
+    id: schoolId,
+    name,
+    urlName,
+    accessCode: '0123456789',
+    jwt: jwtFactory.sign({ schoolId }, config.jwtSecret),
+  });
 };
 
 School.getJWTByAccessCode = async (schoolId, accessCode) => {
