@@ -22,6 +22,10 @@ const Member = sequelize.define('member', {
     type: Sequelize.DATE,
     allowNull: false,
   },
+  phoneNumber: {
+    type: Sequelize.STRING,
+    default: '',
+  },
   passwordHash: {
     type: Sequelize.STRING,
   },

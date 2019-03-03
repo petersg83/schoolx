@@ -50,9 +50,7 @@ const convertFileToBase64 = file => new Promise((resolve, reject) => {
 
 const addUploadFeature = requestHandler => (type, resource, params) => {
   if ((type === 'UPDATE' || type === 'CREATE') && resource === 'members') {
-    console.log('data', params.data);
     if (params.data.pictures) {
-
       return convertFileToBase64(params.data.pictures)
         .then(picture64 => ({
           src: picture64,

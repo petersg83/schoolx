@@ -10,6 +10,13 @@ const validateDates = (value) => {
   }
 }
 
+const validatePhoneNumberFormat = (value) => {
+  const phoneNumberRegex = /((?:\+|00)[17](?: |-)?|(?:\+|00)[1-9]\d{0,2}(?: |-)?|(?:\+|00)1-\d{3}(?: |-)?)?(0\d|\([0-9]{3}\)|[1-9]{0,3})(?:((?: |-)[0-9]{2}){4}|((?:[0-9]{2}){4})|((?: |-)[0-9]{3}(?: |-)[0-9]{4})|([0-9]{7}))/g;
+  if (typeof value === 'string' && !value.match(phoneNumberRegex)) {
+    return 'Format incorrect';
+  }
+}
+
 const MemberTitle = ({ record }) => (<span>Membre {record ? `"${record.firstName} ${record.lastName}"` : ''}</span>);
 
 const dayOffChoices = [
@@ -71,6 +78,7 @@ export const MemberShow = (props) => (
         <TextField source="firstName" label="Prénom" />
         <TextField source="lastName" label="Nom" type="url" />
         <DateField source="birthday" label="Date de naissance" />
+        <TextField source="phoneNumber" label="Numéro de téléphone" />
       </Tab>
       <Tab label="Jour off">
         <ReferenceManyField reference="memberSettings" target="memberId" addLabel={false}>
@@ -104,6 +112,7 @@ export const MemberEdit = (props) => (
         <TextInput source="firstName" label="Prénom" validate={required()} />
         <TextInput source="lastName" label="Nom" type="url" validate={required()} />
         <DateInput source="birthday" label="Date de naissance" validate={required()} />
+        <TextInput source="phoneNumber" label="Numéro de téléphone" validate={validatePhoneNumberFormat} />
       </FormTab>
       <FormTab label="Jours off">
         <ArrayInput source="memberSettings" label="Périodes de jours off" style={{ width: '100%' }} validate={validateDates}>
@@ -135,6 +144,7 @@ export const MemberCreate = (props) => (
       <TextInput source="firstName" label="Prénom" validate={required()} />
       <TextInput source="lastName" label="Nom" type="url" validate={required()} />
       <DateInput source="birthday" label="Date de naissance" validate={required()} />
+      <TextInput source="phoneNumber" label="Numéro de téléphone" validate={validatePhoneNumberFormat} />
       <DateInput source="arrivalDate" label="Date d'arrivée" />
       <SelectArrayInput label="Jours off" source="daysOff" choices={dayOffChoices} />
     </SimpleForm>

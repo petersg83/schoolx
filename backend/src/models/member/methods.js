@@ -75,6 +75,7 @@ Member.createWithSettingsAndPeriods = memberWithSettingsAndPeriods => {
     lastName: memberWithSettingsAndPeriods.lastName,
     birthday: memberWithSettingsAndPeriods.birthday,
     schoolId: memberWithSettingsAndPeriods.schoolId,
+    phoneNumber: memberWithSettingsAndPeriods.phoneNumber,
     avatarPath: memberWithSettingsAndPeriods.avatarPath,
   };
 

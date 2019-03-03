@@ -81,6 +81,7 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
       firstName: ctx.request.body.firstName,
       lastName: ctx.request.body.lastName,
       birthday: ctx.request.body.birthday,
+      phoneNumber: ctx.request.body.phoneNumber,
     };
 
     if (ctx.request.body.pictures) {
@@ -151,6 +152,7 @@ router.post('/members/', authRequired(['superAdmin', 'admin'], async (ctx, next,
       firstName: ctx.request.body.firstName,
       lastName: ctx.request.body.lastName,
       birthday: ctx.request.body.birthday,
+      phoneNumber: ctx.request.body.phoneNumber,
       schoolId: admin.schoolId,
       daysOff: ctx.request.body.daysOff,
       arrivalDate: ctx.request.body.arrivalDate ? moment(ctx.request.body.arrivalDate).startOf('date').toDate() : null,
