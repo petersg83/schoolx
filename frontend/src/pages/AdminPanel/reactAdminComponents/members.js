@@ -61,6 +61,7 @@ export const MemberList = (props) => (
       <TextField source="firstName" label="Prénom"/>
       <TextField source="lastName" label="Nom" />
       <DateField source="birthday" label="Date de naissance" />
+      <TextField source="phoneNumber" label="Numéro de téléphone" />
       {props.permissions === 'superAdmin' &&  <ReferenceField label="Ecole" source="schoolId" reference="schools">
         <TextField source="urlName" />
       </ReferenceField>}
