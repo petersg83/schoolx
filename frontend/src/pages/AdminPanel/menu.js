@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TodayIcon from '@material-ui/icons/Today';
+import ShowChartIcon from '@material-ui/icons/ShowChart';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 
 const MyMenu = (props) => {
@@ -17,6 +18,7 @@ const MyMenu = (props) => {
         return <MenuItemLink key={`${resource.name}`} to={`/${resource.name}`} primaryText={resource.options.label || resource.name} onClick={props.onMenuClick} leftIcon={LeftIcon ? <LeftIcon /> : <ViewListIcon />} />;
       })}
       <MenuItemLink to="/calendar" primaryText="Calendrier" onClick={props.onMenuClick} leftIcon={<TodayIcon />} />
+      <MenuItemLink to="/statistics" primaryText="Statistiques" onClick={props.onMenuClick} leftIcon={<ShowChartIcon />} />
       <MenuItemLink to="/settings" primaryText="Paramètres" onClick={props.onMenuClick} leftIcon={<SettingsIcon />} />
       <Responsive
         small={props.logout}

@@ -9,6 +9,7 @@ require('./routes/schoolYear');
 require('./routes/admin');
 require('./routes/calendar');
 require('./routes/inAndOut');
+require('./routes/statistics');
 require('./routes/settings');
 require('./routes/export');
 

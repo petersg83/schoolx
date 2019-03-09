@@ -10,6 +10,7 @@ import { MemberList, MemberEdit, MemberCreate, MemberShow } from './reactAdminCo
 import { SchoolYearList, SchoolYearEdit, SchoolYearCreate, SchoolYearShow } from './reactAdminComponents/schoolYears';
 import { AdminList, AdminEdit, AdminCreate } from './reactAdminComponents/admins';
 import LoginPage from './reactAdminComponents/LoginPage';
+import StatisticsPage from './reactAdminComponents/StatisticsPage';
 import CalendarPage from './reactAdminComponents/CalendarPage';
 import Dashboard from './reactAdminComponents/dashboard';
 import authProvider from './reactAdminComponents/authProvider';
@@ -73,7 +74,8 @@ const dataProvider = jsonServerProvider(config.apiEndpoint, httpClient);
 const uploadCapableDataProvider = addUploadFeature(dataProvider);
 
 const CustomRoutes = [
-  <Route exact path="/calendar" options={{ label: 'Calendrier' }} component={CalendarPage} />,
+  <Route exact path="/calendar" component={CalendarPage} options={{ label: 'Calendrier' }} />,
+  <Route exact path="/statistics" component={StatisticsPage} options={{ label: 'Statistiques' }} />,
   <Route exact path="/settings" component={SettingsPage} options={{ label: 'Paramètres' }} />,
   <Route exact path="/inandout" component={InAndOutPage} noLayout />,
 ];
