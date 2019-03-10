@@ -15,7 +15,6 @@ import moment from 'moment';
 import 'moment/locale/fr';
 
 const DumbDaySumUp = (props) => {
-
   let content;
 
   if (props.isSchoolOpen && props.membersDay.length) {
@@ -26,13 +25,13 @@ const DumbDaySumUp = (props) => {
         Retard à partir de {props.daySettings && props.daySettings.maxArrivalTime}<br />
         Abs. partielle en dessous de {props.daySettings && props.daySettings.minTimeBefPartialAbsence.replace(':', 'h')}, totale en dessous de {props.daySettings && props.daySettings.minTimeBefTotalAbsence.replace(':', 'h')}
       </Typography>
-      <Table>
+      <Table style={{ minWidth: '1400px' }}>
         <TableHead>
           <TableRow>
-            <TableCell>Nom</TableCell>
-            <TableCell align="right">Heures</TableCell>
-            <TableCell align="right">Résumé</TableCell>
-            <TableCell align="right">{props.editMode ? 'Informations' : 'Note'}</TableCell>
+            <TableCell padding="dense">Nom</TableCell>
+            <TableCell padding="dense" align="right">Heures</TableCell>
+            <TableCell padding="dense" align="right">Résumé</TableCell>
+            <TableCell padding="dense" align="right">{props.editMode ? 'Informations' : 'Note'}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

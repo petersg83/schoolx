@@ -20,7 +20,7 @@ import config from '../../../../config';
 
 const styles = theme => ({
   table: {
-    minWidth: 1400,
+    minWidth: 1500,
   },
 });
 

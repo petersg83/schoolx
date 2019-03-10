@@ -40,10 +40,10 @@ export const DumbEditableMemberDayRow = (props) => {
   }
 
   return <TableRow>
-    <TableCell component="th" scope="row">{props.memberDay.firstName} {props.memberDay.lastName}</TableCell>
-    <TableCell align="right">{timeText}</TableCell>
-    <TableCell align="right" style={{ backgroundColor: props.memberDay.color }}>{props.memberDay.title}</TableCell>
-    <TableCell align="right">
+    <TableCell padding="dense" component="th" scope="row">{props.memberDay.firstName} {props.memberDay.lastName}</TableCell>
+    <TableCell padding="dense" align="right">{timeText}</TableCell>
+    <TableCell padding="dense" align="right" style={{ backgroundColor: props.memberDay.color }}>{props.memberDay.title}</TableCell>
+    <TableCell padding="dense" align="right">
       <form onSubmit={props.onSubmit}>
         <FormControl component="fieldset">
           <FormGroup style={{ flexDirection: 'row' }}>
