@@ -174,11 +174,11 @@ class LoginPage extends Component {
             </CardContent>
           </Card>
         </form>
-        <div className={classes.credits}>
+        {false && <div className={classes.credits}>
           <Typography gutterBottom component="p" variant="body1" className={classes.p}>
             Photo by Nahil Naseer on Unsplash
           </Typography>
-        </div>
+        </div>}
         <Notification />
       </div>
     );
