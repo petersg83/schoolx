@@ -113,8 +113,8 @@ export const SchoolYearEdit = (props) => (
                 <TextInput source="openAt" label="De" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
                 <TextInput source="closeAt" label="À" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
                 <TextInput source="maxArrivalTime" label="Heure d'arrivée max" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
-                <TextInput source="minTimeBefTotalAbsence" label="Abscence partielle en dessous de"  type="time" InputLabelProps={{ shrink: true }} />
-                <TextInput source="minTimeBefPartialAbsence" label="Abscence totale en dessous de" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
+                <TextInput source="minTimeBefPartialAbsence" label="Abscence partielle en dessous de"  type="time" InputLabelProps={{ shrink: true }} />
+                <TextInput source="minTimeBefTotalAbsence" label="Abscence totale en dessous de" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
               </SimpleFormIterator>
             </ArrayInput>
           </SimpleFormIterator>
@@ -142,8 +142,8 @@ export const SchoolYearCreate = (props) => (
               <TextInput source="openAt" label="De" validate={required()} type="time"  InputLabelProps={{ shrink: true }} />
               <TextInput source="closeAt" label="À" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
               <TextInput source="maxArrivalTime" label="Heure d'arrivée max" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
-              <TextInput source="minTimeBefTotalAbsence" label="Abscence partielle en dessous de" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
-              <TextInput source="minTimeBefPartialAbsence" label="Abscence totale en dessous de" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
+              <TextInput source="minTimeBefPartialAbsence" label="Abscence partielle en dessous de" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
+              <TextInput source="minTimeBefTotalAbsence" label="Abscence totale en dessous de" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
             </SimpleFormIterator>
           </ArrayInput>
         </SimpleFormIterator>
