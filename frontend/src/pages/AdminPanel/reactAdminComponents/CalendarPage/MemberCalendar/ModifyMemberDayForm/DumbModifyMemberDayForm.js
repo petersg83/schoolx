@@ -55,7 +55,6 @@ const DumbModifyMemberDayForm = props => <form onSubmit={props.onSubmit}>
         label="Arrivé à"
         type="time"
         InputLabelProps={{ shrink: true }}
-        inputProps={{ step: 300 }}
         className={props.classes.textField}
         value={props.isInHoliday ? '' : props.arrivedAt}
         onChange={props.onArrivedAtChange}
@@ -66,7 +65,6 @@ const DumbModifyMemberDayForm = props => <form onSubmit={props.onSubmit}>
         label="Parti à"
         type="time"
         InputLabelProps={{ shrink: true }}
-        inputProps={{ step: 300 }}
         className={props.classes.textField}
         value={props.isInHoliday ? '' : props.leftAt}
         onChange={props.onLeftAtChange}
@@ -101,7 +99,6 @@ const DumbModifyMemberDayForm = props => <form onSubmit={props.onSubmit}>
         label="Note"
         type="textArea"
         InputLabelProps={{ shrink: true }}
-        inputProps={{ step: 300 }}
         className={props.classes.textField}
         value={props.note}
         onChange={props.onNoteChange}

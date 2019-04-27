@@ -45,7 +45,6 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         label="Ouvre à"
         type="time"
         InputLabelProps={{ shrink: true }}
-        inputProps={{ step: 300 }}
         className={props.classes.textField}
         disabled={props.isClosed}
         value={props.isClosed ? '' : props.openAt}
@@ -57,7 +56,6 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         label="Ferme à"
         type="time"
         InputLabelProps={{ shrink: true }}
-        inputProps={{ step: 300 }}
         className={props.classes.textField}
         disabled={props.isClosed}
         value={props.isClosed ? '' : props.closeAt}
@@ -69,7 +67,6 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         label="Heure limite d'arrivée"
         type="time"
         InputLabelProps={{ shrink: true }}
-        inputProps={{ step: 300 }}
         className={props.classes.textField}
         disabled={props.isClosed}
         value={props.isClosed ? '' : props.maxArrivalTime}
@@ -81,7 +78,6 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         label="Temps de présence minimum avant absence partielle"
         type="time"
         InputLabelProps={{ shrink: true }}
-        inputProps={{ step: 300 }}
         className={props.classes.textField}
         disabled={props.isClosed}
         value={props.isClosed ? '' : props.minTimeBefPartialAbsence}
@@ -93,7 +89,6 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         label="Temps de présence minimum avant absence totale"
         type="time"
         InputLabelProps={{ shrink: true }}
-        inputProps={{ step: 300 }}
         className={props.classes.textField}
         disabled={props.isClosed}
         value={props.isClosed ? '' : props.minTimeBefTotalAbsence}
@@ -105,7 +100,6 @@ const CreateSSDForm = props => <form onSubmit={props.onSubmit}>
         label="Note"
         type="textArea"
         InputLabelProps={{ shrink: true }}
-        inputProps={{ step: 300 }}
         className={props.classes.textField}
         value={props.note}
         onChange={props.onNoteChange}

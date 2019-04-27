@@ -63,7 +63,6 @@ export const DumbEditableMemberDayRow = (props) => {
               label="Arrivé à"
               type="time"
               InputLabelProps={{ shrink: true }}
-              inputProps={{ step: 300 }}
               value={props.arrivedAt}
               onChange={props.onArrivedAtChange}
               InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
@@ -73,7 +72,6 @@ export const DumbEditableMemberDayRow = (props) => {
               label="Parti à"
               type="time"
               InputLabelProps={{ shrink: true }}
-              inputProps={{ step: 300 }}
               value={props.leftAt}
               onChange={props.onLeftAtChange}
               InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
@@ -105,7 +103,6 @@ export const DumbEditableMemberDayRow = (props) => {
               label="Note"
               type="textArea"
               InputLabelProps={{ shrink: true }}
-              inputProps={{ step: 300 }}
               value={props.note || ''}
               onChange={props.onNoteChange}
               InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
