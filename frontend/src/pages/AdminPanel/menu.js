@@ -7,6 +7,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import TodayIcon from '@material-ui/icons/Today';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import PaymentIcon from '@material-ui/icons/Payment';
 
 const MyMenu = (props) => {
   return (
@@ -20,6 +21,7 @@ const MyMenu = (props) => {
       <MenuItemLink to="/calendar" primaryText="Calendrier" onClick={props.onMenuClick} leftIcon={<TodayIcon />} />
       <MenuItemLink to="/statistics" primaryText="Statistiques" onClick={props.onMenuClick} leftIcon={<ShowChartIcon />} />
       <MenuItemLink to="/settings" primaryText="Paramètres" onClick={props.onMenuClick} leftIcon={<SettingsIcon />} />
+      <MenuItemLink to="/subscription" primaryText="Abonnement" onClick={props.onMenuClick} leftIcon={<PaymentIcon />} />
       <Responsive
         small={props.logout}
         medium={null} // Pass null to render nothing on larger devices

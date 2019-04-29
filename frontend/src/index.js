@@ -1,7 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {StripeProvider} from 'react-stripe-elements';
 import AdminPanel from './pages/AdminPanel';
 import registerServiceWorker from './registerServiceWorker';
+import config from './config';
 
-ReactDOM.render(<AdminPanel />, document.getElementById('root'));
+const App = () => <StripeProvider apiKey={config.stripeApiKey}>
+    <AdminPanel />
+  </StripeProvider>;
+
+ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();

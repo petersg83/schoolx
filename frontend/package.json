@@ -17,6 +17,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "react-spinners": "^0.4.7",
+    "react-stripe-elements": "^3.0.0",
     "recompose": "^0.28.2"
   },
   "scripts": {
