@@ -24,7 +24,7 @@ const Admin = sequelize.define('admin', {
     allowNull: false,
   },
   jwt: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
   }
 }, {
   indexes: [{

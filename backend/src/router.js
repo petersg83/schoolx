@@ -12,5 +12,6 @@ require('./routes/inAndOut');
 require('./routes/statistics');
 require('./routes/settings');
 require('./routes/export');
+require('./routes/stripe');
 
 export default router;

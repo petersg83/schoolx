@@ -29,8 +29,8 @@ Admin.authenticate = async ({ email, password, schoolUrl }) => {
   return isSuccess ? admin : null;
 };
 
-Admin.setAndgetNewJWT = async ({ adminId, email, schoolUrl }) => {
-  const jwt = jwtFactory.sign({ email, schoolUrl, role: 'admin', subdomain: schoolUrl }, config.jwtSecret);
+Admin.setAndgetNewJWT = async ({ adminId, email, schoolUrl, schoolId }) => {
+  const jwt = jwtFactory.sign({ email, schoolUrl, role: 'admin', subdomain: schoolUrl, schoolId }, config.jwtSecret);
   await Admin.update({ jwt }, { where: { id: adminId } });
   return jwt;
 };

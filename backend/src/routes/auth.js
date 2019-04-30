@@ -27,7 +27,7 @@ router.post('/login', async (ctx, next) => {
     });
 
     if (admin && !admin.jwt) {
-      const jwt = await db.Admin.setAndgetNewJWT({ adminId: admin.id, email: params.email, schoolUrl: params.subdomain });
+      const jwt = await db.Admin.setAndgetNewJWT({ adminId: admin.id, email: params.email, schoolUrl: params.subdomain, schoolId: admin.schoolId });
       ctx.body = { jwt };
     } else if (admin) {
       ctx.body = { jwt: admin.jwt };
@@ -47,6 +47,7 @@ router.get('/getSchoolName', async (ctx, next) => {
       ctx.body = { schoolName };
     }
   } catch (e) {
+    console.log('e', e);
     ctx.status = 404;
   }
 });

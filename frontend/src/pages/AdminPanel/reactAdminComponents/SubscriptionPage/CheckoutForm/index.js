@@ -1,5 +1,6 @@
 import { compose, mapProps, withHandlers, withState } from 'recompose';
 import { injectStripe } from 'react-stripe-elements';
+import jwtFactory from 'jsonwebtoken';
 import DumbCheckoutForm from './DumbCheckoutForm';
 
 const plans = [{
@@ -17,7 +18,7 @@ const plans = [{
 }, {
   price: '120',
   frequency: 'year',
-  planId: 'plan_EyIEdy1LAUfVCj',
+  planId: 'plan_EyifdUvpQWAW3C',
 }];
 
 export default compose(
@@ -39,10 +40,9 @@ export default compose(
 
       props.stripe.redirectToCheckout({
         items: [{ plan: planId, quantity: 1 }],
-        successUrl: 'https://clickin.fr/success',
-        cancelUrl: 'https://clickin.fr/cancelled',
-        // clientReferenceId: 'cus_EyCU5MFLHAP0oZ',
-        // customerEmail: jwtFactory.decode(localStorage.getItem('jwt')).email,
+        successUrl: 'https://edp.clickin.fr/success',
+        cancelUrl: 'https://edp.clickin.fr/cancelled',
+        clientReferenceId: jwtFactory.decode(localStorage.getItem('jwt')).schoolId,
       })
       .then(result => {
         if (result.error) {

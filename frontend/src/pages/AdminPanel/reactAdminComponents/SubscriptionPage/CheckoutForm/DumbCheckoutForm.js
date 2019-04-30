@@ -29,12 +29,17 @@ const DumbCheckoutForm = (props) => {
 
   return (
     <div>
-      <Typography variant="title" gutterBottom>S'abonner</Typography>
+      <Typography variant="title" gutterBottom>Tarif libre</Typography>
       <Typography gutterBottom>
         Afin de s'adapter au budget de chaque école, chaque école est libre de choisir en conscience le tarif qu'elle souhaite payer pour l'utilisation de l'application.<br />
-        Derrière cette application se cache de nombreuses heures de travail, le temps que je peux consacrer à l'entretenir et à l'améliorer dépend directement des revenus qu'elle génère.
+        Derrière cette application se cache de nombreuses heures de travail, le temps que je peux consacrer à l'entretenir et à l'améliorer dépend directement des revenus qu'elle génère.<br />
+        Aucune justification ne sera demandée quant au tarif que vous choisissez.
       </Typography>
-      <div style={{ marginTop: '10px' }}>
+      <Typography style={{ marginTop: '20px' }} variant="title" gutterBottom>S'abonner</Typography>
+      <Typography>
+        Vous pouvez opter pour un paiement mensuel ou pour un paiement annuel.
+      </Typography>
+      <div>
         <FormControl className={props.classes.formControl}>
           <Select
             value={props.frequency}
