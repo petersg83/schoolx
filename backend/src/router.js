@@ -13,5 +13,6 @@ require('./routes/statistics');
 require('./routes/settings');
 require('./routes/export');
 require('./routes/stripe');
+require('./routes/subscription');
 
 export default router;

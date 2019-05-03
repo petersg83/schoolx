@@ -118,8 +118,6 @@ export default compose(
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
         }),
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
         body: JSON.stringify({ action: 'arrived' }),
       }).then((res) => {
         if (res.status === 200) {

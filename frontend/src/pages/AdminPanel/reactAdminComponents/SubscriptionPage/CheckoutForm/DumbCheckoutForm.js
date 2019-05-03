@@ -29,13 +29,6 @@ const DumbCheckoutForm = (props) => {
 
   return (
     <div>
-      <Typography variant="title" gutterBottom>Tarif libre</Typography>
-      <Typography gutterBottom>
-        Afin de s'adapter au budget de chaque école, chaque école est libre de choisir en conscience le tarif qu'elle souhaite payer pour l'utilisation de l'application.<br />
-        Derrière cette application se cache de nombreuses heures de travail, le temps que je peux consacrer à l'entretenir et à l'améliorer dépend directement des revenus qu'elle génère.<br />
-        Aucune justification ne sera demandée quant au tarif que vous choisissez.
-      </Typography>
-      <Typography style={{ marginTop: '20px' }} variant="title" gutterBottom>S'abonner</Typography>
       <Typography>
         Vous pouvez opter pour un paiement mensuel ou pour un paiement annuel.
       </Typography>
@@ -58,7 +51,7 @@ const DumbCheckoutForm = (props) => {
             {plansMenuItems}
           </Select>
         </FormControl>
-        <Button type="submit" className={props.classes.button} disabled={!props.price || props.loading} variant="contained" color="secondary" onClick={props.checkout}>
+        <Button type="submit" className={props.classes.button} disabled={!props.price || props.loading} variant="contained" color="secondary" onClick={props.onSubscriptionClick}>
           {!props.loading && "Souscrire"}
           {props.loading && <CircularProgress size={24} />}
         </Button>

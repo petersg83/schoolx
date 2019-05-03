@@ -14,16 +14,18 @@ router.post('/stripecheckoutsessioncompleted', async (ctx, next) => {
 
     if (!school) {
       console.log("hola école non trouvée, id cherché :", stripeEvent.data.object.client_reference_id);
-    } else {
+    } else if (!school.subscriptionId || school.subscriptionId === stripeEvent.data.object.subscription) {
       await db.School.update({
         isFree: false,
         hasPaid: true,
-        paymentFrequency: stripeEvent.data.object.display_items[0].plan.interval,
-        paymentAmount: stripeEvent.data.object.display_items[0].amount,
+        subscriptionId: stripeEvent.data.object.subscription,
         stripeClientIds: _.uniq([...school.stripeClientIds, stripeEvent.data.object.customer]),
       }, {
         where: { id: school.id },
       });
+    } else {
+      // TODO : m'envoyer un mail
+      console.log('Apparemment on essaie de refaire un abonnement dans mon dos ?', school.subscriptionId, ' - ', stripeEvent.data.object.subscription);
     }
   } else {
     console.log('wrong stripe event', stripeEvent);

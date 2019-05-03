@@ -37,15 +37,12 @@ const School = sequelize.define('school', {
     defaultValue: false,
     allowNull: false,
   },
-  paymentFrequency: {
-    type: Sequelize.STRING,
-  },
-  paymentAmount: {
-    type: Sequelize.INTEGER,
-  },
   stripeClientIds: {
     type: Sequelize.JSONB,
     defaultValue: [],
+  },
+  subscriptionId: {
+    type: Sequelize.STRING,
   },
 }, {
   paranoid: true,
