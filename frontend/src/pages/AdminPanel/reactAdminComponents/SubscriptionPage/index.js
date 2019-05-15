@@ -16,6 +16,7 @@ export default compose(
         if (res.status === 200) {
           return res.json;
         } else {
+          props.showNotification('Une erreur inconnue s\'est produite. Si elle persiste, contactez le créateur à contact@pierre-noel.fr');
           throw new Error('Une erreur inconnue s\'est produite. Si elle persiste, contactez le créateur à contact@pierre-noel.fr');
         }
       }).then((res) => {

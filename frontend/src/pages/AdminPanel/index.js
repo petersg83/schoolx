@@ -20,6 +20,8 @@ import Menu from './menu'
 import InAndOutPage from './reactAdminComponents/InAndOutPage';
 import SettingsPage from './reactAdminComponents/SettingsPage';
 import SubscriptionPage from './reactAdminComponents/SubscriptionPage';
+import AfterSubscription from './reactAdminComponents/AfterSubscription';
+
 import config from '../../config';
 
 frenchMessages.ra.auth.username = 'email';
@@ -79,6 +81,8 @@ const CustomRoutes = [
   <Route exact path="/statistics" component={StatisticsPage} options={{ label: 'Statistiques' }} />,
   <Route exact path="/settings" component={SettingsPage} options={{ label: 'Paramètres' }} />,
   <Route exact path="/subscription" component={SubscriptionPage} options={{ label: 'Abonnement' }} />,
+  <Route exact path="/subscriptionSuccess" render={() => <AfterSubscription state="success"/>} noLayout />,
+  <Route exact path="/subscriptionCancelled" render={() => <AfterSubscription state="cancelled"/>} noLayout />,
   <Route exact path="/inandout" component={InAndOutPage} noLayout />,
 ];
 

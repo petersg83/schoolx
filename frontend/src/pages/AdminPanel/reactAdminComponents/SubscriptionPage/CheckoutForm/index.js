@@ -43,10 +43,14 @@ export default compose(
         throw new Error('error planId not found');
       }
 
+      const urlBase = config.domainName
+        .replace('https://', `https://${localStorage.getItem('subdomain')}.`)
+        .replace('http://', `http://${localStorage.getItem('subdomain')}.`);
+
       props.stripe.redirectToCheckout({
         items: [{ plan: planId, quantity: 1 }],
-        successUrl: 'https://edp.clickin.fr/success',
-        cancelUrl: 'https://edp.clickin.fr/cancelled',
+        successUrl: `${urlBase}/#/subscriptionSuccess`,
+        cancelUrl: `${urlBase}/#/subscriptionCancelled`,
         clientReferenceId: jwtFactory.decode(localStorage.getItem('jwt')).schoolId,
       })
       .then(result => {
@@ -75,12 +79,11 @@ export default compose(
         }),
         body: JSON.stringify({ newPlanId: planId }),
       }).then((res) => {
-        console.log('testitou');
         if (res.status === 200) {
           if (props.callbackAfterChangingSubscription) {
             props.setLoading(false);
             props.callbackAfterChangingSubscription();
-            props.showNotification('Changement de tarif enregistré avec succès :)');
+            props.showNotification('Changement de tarif enregistré avec succès :)', 'info');
           }
         } else {
           throw new Error('Une erreur inconnue s\'est produite. Si elle persiste, contactez le créateur à contact@pierre-noel.fr', 'warning');
