@@ -7,6 +7,7 @@ import { Elements } from 'react-stripe-elements';
 import moment from 'moment';
 import 'moment/locale/fr';
 import CheckoutForm from './CheckoutForm';
+import CancelSubscriptionForm from './CancelSubscriptionForm';
 
 const DumbSubscriptionPage = (props) => {
   const freeText = <Typography variant="caption" gutterBottom>Votre abonnement à ClickIn vous a été offert et est illimité et gratuit. Vous pouvez néanmoins commencer un abonnement payant si vous le souhaitez.</Typography>;
@@ -55,8 +56,8 @@ const DumbSubscriptionPage = (props) => {
           Derrière cette application se cache de nombreuses heures de travail, le temps que je peux consacrer à l'entretenir et à l'améliorer dépend directement des revenus qu'elle génère.<br />
           Aucune justification ne vous sera demandée quant au tarif que vous choisissez.
         </Typography>
-        <Typography style={{ marginTop: '20px' }} variant="title" gutterBottom>{props.subscriptionType === 'new' ? "S'abonner" : 'Changer de tarif'}</Typography>
         <CheckoutForm callbackAfterChangingSubscription={props.refreshSubscriptionInfo} subscriptionType={props.subscriptionType} />
+        {props.hasPaid && <CancelSubscriptionForm callbackAfterEndingSubscription={props.refreshSubscriptionInfo} />}
       </CardContent>
     </Card>
   </Elements>;

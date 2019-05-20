@@ -28,6 +28,7 @@ const plans = [{
 export default compose(
   injectStripe,
   connect(null, { showNotification }),
+  withState('isChangingModalOpen', 'setIsChangingModalOpen', false),
   withState('frequency', 'setFrequency', 'month'),
   withState('price', 'setPrice', ''),
   withState('loading', 'setLoading', false),
@@ -80,8 +81,8 @@ export default compose(
         body: JSON.stringify({ newPlanId: planId }),
       }).then((res) => {
         if (res.status === 200) {
+          props.setLoading(false);
           if (props.callbackAfterChangingSubscription) {
-            props.setLoading(false);
             props.callbackAfterChangingSubscription();
             props.showNotification('Changement de tarif enregistré avec succès :)', 'info');
           }
@@ -105,13 +106,20 @@ export default compose(
     handlePriceChange: props => (value) => props.setPrice(value),
   }),
   withHandlers({
-    onSubscriptionClick: props => (e) => {
+    onValidateChangingClick: props => (e) => {
+      props.setIsChangingModalOpen()
+      props.changeSubscription(e);
+    },
+  }),
+  withHandlers({
+    onChangeSubcriptionClick: props => (e) => {
       if (props.subscriptionType === 'changing') {
-        props.changeSubscription(e);
+        props.setIsChangingModalOpen(true);
       } else if (props.subscriptionType === 'new') {
         props.subscribeToNewSubscription(e);
       }
     },
+    onExitChangingModal: props => () => props.setIsChangingModalOpen(false),
   }),
   mapProps(props => ({
     handleFrequencyChange: props.handleFrequencyChange,
@@ -119,7 +127,10 @@ export default compose(
     frequency: props.frequency,
     price: props.price,
     plans: plans.filter(p => p.frequency === props.frequency),
-    onSubscriptionClick: props.onSubscriptionClick,
+    onChangeSubcriptionClick: props.onChangeSubcriptionClick,
     loading: props.loading,
+    isChangingModalOpen: props.isChangingModalOpen,
+    onExitChangingModal: props.onExitChangingModal,
+    onValidateChangingClick: props.onValidateChangingClick,
   })),
 )(DumbCheckoutForm);

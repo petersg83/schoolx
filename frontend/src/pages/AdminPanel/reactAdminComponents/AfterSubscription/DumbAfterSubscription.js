@@ -70,7 +70,7 @@ const DumbAfterSubscription = (props) => {
         <Typography style={{ marginTop: '30px' }}>
           {contentText}
         </Typography>
-        <Button variant="contained" href="/#/subscription" color="primary" size="medium" className={classes.button}>
+        <Button variant="contained" href="/#/subscription" color="secondary" size="medium" className={classes.button}>
           Retourner à l'application
         </Button>
       </Paper>

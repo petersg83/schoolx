@@ -6,6 +6,8 @@ import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
 
 const styles = theme => ({
   root: {
@@ -29,6 +31,7 @@ const DumbCheckoutForm = (props) => {
 
   return (
     <div>
+      <Typography style={{ marginTop: '20px' }} variant="title" gutterBottom>{props.subscriptionType === 'new' ? "S'abonner" : 'Changer de tarif'}</Typography>
       <Typography>
         Vous pouvez opter pour un paiement mensuel ou pour un paiement annuel.
       </Typography>
@@ -51,11 +54,29 @@ const DumbCheckoutForm = (props) => {
             {plansMenuItems}
           </Select>
         </FormControl>
-        <Button type="submit" className={props.classes.button} disabled={!props.price || props.loading} variant="contained" color="secondary" onClick={props.onSubscriptionClick}>
+        <Button type="submit" className={props.classes.button} disabled={!props.price || props.loading} variant="contained" color="secondary" onClick={props.onChangeSubcriptionClick}>
           {!props.loading && "Souscrire"}
           {props.loading && <CircularProgress size={24} />}
         </Button>
       </div>
+      <Dialog
+        open={props.isChangingModalOpen}
+        onClose={props.onExitChangingModal}
+      >
+        <DialogContent>
+          <Typography variant='subheading' style={{ textAlign: 'center', paddingBottom: '1.5rem' }} gutterBottom>
+            Passer à {props.price}€/{props.frequency === 'month' ? 'mois' : 'an'} à partir de maintenant ?
+          </Typography>
+          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <Button variant="contained" color="secondary" size="small" onClick={props.onValidateChangingClick}>
+            Oui
+          </Button>
+          <Button size="small" onClick={props.onExitChangingModal}>
+            Annuler
+          </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
