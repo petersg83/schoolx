@@ -42,4 +42,8 @@ db.SpecialMemberDay = require('./models/specialMemberDay').default;
 require('./models/specialMemberDay/methods');
 require('./models/specialMemberDay/relations');
 
+db.SubscriptionPlan = require('./models/subscriptionPlan').default;
+require('./models/subscriptionPlan/methods');
+require('./models/subscriptionPlan/relations');
+
 export default db;

@@ -1,4 +1,4 @@
-import { compose, mapProps, withHandlers, withState } from 'recompose';
+import { compose, lifecycle, mapProps, withHandlers, withState } from 'recompose';
 import { showNotification } from 'react-admin';
 import { connect } from 'react-redux';
 import { injectStripe } from 'react-stripe-elements';
@@ -7,24 +7,6 @@ import DumbCheckoutForm from './DumbCheckoutForm';
 import config from '../../../../../config';
 import { httpClient } from '../../../index';
 
-const plans = [{
-  price: '5',
-  frequency: 'month',
-  planId: 'plan_EyIAKpzaOEA60l',
-}, {
-  price: '60',
-  frequency: 'year',
-  planId: 'plan_EyIDy24T2Qozgx',
-}, {
-  price: '10',
-  frequency: 'month',
-  planId: 'plan_EyI8VObQWgSXVM',
-}, {
-  price: '120',
-  frequency: 'year',
-  planId: 'plan_EyifdUvpQWAW3C',
-}];
-
 export default compose(
   injectStripe,
   connect(null, { showNotification }),
@@ -32,16 +14,30 @@ export default compose(
   withState('frequency', 'setFrequency', 'month'),
   withState('price', 'setPrice', ''),
   withState('loading', 'setLoading', false),
+  withState('plans', 'setPlans', []),
   withHandlers({
+    getPlans: props => () => {
+      httpClient(`${config.apiEndpoint}/getPlans`)
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json;
+        } else {
+          props.showNotification('Une erreur inconnue s\'est produite. Si elle persiste, contactez le créateur à contact@pierre-noel.fr');
+          throw new Error('Une erreur inconnue s\'est produite. Si elle persiste, contactez le créateur à contact@pierre-noel.fr');
+        }
+      }).then((res) => {
+        props.setPlans(res.plans);
+      });
+    },
     subscribeToNewSubscription: props => (e) => {
       e.preventDefault();
       props.setLoading(true);
-      const plan = plans.find(p => p.price === props.price && p.frequency === props.frequency);
-      let planId = plan ? plan.planId : null;
+      const plan = props.plans.find(p => p.price === props.price && p.frequency === props.frequency);
+      let stripePlanId = plan ? plan.stripePlanId : null;
 
-      if (!planId) {
-        console.log('error planId not found !');
-        throw new Error('error planId not found');
+      if (!stripePlanId) {
+        console.log('error stripePlanId not found !');
+        throw new Error('error stripePlanId not found');
       }
 
       const urlBase = config.domainName
@@ -49,7 +45,7 @@ export default compose(
         .replace('http://', `http://${localStorage.getItem('subdomain')}.`);
 
       props.stripe.redirectToCheckout({
-        items: [{ plan: planId, quantity: 1 }],
+        items: [{ plan: stripePlanId, quantity: 1 }],
         successUrl: `${urlBase}/#/subscriptionSuccess`,
         cancelUrl: `${urlBase}/#/subscriptionCancelled`,
         clientReferenceId: jwtFactory.decode(localStorage.getItem('jwt')).schoolId,
@@ -63,12 +59,12 @@ export default compose(
     changeSubscription: props => (e) => {
       e.preventDefault();
       props.setLoading(true);
-      const plan = plans.find(p => p.price === props.price && p.frequency === props.frequency);
-      let planId = plan ? plan.planId : null;
+      const plan = props.plans.find(p => p.price === props.price && p.frequency === props.frequency);
+      let stripePlanId = plan ? plan.stripePlanId : null;
 
-      if (!planId) {
-        console.log('error planId not found !');
-        throw new Error('error planId not found');
+      if (!stripePlanId) {
+        console.log('error stripePlanId not found !');
+        throw new Error('error stripePlanId not found');
       }
 
       httpClient(`${config.apiEndpoint}/changeSubscription`, {
@@ -78,7 +74,7 @@ export default compose(
           "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
           'Content-Type': 'application/json',
         }),
-        body: JSON.stringify({ newPlanId: planId }),
+        body: JSON.stringify({ newPlanId: stripePlanId }),
       }).then((res) => {
         if (res.status === 200) {
           props.setLoading(false);
@@ -121,12 +117,17 @@ export default compose(
     },
     onExitChangingModal: props => () => props.setIsChangingModalOpen(false),
   }),
+  lifecycle({
+    componentDidMount() {
+      this.props.getPlans();
+    },
+  }),
   mapProps(props => ({
     handleFrequencyChange: props.handleFrequencyChange,
     handlePriceChange: props.handlePriceChange,
     frequency: props.frequency,
     price: props.price,
-    plans: plans.filter(p => p.frequency === props.frequency),
+    plans: props.plans.filter(p => p.frequency === props.frequency),
     onChangeSubcriptionClick: props.onChangeSubcriptionClick,
     loading: props.loading,
     isChangingModalOpen: props.isChangingModalOpen,

@@ -1,0 +1,1 @@
+import SubscriptionPlan from './index';

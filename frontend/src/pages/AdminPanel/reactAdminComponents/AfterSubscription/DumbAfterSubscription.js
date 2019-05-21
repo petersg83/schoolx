@@ -5,6 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import blue from '@material-ui/core/colors/blue';
 
 const styles = theme => ({
   main: {
@@ -20,6 +21,11 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
+    color: theme.palette.getContrastText(blue[500]),
+    backgroundColor: blue[500],
+    '&:hover': {
+      backgroundColor: blue[700],
+    },
   },
   paper: {
     display: 'flex',
@@ -70,7 +76,7 @@ const DumbAfterSubscription = (props) => {
         <Typography style={{ marginTop: '30px' }}>
           {contentText}
         </Typography>
-        <Button variant="contained" href="/#/subscription" color="secondary" size="medium" className={classes.button}>
+        <Button variant="contained" href="/#/subscription" size="medium" className={classes.button}>
           Retourner à l'application
         </Button>
       </Paper>

@@ -33,6 +33,7 @@ const DumbCheckoutForm = (props) => {
     <div>
       <Typography style={{ marginTop: '20px' }} variant="title" gutterBottom>{props.subscriptionType === 'new' ? "S'abonner" : 'Changer de tarif'}</Typography>
       <Typography>
+        Vous êtes libre de changer de tarif quand vous le souhaitez, les factures s'adapteront au prorata temporis.<br />
         Vous pouvez opter pour un paiement mensuel ou pour un paiement annuel.
       </Typography>
       <div>

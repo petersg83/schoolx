@@ -123,11 +123,19 @@ router.post('/endSubscription', authRequired(['admin'], async (ctx, next, { admi
     }, {
       where: { id: school.id },
     });
-    
+
     ctx.body = {};
   } catch (e) {
     console.log(e);
     ctx.status = 500;
     ctx.body = { status: 500, message: e.message };
   }
+}));
+
+router.get('/getPlans', authRequired(['admin'], async (ctx, next, { admin }) => {
+  const plans = await db.SubscriptionPlan.getAvailablePlans();
+
+  ctx.body = {
+    plans,
+  };
 }));

@@ -36,8 +36,8 @@ const DumbSubscriptionPage = (props) => {
 
   const isCurrentlyPaying = <div>
     <Typography variant="title" gutterBottom>Vous êtes abonnés :)</Typography>
-    <Typography gutterBottom>Merci de vous être abonnés à ClickIn. Vous avez actuellement le tarif suivant : {Math.round(props.amount/100, 2)}€/{props.frequency === 'month' ? 'mois' : 'an'}.<br />
-      Vous êtes libre de changer de tarif quand vous le souhaitez, les factures s'adapteront au prorata temporis.
+    <Typography gutterBottom>
+      Merci de vous être abonnés à ClickIn. Vous avez actuellement le tarif suivant : {Math.round(props.amount/100, 2)}€/{props.frequency === 'month' ? 'mois' : 'an'}.<br />
     </Typography>
 
   </div>;
