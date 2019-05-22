@@ -12,7 +12,8 @@ export default {
     passwordHash: 'ADMIN_PASSWORD',
   },
   secretStripeApiKey: 'SECRET_STRIPE_API_KEY',
-  secretStripeWHKey: 'SECRET_STRIPE_WH_KEY',
+  secretStripeWHKey_stripecheckoutsessioncompleted: 'SECRET_STRIPE_WH_KEY',
+  secretStripeWHKey_newInvoiceFinalized: 'SECRET_STRIPE_WH_KEY',
   gmail: {
     user: 'GMAIL_ADDRESS',
     pass: 'GMAIL_PASSWORD',

@@ -103,7 +103,7 @@ export default compose(
   }),
   withHandlers({
     onValidateChangingClick: props => (e) => {
-      props.setIsChangingModalOpen()
+      props.setIsChangingModalOpen(false)
       props.changeSubscription(e);
     },
   }),

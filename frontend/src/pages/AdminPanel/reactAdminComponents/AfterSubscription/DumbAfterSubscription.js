@@ -48,7 +48,7 @@ const DumbAfterSubscription = (props) => {
     titleText = 'Paiement validé avec succès !';
     contentText = <span>
       Merci pour le soutien que vous apportez à ce projet :)<br />
-      En espérant que vous allez continuer à apprécier l'application !<br />
+      Vous recevrez la facture par mail d'ici une heure.<br />
       <br />
       A bientôt,<br />
       Pierre
