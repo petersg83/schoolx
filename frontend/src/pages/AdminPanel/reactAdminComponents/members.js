@@ -1,7 +1,8 @@
 import React from 'react';
 import moment from 'moment';
-import { ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, Filter, FormTab, ImageInput, ImageField, List, required, ReferenceField, ReferenceManyField, TextField, TextInput, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout } from 'react-admin';
+import { ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, EmailField, Filter, FormTab, ImageInput, ImageField, List, required, ReferenceField, ReferenceManyField, TextField, TextInput, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout } from 'react-admin';
 import { periodsOverlap } from '../../../utils/dates';
+import { emailRegex, phoneNumberRegex } from '../../../utils/regex';
 import config from '../../../config';
 
 const validateDates = (value) => {
@@ -11,8 +12,13 @@ const validateDates = (value) => {
 }
 
 const validatePhoneNumberFormat = (value) => {
-  const phoneNumberRegex = /((?:\+|00)[17](?: |-)?|(?:\+|00)[1-9]\d{0,2}(?: |-)?|(?:\+|00)1-\d{3}(?: |-)?)?(0\d|\([0-9]{3}\)|[1-9]{0,3})(?:((?: |-)[0-9]{2}){4}|((?:[0-9]{2}){4})|((?: |-)[0-9]{3}(?: |-)[0-9]{4})|([0-9]{7}))/g;
-  if (typeof value === 'string' && !value.match(phoneNumberRegex)) {
+  if (typeof value === 'string' && value.length && !value.match(phoneNumberRegex)) {
+    return 'Format incorrect';
+  }
+}
+
+const validateEmailFormat = (value) => {
+  if (typeof value === 'string' && value.length && !value.match(emailRegex)) {
     return 'Format incorrect';
   }
 }
@@ -80,6 +86,13 @@ export const MemberShow = (props) => (
         <TextField source="lastName" label="Nom" type="url" />
         <DateField source="birthday" label="Date de naissance" />
         <TextField source="phoneNumber" label="Numéro de téléphone" />
+        <EmailField source="email" label="Email" />
+        <TextField source="responsible1Name" label="Nom représentant·e légal·e 1" />
+        <TextField source="responsible1Email" label="Email représentant·e légal·e 1" type="email" />
+        <TextField source="responsible1PhoneNumber" label="Téléphone représentant·e légal·e 1" />
+        <TextField source="responsible2Name" label="Nom représentant·e légal·e 2" />
+        <TextField source="responsible2Email" label="Email représentant·e légal·e 2" type="email" />
+        <TextField source="responsible2PhoneNumber" label="Téléphone représentant·e légal·e 2" />
       </Tab>
       <Tab label="Jour off">
         <ReferenceManyField reference="memberSettings" target="memberId" addLabel={false}>
@@ -113,7 +126,14 @@ export const MemberEdit = (props) => (
         <TextInput source="firstName" label="Prénom" validate={required()} />
         <TextInput source="lastName" label="Nom" type="url" validate={required()} />
         <DateInput source="birthday" label="Date de naissance" validate={required()} />
-        <TextInput source="phoneNumber" label="Numéro de téléphone" validate={validatePhoneNumberFormat} />
+        <TextInput source="phoneNumber" label="N° de téléphone" validate={validatePhoneNumberFormat} />
+        <TextInput source="email" label="Email" type="email" />
+        <TextInput source="responsible1Name" label="Nom représentant·e légal·e 1" />
+        <TextInput source="responsible1Email" label="Email représentant·e légal·e 1" type="email" validate={validateEmailFormat} />
+        <TextInput source="responsible1PhoneNumber" label="Téléphone représentant·e légal·e 1"  validate={validatePhoneNumberFormat} />
+        <TextInput source="responsible2Name" label="Nom représentant·e légal·e 2" />
+        <TextInput source="responsible2Email" label="Email représentant·e légal·e 2" type="email" validate={validateEmailFormat} />
+        <TextInput source="responsible2PhoneNumber" label="Téléphone représentant·e légal·e 2"  validate={validatePhoneNumberFormat} />
       </FormTab>
       <FormTab label="Jours off">
         <ArrayInput source="memberSettings" label="Périodes de jours off" style={{ width: '100%' }} validate={validateDates}>
@@ -145,7 +165,14 @@ export const MemberCreate = (props) => (
       <TextInput source="firstName" label="Prénom" validate={required()} />
       <TextInput source="lastName" label="Nom" type="url" validate={required()} />
       <DateInput source="birthday" label="Date de naissance" validate={required()} />
-      <TextInput source="phoneNumber" label="Numéro de téléphone" validate={validatePhoneNumberFormat} />
+      <TextInput source="phoneNumber" label="N° de téléphone" validate={validatePhoneNumberFormat} />
+      <TextInput source="email" label="Email" type="email" />
+      <TextInput source="responsible1Name" label="Nom représentant·e légal·e 1" />
+      <TextInput source="responsible1Email" label="Email représentant·e légal·e 1" type="email" validate={validateEmailFormat} />
+      <TextInput source="responsible1PhoneNumber" label="N° de téléphone représentant·e légal·e 1"  validate={validatePhoneNumberFormat} />
+      <TextInput source="responsible2Name" label="Nom représentant·e légal·e 2" />
+      <TextInput source="responsible2Email" label="Email représentant·e légal·e 2" type="email" validate={validateEmailFormat} />
+      <TextInput source="responsible2PhoneNumber" label="N° de téléphone représentant·e légal·e 2"  validate={validatePhoneNumberFormat} />
       <DateInput source="arrivalDate" label="Date d'arrivée" />
       <SelectArrayInput label="Jours off" source="daysOff" choices={dayOffChoices} />
     </SimpleForm>

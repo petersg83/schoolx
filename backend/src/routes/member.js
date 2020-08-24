@@ -82,6 +82,13 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
       lastName: ctx.request.body.lastName,
       birthday: ctx.request.body.birthday,
       phoneNumber: ctx.request.body.phoneNumber,
+      email: ctx.request.body.email,
+      responsible1Name: ctx.request.body.responsible1Name,
+      responsible1Email: ctx.request.body.responsible1Email,
+      responsible1PhoneNumber: ctx.request.body.responsible1PhoneNumber,
+      responsible2Name: ctx.request.body.responsible2Name,
+      responsible2Email: ctx.request.body.responsible2Email,
+      responsible2PhoneNumber: ctx.request.body.responsible2PhoneNumber,
     };
 
     if (ctx.request.body.pictures) {
@@ -156,6 +163,13 @@ router.post('/members/', authRequired(['superAdmin', 'admin'], async (ctx, next,
       schoolId: admin.schoolId,
       daysOff: ctx.request.body.daysOff,
       arrivalDate: ctx.request.body.arrivalDate ? moment(ctx.request.body.arrivalDate).startOf('date').toDate() : null,
+      email: ctx.request.body.email,
+      responsible1Name: ctx.request.body.responsible1Name,
+      responsible1Email: ctx.request.body.responsible1Email,
+      responsible1PhoneNumber: ctx.request.body.responsible1PhoneNumber,
+      responsible2Name: ctx.request.body.responsible2Name,
+      responsible2Email: ctx.request.body.responsible2Email,
+      responsible2PhoneNumber: ctx.request.body.responsible2PhoneNumber,
     };
 
     if (ctx.request.body.pictures) {

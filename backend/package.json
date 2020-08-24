@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist/ && babel ./src/ --out-dir dist/ --copy-files",
     "start": "npm run build && node dist/server.js",
-    "execute": "./node_modules/babel-cli/bin/babel-node.js"
+    "execute": "./node_modules/babel-cli/bin/babel-node.js",
+    "sequelize": "./node_modules/sequelize-cli/lib/sequelize"
   },
   "dependencies": {
     "@koa/cors": "2",
@@ -37,5 +38,8 @@
     "stripe": "^6.31.1",
     "urlify": "^0.3.6",
     "xlsx": "^0.14.1"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
   }
 }

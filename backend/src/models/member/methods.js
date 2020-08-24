@@ -77,6 +77,13 @@ Member.createWithSettingsAndPeriods = memberWithSettingsAndPeriods => {
     schoolId: memberWithSettingsAndPeriods.schoolId,
     phoneNumber: memberWithSettingsAndPeriods.phoneNumber,
     avatarPath: memberWithSettingsAndPeriods.avatarPath,
+    email: memberWithSettingsAndPeriods.email,
+    responsible1Name: memberWithSettingsAndPeriods.responsible1Name,
+    responsible1Email: memberWithSettingsAndPeriods.responsible1Email,
+    responsible1PhoneNumber: memberWithSettingsAndPeriods.responsible1PhoneNumber,
+    responsible2Name: memberWithSettingsAndPeriods.responsible2Name,
+    responsible2Email: memberWithSettingsAndPeriods.responsible2Email,
+    responsible2PhoneNumber: memberWithSettingsAndPeriods.responsible2PhoneNumber,
   };
 
   if (memberWithSettingsAndPeriods.daysOff && memberWithSettingsAndPeriods.daysOff.length) {

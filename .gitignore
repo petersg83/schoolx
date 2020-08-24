@@ -8,6 +8,7 @@ backend/tmp_invoices/*
 !backend/tmp_invoices/.gitkeep
 backend/src/config.js
 backend/scripts/config.sh
+backend/config/config.json
 
 frontend/node_modules/
 frontend/coverage

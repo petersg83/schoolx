@@ -34,7 +34,28 @@ const Member = sequelize.define('member', {
   },
   avatarPath: {
     type: Sequelize.STRING,
-  }
+  },
+  email: {
+    type: Sequelize.STRING,
+  },
+  responsible1Name: {
+    type: Sequelize.STRING,
+  },
+  responsible1Email: {
+    type: Sequelize.STRING,
+  },
+  responsible1PhoneNumber: {
+    type: Sequelize.STRING,
+  },
+  responsible2Name: {
+    type: Sequelize.STRING,
+  },
+  responsible2Email: {
+    type: Sequelize.STRING,
+  },
+  responsible2PhoneNumber: {
+    type: Sequelize.STRING,
+  },
 }, {
   paranoid: true,
   indexes: [{
