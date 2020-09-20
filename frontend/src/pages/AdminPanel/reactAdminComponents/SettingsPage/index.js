@@ -7,12 +7,21 @@ export default compose(
   withState('editMode', 'setEditMode', false),
   withState('accessCode', 'setAccessCode', ''),
   withState('accessCodeEdit', 'setAccessCodeEdit', ''),
+  withState('email', 'setEmail', ''),
+  withState('emailEdit', 'setEmailEdit', ''),
+  withState('emailSubject', 'setEmailSubject', ''),
+  withState('emailSubjectEdit', 'setEmailSubjectEdit', ''),
+  withState('sms', 'setSms', ''),
+  withState('smsEdit', 'setSmsEdit', ''),
   withState('errors', 'setErrors', {}),
   withHandlers({
     onEditModeChange: props => editMode => {
       props.setEditMode(editMode)
       if (editMode) {
         props.setAccessCodeEdit(props.accessCode);
+        props.setEmailEdit(props.email);
+        props.setEmailSubjectEdit(props.emailSubject);
+        props.setSmsEdit(props.sms);
       } else {
         props.setErrors({});
       }
@@ -22,6 +31,15 @@ export default compose(
       if (newAccessCodeEdit.trim().length > 7) {
         props.setErrors({ ...props.errors, accessCode: null });
       }
+    },
+    onEmailEditChange: props => newEmail => {
+      props.setEmailEdit(newEmail);
+    },
+    onSmsEditChange: props => newSms => {
+      props.setSmsEdit(newSms);
+    },
+    onEmailSubjectEditChange: props => newSms => {
+      props.setEmailSubjectEdit(newSms);
     },
   }),
   withHandlers({
@@ -43,6 +61,9 @@ export default compose(
           }),
           body: JSON.stringify({
             accessCode: props.accessCodeEdit,
+            sms: props.smsEdit,
+            email: props.emailEdit,
+            emailSubject: props.emailSubjectEdit,
           }),
         })
         .then((res) => {
@@ -53,6 +74,9 @@ export default compose(
           }
         })
         .then((res) => {
+          props.setEmail(res.email);
+          props.setEmailSubject(res.emailSubject);
+          props.setSms(res.sms);
           props.setAccessCode(res.accessCode);
           props.setEditMode(false);
         });
@@ -75,6 +99,9 @@ export default compose(
       })
       .then((res) => {
         props.setAccessCode(res.accessCode);
+        props.setEmail(res.email);
+        props.setEmailSubject(res.emailSubject);
+        props.setSms(res.sms);
       });
     },
   }),

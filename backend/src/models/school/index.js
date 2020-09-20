@@ -44,6 +44,15 @@ const School = sequelize.define('school', {
   subscriptionId: {
     type: Sequelize.STRING,
   },
+  email: {
+    type: Sequelize.TEXT,
+  },
+  emailSubject: {
+    type: Sequelize.TEXT,
+  },
+  sms: {
+    type: Sequelize.TEXT,
+  },
 }, {
   paranoid: true,
   indexes: [{

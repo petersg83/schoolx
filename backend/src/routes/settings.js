@@ -1,21 +1,22 @@
+import _ from 'lodash';
 import router from '../koa-router';
 import db from '../db';
 import { authRequired } from '../utils/auth';
 
 router.put('/settings', authRequired(['admin'], async (ctx, next, { admin }) => {
-  if (ctx.request.body.accessCode || ctx.request.body.accessCode === '') {
+  const updates = _.pick(ctx.request.body, ['accessCode', 'email', 'emailSubject', 'sms']);
+  if (updates.accessCode) {
     const t = await db.sequelize.transaction();
     try {
-      const newAccessCode = ctx.request.body.accessCode;
       const school = await db.School.findById(admin.schoolId);
-      if (school && newAccessCode !== school.accessCode) {
-        await db.School.update({
-          accessCode: newAccessCode,
-        }, {
+      if (school) {
+        await db.School.update(updates, {
           where: { id: admin.schoolId },
           transaction: t,
         });
-        await db.School.setAndgetNewJWT(admin.schoolId, t);
+        if (updates.accessCode !== school.accessCode) {
+          await db.School.setAndgetNewJWT(admin.schoolId, t);
+        }
       }
       await t.commit();
       ctx.body = await db.School.findById(admin.schoolId);
@@ -34,5 +35,8 @@ router.get('/settings', authRequired(['admin'], async (ctx, next, { admin }) => 
   const school = await db.School.findById(admin.schoolId);
   ctx.body = {
     accessCode: school.accessCode,
+    sms: school.sms,
+    email: school.email,
+    emailSubject: school.emailSubject,
   };
 }));
