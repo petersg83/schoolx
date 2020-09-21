@@ -5,6 +5,13 @@ import config from '../../../../../../config';
 import { httpClient } from '../../../../index';
 
 export default compose(
+  withState('selected', 'setSelected', false),
+  withHandlers({
+    onSelectedChange: props => e => {
+      props.setSelected(e.target.checked);
+      props.selectMember(props.memberDay, e.target.checked);
+    },
+  }),
   branch(
     props => props.editMode,
     baseComponent => baseComponent,

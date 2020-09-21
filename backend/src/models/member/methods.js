@@ -20,6 +20,36 @@ Member.findByIdAndSchoolId = (id, schoolId) => Member.findOne({
   include: [{ model: MemberSettings, as: 'memberSettings'}, { model: MemberPeriodsAtSchool, as: 'memberPeriodsAtSchool'}],
 });
 
+Member.getEmailsMetadata = async (memberIds, schoolId) => {
+  const members = await Member.findAll({ where: { id: { $in: memberIds }, schoolId: schoolId } });
+  const school = await School.findOne({ where: { id: schoolId } });
+
+  const emailsMetadata = members.reduce((acc, m) => {
+    const resp1 = {
+      memberId: m.id,
+      emailAddress: m.responsible1Email,
+      phoneNumber: m.responsible1PhoneNumber,
+      name: m.responsible1Name,
+    };
+    const resp2 = {
+      memberId: m.id,
+      emailAddress: m.responsible2Email,
+      phoneNumber: m.responsible2PhoneNumber,
+      name: m.responsible2Name,
+    };
+
+    return [...acc, resp1, resp2];
+  }, []);
+
+  return {
+    emailsMetadata,
+    school: {
+      emailSubject: school.emailSubject,
+      emailContent: school.email,
+    }
+  };
+};
+
 Member.getInAndOutMembersForSchoolAndDay = async (schoolId, date) => {
   const day = moment(date).startOf('day');
   const schoolIsOpenThisday = await School.isSchoolOpenOn(schoolId, day);

@@ -1,5 +1,5 @@
 import DumbDaySumUp from './DumbDaySumUp';
-import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import { compose, lifecycle, withHandlers, withProps, withState } from 'recompose';
 import moment from 'moment';
 import config from '../../../../../config';
 import { httpClient } from '../../../index';
@@ -10,6 +10,8 @@ export default compose(
   withState('daySettings', 'setDaySettings', null),
   withState('isSchoolOpen', 'setIsSchoolOpen', false),
   withState('editMode', 'setEditMode', false),
+  withState('isEmailModalOpen', 'setIsEmailModalOpen', false),
+  withState('selectedMembers', 'setSelectedMembers', []),
   withHandlers({
     getMembers: props => (date) => {
       httpClient(`${config.apiEndpoint}/membersDay?date=${moment(date).valueOf()}`, {
@@ -79,7 +81,21 @@ export default compose(
     onDateChange: props => date => props.getMembers(date),
     onEditModeChange: props => newValue => props.setEditMode(newValue),
     afterChangingAMemberDay: props => () => props.getMembers(props.currentDate),
+    selectMember: props => (member, selected) => {
+      if (selected) {
+        props.setSelectedMembers([...props.selectedMembers, member]);
+      } else {
+        const newSelectedMembers = props.selectedMembers.filter(m => m.memberId !== member.memberId);
+        props.setSelectedMembers(newSelectedMembers);
+      }
+      console.log(props.selectedMembers);
+    },
+    closeEmailModal: props => () => props.setIsEmailModalOpen(false),
+    openEmailModal: props => () => props.setIsEmailModalOpen(true),
   }),
+  withProps((props) => ({
+    modalButtonDisabled: props.selectedMembers.length === 0,
+  })),
   lifecycle({
     componentDidMount() {
       this.props.getMembers(this.props.currentDate);

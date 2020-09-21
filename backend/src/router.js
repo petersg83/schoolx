@@ -14,5 +14,6 @@ require('./routes/settings');
 require('./routes/export');
 require('./routes/stripe');
 require('./routes/subscription');
+require('./routes/emails');
 
 export default router;

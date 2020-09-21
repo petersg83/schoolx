@@ -10,7 +10,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
 import MemberDayRow from './MemberDayRow';
+import EmailModal from './EmailModal';
 import moment from 'moment';
 import 'moment/locale/fr';
 
@@ -18,7 +20,7 @@ const DumbDaySumUp = (props) => {
   let content;
 
   if (props.isSchoolOpen && props.membersDay.length) {
-    const memberDayRows = props.membersDay && props.membersDay.map(md => <MemberDayRow memberDay={md} key={`md-${md.memberId}`} editMode={props.editMode} date={props.currentDate} afterSubmit={props.afterChangingAMemberDay} />);
+    const memberDayRows = props.membersDay && props.membersDay.map(md => <MemberDayRow memberDay={md} key={`md-${md.memberId}`} editMode={props.editMode} date={props.currentDate} afterSubmit={props.afterChangingAMemberDay} selectMember={props.selectMember}/>);
     content = <div>
       <Typography variant="caption" style={{ marginBottom: '10px' }}>
         {props.daySettings && props.daySettings.openAt} → {props.daySettings && props.daySettings.closeAt}<br />
@@ -28,6 +30,7 @@ const DumbDaySumUp = (props) => {
       <Table style={{ minWidth: '1400px' }}>
         <TableHead>
           <TableRow>
+            <TableCell padding="none"></TableCell>
             <TableCell padding="dense">Nom</TableCell>
             <TableCell padding="dense" align="right">Heures</TableCell>
             <TableCell padding="dense" align="right">Résumé</TableCell>
@@ -46,6 +49,7 @@ const DumbDaySumUp = (props) => {
   }
 
   return <div style={{ marginTop: '20px' }}>
+    <EmailModal selectedMembers={props.selectedMembers} isOpen={props.isEmailModalOpen} closeModal={props.closeEmailModal} />
     <div style={{ marginBottom: '20px' }}>
       <FormControl style={{ flexDirection: 'row', display: 'flex' }}>
         <FormGroup style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
@@ -58,17 +62,22 @@ const DumbDaySumUp = (props) => {
             onChange={e => props.onDateChange(e.target.value)}
             style={{ marginRight: '20px' }}
           />
-          <FormControlLabel
+          <div>
+            <Button disabled={props.modalButtonDisabled} style={{ marginRight: '10px' }} color='secondary' size="small" variant="contained" onClick={() => props.openEmailModal()}>
+              Emails de retard
+            </Button>
+            <FormControlLabel
             control={
               <Switch
-                checked={props.editMode}
-                onChange={e => props.onEditModeChange(e.target.checked)}
-                value="editMode"
-                color="secondary"
+              checked={props.editMode}
+              onChange={e => props.onEditModeChange(e.target.checked)}
+              value="editMode"
+              color="secondary"
               />
             }
             label="Mode édition"
-          />
+            />
+          </div>
         </FormGroup>
       </FormControl>
     </div>

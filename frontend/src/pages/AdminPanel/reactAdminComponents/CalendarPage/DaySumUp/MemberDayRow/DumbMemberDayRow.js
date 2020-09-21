@@ -22,6 +22,13 @@ export const DumbShowMemberDayRow = (props) => {
 
   return (
     <TableRow>
+      <TableCell style={{ width: '25px' }} padding="none">
+        <Checkbox
+          checked={props.selected}
+          onChange={props.onSelectedChange}
+          color="secondary"
+        />
+      </TableCell>
       <TableCell component="th" scope="row" style={{ width: '150px' }}>{props.memberDay.firstName} {props.memberDay.lastName}</TableCell>
       <TableCell align="right" style={{ width: '100px' }}>{timeText}</TableCell>
       <TableCell align="right" style={{ backgroundColor: props.memberDay.color, width: '100px' }}>{props.memberDay.title}</TableCell>
