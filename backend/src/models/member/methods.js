@@ -30,12 +30,14 @@ Member.getEmailsMetadata = async (memberIds, schoolId) => {
       emailAddress: m.responsible1Email,
       phoneNumber: m.responsible1PhoneNumber,
       name: m.responsible1Name,
+      memberName: `${m.firstName} ${m.lastName}`,
     };
     const resp2 = {
       memberId: m.id,
       emailAddress: m.responsible2Email,
       phoneNumber: m.responsible2PhoneNumber,
       name: m.responsible2Name,
+      memberName: `${m.firstName} ${m.lastName}`,
     };
 
     return [...acc, resp1, resp2];
@@ -46,6 +48,7 @@ Member.getEmailsMetadata = async (memberIds, schoolId) => {
     school: {
       emailSubject: school.emailSubject,
       emailContent: school.email,
+      smsContent: school.sms,
     }
   };
 };
