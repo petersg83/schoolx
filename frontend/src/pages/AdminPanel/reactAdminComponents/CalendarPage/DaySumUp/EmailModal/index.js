@@ -21,12 +21,11 @@ export default compose(
     onEmailSubjectChange: (props) => (value) => props.setEmailSubject(value),
     onEmailContentChange: (props) => (value) => props.setEmailContent(value),
     onSmsContentChange: (props) => (value) => props.setSmsContent(value),
-    onCancel: (props) => (value) => {
+    onCancel: (props) => () => {
       props.closeModal();
       props.setShouldReset(true);
     },
     onSendingTypeChange: (props) => (index, value) => {
-      console.log('value', value);
       const newEmailsMetaData = [...props.emailsMetadata];
       newEmailsMetaData[index] = {
         ...newEmailsMetaData[index],
@@ -34,6 +33,8 @@ export default compose(
       };
       props.setEmailsMetadata(newEmailsMetaData);
     },
+  }),
+  withHandlers({
     sendEmailsAndSms: (props) => () => {
       props.setLoading(true);
       props.setError('');
@@ -51,19 +52,20 @@ export default compose(
         }),
       })
       .then((res) => {
-        console.log('ICI');
         props.setLoading(false);
-        if (res.status === 200) {
+        if (res.status === 200 && !res.json.error) {
           props.onCancel();
+        } else if (res.json.error) {
+          props.setError(res.json.error);
         } else {
           props.setError("Une erreur s'est produite");
         }
       })
-      .catch((e) => {
+      .catch((e, truc) => {
         props.setLoading(false);
-        props.setError("Une erreur s'est produite");
+        props.setError(e.message);
       })
-    }
+    },
   }),
   lifecycle({
     componentDidUpdate(prevProps) {

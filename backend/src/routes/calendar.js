@@ -256,9 +256,21 @@ router.get('/membersDay', authRequired(['admin'], async (ctx, next, { admin, sup
 
       const membersDay = [];
       const momentDay = moment(day);
-      const daySettings = specialSchoolDay
-        ? specialSchoolDay
-        : schoolYear.schoolYearSettings[0] && schoolYear.schoolYearSettings[0].usualOpenedDays.find(uod => uod.days.includes(momentDay.locale('en').format('dddd').toLowerCase()));
+      let daySettings;
+
+      if (specialSchoolDay) {
+        daySettings = specialSchoolDay;
+      } else {
+        schoolYear.schoolYearSettings.find(sys => {
+          const dayFound = sys.usualOpenedDays.find(uod => uod.days.includes(momentDay.locale('en').format('dddd').toLowerCase()));
+          if (dayFound) {
+            daySettings = dayFound;
+          }
+          return !!dayFound;
+        }
+      );
+      }
+
       daySettings.day = momentDay.toISOString();
 
       for (let member of members) {

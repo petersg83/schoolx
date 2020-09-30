@@ -53,6 +53,15 @@ const School = sequelize.define('school', {
   sms: {
     type: Sequelize.TEXT,
   },
+  smsToken: {
+    type: Sequelize.TEXT,
+  },
+  emailAddress: {
+    type: Sequelize.TEXT,
+  },
+  emailToken: {
+    type: Sequelize.TEXT,
+  },
 }, {
   paranoid: true,
   indexes: [{
