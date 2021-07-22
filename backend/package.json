@@ -39,7 +39,7 @@
     "smsapicom": "^1.5.1",
     "stripe": "^6.31.1",
     "urlify": "^0.3.6",
-    "xlsx": "^0.14.1"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "sequelize-cli": "^6.2.0"
