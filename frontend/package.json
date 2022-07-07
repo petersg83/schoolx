@@ -6,7 +6,7 @@
     "import": "^0.0.6",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.20",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.23",
     "ra-data-json-server": "2.9.9",
     "ra-language-english": "2.9.9",
