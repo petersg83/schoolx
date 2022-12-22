@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "import": "^0.0.6",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.20",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.23",
