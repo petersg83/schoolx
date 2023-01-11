@@ -21,7 +21,7 @@
     "download": "^7.1.0",
     "eslint": "^5.2.0",
     "jsonwebtoken": "^8.3.0",
-    "knex": "^0.19.5",
+    "knex": "^2.4.0",
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
     "koa-helmet": "^4.0.0",
