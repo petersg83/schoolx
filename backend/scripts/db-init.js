@@ -1,12 +1,17 @@
 import config from '../src/config.js';
 import db from '../src/db';
 
-(async () => {
+const run = async () => {
   await db.sequelize.sync();
   await db.SuperAdmin.upsert({
     email: config.defaultAdmin.email,
     passwordHash: config.defaultAdmin.passwordHash,
   });
-  console.log('ALL DONE');
-  process.exit();
-})();
+};
+
+run()
+  .then(() => {
+    console.log('ALL DONE');
+    process.exit();
+  })
+  .catch((e) => console.log('e'));
