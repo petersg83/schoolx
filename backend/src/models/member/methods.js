@@ -122,7 +122,7 @@ Member.createWithSettingsAndPeriods = memberWithSettingsAndPeriods => {
   if (memberWithSettingsAndPeriods.daysOff && memberWithSettingsAndPeriods.daysOff.length) {
     creationData.memberSettings = [{
       daysOff: memberWithSettingsAndPeriods.daysOff,
-      startAt: moment(memberWithSettingsAndPeriods.arrivalDate).startOf('date').toDate() || moment().startOf('date').toDate(),
+      startAt: moment(memberWithSettingsAndPeriods.arrivalDate || moment()).startOf('date').toDate(),
     }];
   }
 
