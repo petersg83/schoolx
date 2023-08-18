@@ -130,10 +130,10 @@ export const MemberEdit = (props) => (
         <TextInput source="email" label="Email" type="email" />
         <TextInput source="responsible1Name" label="Nom représentant·e légal·e 1" />
         <TextInput source="responsible1Email" label="Email représentant·e légal·e 1" type="email" validate={validateEmailFormat} />
-        <TextInput source="responsible1PhoneNumber" label="Téléphone représentant·e légal·e 1"  validate={validatePhoneNumberFormat} />
+        <TextInput source="responsible1PhoneNumber" label="N° de tel représentant·e légal·e 1"  validate={validatePhoneNumberFormat} />
         <TextInput source="responsible2Name" label="Nom représentant·e légal·e 2" />
         <TextInput source="responsible2Email" label="Email représentant·e légal·e 2" type="email" validate={validateEmailFormat} />
-        <TextInput source="responsible2PhoneNumber" label="Téléphone représentant·e légal·e 2"  validate={validatePhoneNumberFormat} />
+        <TextInput source="responsible2PhoneNumber" label="N° de tel représentant·e légal·e 2"  validate={validatePhoneNumberFormat} />
       </FormTab>
       <FormTab label="Jours off">
         <ArrayInput source="memberSettings" label="Périodes de jours off" style={{ width: '100%' }} validate={validateDates}>
@@ -169,10 +169,10 @@ export const MemberCreate = (props) => (
       <TextInput source="email" label="Email" type="email" />
       <TextInput source="responsible1Name" label="Nom représentant·e légal·e 1" />
       <TextInput source="responsible1Email" label="Email représentant·e légal·e 1" type="email" validate={validateEmailFormat} />
-      <TextInput source="responsible1PhoneNumber" label="N° de téléphone représentant·e légal·e 1"  validate={validatePhoneNumberFormat} />
+      <TextInput source="responsible1PhoneNumber" label="N° de tel représentant·e légal·e 1"  validate={validatePhoneNumberFormat} />
       <TextInput source="responsible2Name" label="Nom représentant·e légal·e 2" />
       <TextInput source="responsible2Email" label="Email représentant·e légal·e 2" type="email" validate={validateEmailFormat} />
-      <TextInput source="responsible2PhoneNumber" label="N° de téléphone représentant·e légal·e 2"  validate={validatePhoneNumberFormat} />
+      <TextInput source="responsible2PhoneNumber" label="N° de tel représentant·e légal·e 2"  validate={validatePhoneNumberFormat} />
       <DateInput source="arrivalDate" label="Date d'arrivée" />
       <SelectArrayInput label="Jours off" source="daysOff" choices={dayOffChoices} />
     </SimpleForm>
