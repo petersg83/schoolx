@@ -1,5 +1,5 @@
 import { AUTH_LOGIN, AUTH_LOGOUT, AUTH_ERROR, AUTH_CHECK, AUTH_GET_PERMISSIONS } from 'react-admin';
-import jwtFactory from 'jsonwebtoken';
+import jwtDecode from 'jwt-decode';
 import config from '../../../config';
 
 export default (type, params) => {
@@ -28,8 +28,8 @@ export default (type, params) => {
     })
     .then(res => {
       localStorage.setItem('jwt', res.jwt);
-      localStorage.setItem('role', jwtFactory.decode(res.jwt).role);
-      localStorage.setItem('subdomain', jwtFactory.decode(res.jwt).subdomain);
+      localStorage.setItem('role', jwtDecode(res.jwt).role);
+      localStorage.setItem('subdomain', jwtDecode(res.jwt).subdomain);
     })
   }
   // called when the user clicks on the logout button

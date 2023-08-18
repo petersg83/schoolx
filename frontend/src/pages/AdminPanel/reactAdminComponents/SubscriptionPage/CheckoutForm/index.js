@@ -2,7 +2,7 @@ import { compose, lifecycle, mapProps, withHandlers, withState } from 'recompose
 import { showNotification } from 'react-admin';
 import { connect } from 'react-redux';
 import { injectStripe } from 'react-stripe-elements';
-import jwtFactory from 'jsonwebtoken';
+import jwtDecode from 'jwt-decode';
 import DumbCheckoutForm from './DumbCheckoutForm';
 import config from '../../../../../config';
 import { httpClient } from '../../../index';
@@ -48,7 +48,7 @@ export default compose(
         items: [{ plan: stripePlanId, quantity: 1 }],
         successUrl: `${urlBase}/#/subscriptionSuccess`,
         cancelUrl: `${urlBase}/#/subscriptionCancelled`,
-        clientReferenceId: jwtFactory.decode(localStorage.getItem('jwt')).schoolId,
+        clientReferenceId: jwtDecode(localStorage.getItem('jwt')).schoolId,
       })
       .then(result => {
         if (result.error) {
