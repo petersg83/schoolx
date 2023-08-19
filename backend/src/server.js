@@ -29,7 +29,9 @@ app.use(async (context, next) => {
   context.set('X-Response-Time', `${ms}ms`);
 });
 
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
 
 app.use(router.routes());
 
