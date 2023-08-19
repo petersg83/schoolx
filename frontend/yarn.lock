@@ -8346,13 +8346,6 @@ react-spinners@^0.4.7:
     react-emotion "^9.1.1"
     recompose "0.27.1 - 0.30.0"
 
-react-stripe-elements@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-stripe-elements/-/react-stripe-elements-3.0.1.tgz#e6897e3047b65a63737495bf2d28a93bb3064045"
-  integrity sha512-zGY/Oc8KmI175cCrV+9VXY2wPJeo2l9t53XGnvqknfO3X+dJyvQi2+xS3Tv/lSPB26aDMD6Jor68YB2KXHcDMA==
-  dependencies:
-    prop-types "^15.5.10"
-
 react-themeable@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-themeable/-/react-themeable-1.1.0.tgz#7d4466dd9b2b5fa75058727825e9f152ba379a0e"

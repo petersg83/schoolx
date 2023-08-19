@@ -22,28 +22,6 @@ const School = sequelize.define('school', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  trialUntil: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.NOW,
-    allowNull: false,
-  },
-  isFree: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false,
-    allowNull: false,
-  },
-  hasPaid: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false,
-    allowNull: false,
-  },
-  stripeClientIds: {
-    type: Sequelize.JSONB,
-    defaultValue: [],
-  },
-  subscriptionId: {
-    type: Sequelize.STRING,
-  },
   email: {
     type: Sequelize.TEXT,
   },

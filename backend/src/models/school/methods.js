@@ -54,7 +54,6 @@ School.createSchool = ({ name, urlName }) => {
     urlName,
     accessCode: '!0123456789',
     jwt: jwtFactory.sign({ schoolId }, config.jwtSecret),
-    trialUntil: moment().add(1, 'month'),
   });
 };
 
