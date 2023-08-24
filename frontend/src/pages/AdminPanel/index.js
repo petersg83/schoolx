@@ -1,10 +1,11 @@
 import React from 'react';
 import jsonServerProvider from 'ra-data-json-server';
-import { Layout, Admin, Resource, fetchUtils, resolveBrowserLocale } from 'react-admin';
+import { CustomRoutes, Layout, Admin, Resource, fetchUtils, resolveBrowserLocale, withLifecycleCallbacks } from 'react-admin';
 import { Route } from 'react-router-dom';
-import PeopleIcon from '@material-ui/icons/People';
-import PermIdentityIcon from '@material-ui/icons/PermIdentity';
-import DateRangeIcon from '@material-ui/icons/DateRange';
+import PeopleIcon from '@mui/icons-material/People';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import { castArray } from 'lodash';
 import { SchoolList, SchoolEdit, SchoolCreate } from './reactAdminComponents/schools';
 import { MemberList, MemberEdit, MemberCreate, MemberShow } from './reactAdminComponents/members';
 import { SchoolYearList, SchoolYearEdit, SchoolYearCreate, SchoolYearShow } from './reactAdminComponents/schoolYears';
@@ -16,6 +17,7 @@ import Dashboard from './reactAdminComponents/dashboard';
 import authProvider from './reactAdminComponents/authProvider';
 import frenchMessages from 'ra-language-french';
 import englishMessages from 'ra-language-english';
+import polyglotI18nProvider from 'ra-i18n-polyglot';
 import Menu from './menu'
 import InAndOutPage from './reactAdminComponents/InAndOutPage';
 import SettingsPage from './reactAdminComponents/SettingsPage';
@@ -28,7 +30,7 @@ const messages = {
   fr: frenchMessages,
   en: englishMessages,
 }
-const i18nProvider = locale => messages[locale];
+const i18nProvider = polyglotI18nProvider(locale => messages[locale]);
 
 export const httpClient = (url, options = {}) => {
   if (!options.headers) {
@@ -50,59 +52,75 @@ const convertFileToBase64 = file => new Promise((resolve, reject) => {
     reader.onerror = reject;
 });
 
-const addUploadFeature = requestHandler => (type, resource, params) => {
-  if ((type === 'UPDATE' || type === 'CREATE') && resource === 'members') {
-    if (params.data.pictures) {
-      return convertFileToBase64(params.data.pictures)
-        .then(picture64 => ({
-          src: picture64,
-          title: `${params.data.pictures.title}`,
-        }))
-        .then(transformedNewPicture => requestHandler(type, resource, {
-          ...params,
-          data: {
-            ...params.data,
-            pictures: transformedNewPicture,
-          },
-        }));
-    }
+const convertPictureToBase64 = async (params) => {
+  if (!params.data.pictures) {
+    return params;
   }
-  // for other request types and resources, fall back to the default request handler
-  return requestHandler(type, resource, params);
-};
+  
+  const newPictures = castArray(params.data.pictures).filter(p => p.rawFile instanceof File);
+  const formerPictures = castArray(params.data.pictures).filter(p => !(p.rawFile instanceof File));
+
+  const base64Pictures = await Promise.all(newPictures.map(convertFileToBase64))
+    .then(base64Pictures =>
+      base64Pictures.map(picture64 => ({
+        src: picture64,
+        title: `${params.data.pictures.title}`,
+      }))
+  );
+  
+  return {
+    ...params,
+    data: {
+      ...params.data,
+      pictures: [
+        ...base64Pictures,
+        ...formerPictures,
+      ],
+    },
+  }
+}
 
 const dataProvider = jsonServerProvider(config.apiEndpoint, httpClient);
-const uploadCapableDataProvider = addUploadFeature(dataProvider);
-
-const CustomRoutes = [
-  <Route exact path="/calendar" component={CalendarPage} options={{ label: 'Calendrier' }} />,
-  <Route exact path="/statistics" component={StatisticsPage} options={{ label: 'Statistiques' }} />,
-  <Route exact path="/settings" component={SettingsPage} options={{ label: 'Paramètres' }} />,
-  <Route exact path="/inandout" component={InAndOutPage} noLayout />,
-];
+const uploadCapableDataProvider = withLifecycleCallbacks(dataProvider, [
+  {
+    resource: 'members',
+    beforeCreate: convertPictureToBase64,
+    beforeUpdate: convertPictureToBase64,
+    beforeUpdateMany: convertPictureToBase64,
+  }
+]);
 
 const getResources = (role) => {
+  console.log('rrr', role);
   if (role === 'admin') {
-    return [
-      <Resource options={{ label: 'Années' }} name="schoolYears" icon={DateRangeIcon} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
-      <Resource options={{ label: 'Admins' }} name="admins" icon={PermIdentityIcon} list={AdminList} edit={AdminEdit} create={AdminCreate} />,
-      <Resource options={{ label: 'Membres' }} name="members" icon={PeopleIcon} list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
-      <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
-      <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
-    ];
+    return <>
+      <Resource options={{ label: 'Années' }} name="schoolYears" icon={DateRangeIcon} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />
+      <Resource options={{ label: 'Admins' }} name="admins" icon={PermIdentityIcon} list={AdminList} edit={AdminEdit} create={AdminCreate} />
+      <Resource options={{ label: 'Membres' }} name="members" icon={PeopleIcon} list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />
+      {/* <Resource options={{ label: 'memberSettings' }} name="memberSettings" />
+      <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" /> */}
+      <CustomRoutes>
+        <Route exact path="/calendar" element={<CalendarPage />} options={{ label: 'Calendrier' }} />
+        <Route exact path="/statistics" element={<StatisticsPage />} options={{ label: 'Statistiques' }} />
+        <Route exact path="/settings" element={<SettingsPage />} options={{ label: 'Paramètres' }} />
+      </CustomRoutes>
+    </>;
   } else if (role === 'superAdmin') {
-    return [
-      <Resource options={{ label: 'Ecoles' }} name="schools" icon={DateRangeIcon} list={SchoolList} edit={SchoolEdit} create={SchoolCreate} />,
-      <Resource options={{ label: 'Admins' }} name="admins" icon={PermIdentityIcon} list={AdminList} edit={AdminEdit} create={AdminCreate} />,
-      <Resource options={{ label: 'Membres' }} name="members" icon={PeopleIcon} list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />,
-      <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
-      <Resource options={{ label: 'memberSettings' }} name="memberSettings" />,
-      <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />,
-    ];
+    return <>
+      <Resource options={{ label: 'Ecoles' }} name="schools" icon={DateRangeIcon} list={SchoolList} edit={SchoolEdit} create={SchoolCreate} />
+      <Resource options={{ label: 'Admins' }} name="admins" icon={PermIdentityIcon} list={AdminList} edit={AdminEdit} create={AdminCreate} />
+      <Resource options={{ label: 'Membres' }} name="members" icon={PeopleIcon} list={MemberList} edit={MemberEdit} create={MemberCreate} show={MemberShow} />
+      <Resource options={{ label: 'Années' }} name="schoolYears" list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />
+      <Resource options={{ label: 'memberSettings' }} name="memberSettings" />
+      <Resource options={{ label: 'memberPeriodsAtSchool' }} name="memberPeriodsAtSchool" />
+    </>;
   } else if (role === 'inandout') { // Needed to access inandout page when unauthenticated. Waiting for enhancement : https://github.com/marmelab/react-admin/issues/1647
-    return [
-      <Resource options={{ label: 'Années' }} name="schoolYears" icon={DateRangeIcon} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />,
-    ];
+    return <>
+      <CustomRoutes noLayout>
+        <Route exact path="/inandout" element={<InAndOutPage />} />
+      </CustomRoutes>
+      <Resource options={{ label: 'Années' }} name="schoolYears" icon={DateRangeIcon} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />
+    </>;
   }
 }
 
@@ -115,8 +133,7 @@ const AdminPanel = props => (<Admin
   dashboard={Dashboard}
   authProvider={authProvider}
   loginPage={LoginPage}
-  customRoutes={CustomRoutes}
-  appLayout={MyLayout}
+  layout={MyLayout}
 >
   {getResources}
 </Admin>);

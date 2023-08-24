@@ -1,20 +1,20 @@
 import React from 'react';
 import moment from 'moment';
-import BigCalendar from 'react-big-calendar';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Divider from '@material-ui/core/Divider';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Divider from '@mui/material/Divider';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/fr';
 import ModifyMemberDayForm from './ModifyMemberDayForm';
 import MemberSumUp from './MemberSumUp';
 
 moment.locale('fr');
-const localizer = BigCalendar.momentLocalizer(moment);
+const localizer = momentLocalizer(moment);
 const messages = {
   allDay: 'journée',
   previous: 'précédent',
@@ -38,7 +38,7 @@ const DumbMemberCalendar = (props) => {
         height: 480,
       }}
     >
-      <BigCalendar
+      <Calendar
         localizer={localizer}
         events={props.events}
         startAccessor="start"

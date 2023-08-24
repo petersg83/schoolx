@@ -1,6 +1,33 @@
 import React from 'react';
 import moment from 'moment';
-import { ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, EmailField, Filter, FormTab, ImageInput, ImageField, List, required, ReferenceField, ReferenceManyField, TextField, TextInput, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout } from 'react-admin';
+import {
+  ArrayInput,
+  Create,
+  Datagrid,
+  DateInput,
+  DateField,
+  Edit,
+  EditButton,
+  EmailField,
+  Filter,
+  ImageInput,
+  ImageField,
+  List,
+  required,
+  ReferenceField,
+  ReferenceManyField,
+  TextField,
+  TextInput,
+  SelectArrayInput,
+  Show,
+  ShowButton,
+  SimpleForm,
+  SimpleFormIterator,
+  Tab,
+  TabbedForm,
+  TabbedShowLayout,
+  WithRecord
+} from 'react-admin';
 import { periodsOverlap } from '../../../utils/dates';
 import { emailRegex, phoneNumberRegex } from '../../../utils/regex';
 import config from '../../../config';
@@ -45,10 +72,10 @@ const daysOffMap = {
   sunday: 'Dimanche',
 };
 
-const DaysOffField = ({ record }) => <span>{record.daysOff.map(day => daysOffMap[day]).join(', ')}</span>;
-const EndAtField = ({ record }) => <span>{record.endAt ? moment(record.endAt).format('DD/MM/YYYY') : 'à définir'}</span>;
-const AvatarField = ({ record, fileName }) => record[fileName] ? <img alt={record.firstName} style={{ marginTop: '20px', maxWidth: '127px', maxHeight: '150px' }} src={`${config.apiEndpoint}/public/avatars/${record[fileName]}`} /> : null;
-const TinyAvatarField = ({ record, fileName }) => record[fileName] ? <img alt={record.firstName} style={{ maxWidth: '34px', maxHeight: '40px' }} src={`${config.apiEndpoint}/public/avatars/${record[fileName]}`} /> : null;
+const DaysOffField = ({ label, source }) => <WithRecord label={label} render={(record) => <span>{record[source].map(day => daysOffMap[day]).join(', ')}</span>} />
+const EndAtField = ({ label, source }) => <WithRecord label={label} render={(record) => <span>{record[source] ? moment(record.endAt).format('DD/MM/YYYY') : 'à définir'}</span>} />
+const AvatarField = ({ label, source }) => <WithRecord label={label} render={(record) => record[source] ? <img alt={record.firstName} style={{ marginTop: '20px', maxWidth: '127px', maxHeight: '150px' }} src={`${config.apiEndpoint}/public/avatars/${record[source]}`} /> : <span></span>} />
+const TinyAvatarField = ({ label, source }) => <WithRecord label={label} render={record => record[source] ? <img alt={record.firstName} style={{ maxWidth: '34px', maxHeight: '40px' }} src={`${config.apiEndpoint}/public/avatars/${record[source]}`} /> : <span></span>} />
 
 const MemberFilter = (props) => (
     <Filter {...props}>
@@ -63,7 +90,7 @@ export const MemberList = (props) => (
     {...props}
   >
     <Datagrid>
-      <TinyAvatarField fileName="avatarPath" label="Avatar" />
+      <TinyAvatarField source="avatarPath" label="Avatar" />
       <TextField source="firstName" label="Prénom"/>
       <TextField source="lastName" label="Nom" />
       <DateField source="birthday" label="Date de naissance" locales="fr-FR" />
@@ -81,9 +108,9 @@ export const MemberShow = (props) => (
   <Show title={<MemberTitle />} {...props}>
     <TabbedShowLayout>
       <Tab label="Résumé">
-        <AvatarField fileName="avatarPath"/>
+        <AvatarField source="avatarPath"/>
         <TextField source="firstName" label="Prénom" />
-        <TextField source="lastName" label="Nom" type="url" />
+        <TextField source="lastName" label="Nom" />
         <DateField source="birthday" label="Date de naissance" />
         <TextField source="phoneNumber" label="Numéro de téléphone" />
         <EmailField source="email" label="Email" />
@@ -116,15 +143,15 @@ export const MemberShow = (props) => (
 );
 
 export const MemberEdit = (props) => (
-  <Edit title={<MemberTitle />} undoable={false} {...props}>
+  <Edit title={<MemberTitle />}>
     <TabbedForm redirect="show">
-      <FormTab label="Résumé">
-        <AvatarField fileName="avatarPath"/>
-        <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} options={{ style: { width: '224px' } }} onDrop={(accepted, rejected) => console.log('mm', rejected)} placeholder={<p>Faites glisser le nouvel avatar ici<br />5Mo max</p>}>
+      <TabbedForm.Tab label="Résumé">
+        <AvatarField source="avatarPath"/>
+        <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} sx={{ width: '224px' } } placeholder={<p>Faites glisser le nouvel avatar ici<br />5Mo max</p>}>
           <ImageField source="src" title="title" />
         </ImageInput>
         <TextInput source="firstName" label="Prénom" validate={required()} />
-        <TextInput source="lastName" label="Nom" type="url" validate={required()} />
+        <TextInput source="lastName" label="Nom" validate={required()} />
         <DateInput source="birthday" label="Date de naissance" validate={required()} />
         <TextInput source="phoneNumber" label="N° de téléphone" validate={validatePhoneNumberFormat} />
         <TextInput source="email" label="Email" type="email" />
@@ -134,8 +161,8 @@ export const MemberEdit = (props) => (
         <TextInput source="responsible2Name" label="Nom représentant·e légal·e 2" />
         <TextInput source="responsible2Email" label="Email représentant·e légal·e 2" type="email" validate={validateEmailFormat} />
         <TextInput source="responsible2PhoneNumber" label="N° de tel représentant·e légal·e 2"  validate={validatePhoneNumberFormat} />
-      </FormTab>
-      <FormTab label="Jours off">
+      </TabbedForm.Tab>
+      <TabbedForm.Tab label="Jours off">
         <ArrayInput source="memberSettings" label="Périodes de jours off" style={{ width: '100%' }} validate={validateDates}>
           <SimpleFormIterator>
             <SelectArrayInput label="Jours off" source="daysOff" choices={dayOffChoices} validate={required()} />
@@ -143,15 +170,15 @@ export const MemberEdit = (props) => (
             <DateInput source="endAt" label="Jusqu'au" />
           </SimpleFormIterator>
         </ArrayInput>
-      </FormTab>
-      <FormTab label="Périodes d'inscription">
+      </TabbedForm.Tab>
+      <TabbedForm.Tab label="Périodes d'inscription">
         <ArrayInput source="memberPeriodsAtSchool" label="Périodes où le membre est inscrit à l'école" style={{ width: '100%' }} validate={validateDates}>
           <SimpleFormIterator>
             <DateInput source="startAt" label="Du" value={moment().format('YYYY-MM-DD')} options={{ format: 'DD/MM/YYYY' }} validate={required()} />
             <DateInput source="endAt" label="Jusqu'au" />
           </SimpleFormIterator>
         </ArrayInput>
-      </FormTab>
+      </TabbedForm.Tab>
     </TabbedForm>
   </Edit>
 );
@@ -159,11 +186,11 @@ export const MemberEdit = (props) => (
 export const MemberCreate = (props) => (
   <Create {...props} title="Ajouter un membre à l'école" undoable="false">
     <SimpleForm redirect="show">
-      <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} options={{ style: { width: '224px' } }} onDrop={(accepted, rejected) => console.log('mm', rejected)} placeholder={<p>Faites glisser le nouvel avatar ici<br />5Mo max</p>}>
+      <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} sx={{ width: '224px' } } placeholder={<p>Faites glisser le nouvel avatar ici<br />5Mo max</p>}>
         <ImageField source="src" title="title" />
       </ImageInput>
       <TextInput source="firstName" label="Prénom" validate={required()} />
-      <TextInput source="lastName" label="Nom" type="url" validate={required()} />
+      <TextInput source="lastName" label="Nom" validate={required()} />
       <DateInput source="birthday" label="Date de naissance" validate={required()} />
       <TextInput source="phoneNumber" label="N° de téléphone" validate={validatePhoneNumberFormat} />
       <TextInput source="email" label="Email" type="email" />

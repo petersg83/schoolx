@@ -1,13 +1,13 @@
 import React from 'react';
 
-import FormLabel from '@material-ui/core/FormLabel';
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
+import FormLabel from '@mui/material/FormLabel';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
+import { withStyles } from '@mui/styles';
 import 'moment/locale/fr';
 
 const styles = theme => ({

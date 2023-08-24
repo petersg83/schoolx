@@ -1,14 +1,14 @@
 import React from 'react';
-import BigCalendar from 'react-big-calendar';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import CreateSSDForm from './CreateSSDForm';
 import 'moment/locale/fr';
 
 moment.locale('fr');
-const localizer = BigCalendar.momentLocalizer(moment);
+const localizer = momentLocalizer(moment);
 const messages = {
   allDay: 'journée',
   previous: 'précédent',
@@ -31,7 +31,7 @@ const DumbSchoolCalendar = (props) => <div>
       padding: '20px',
     }}
   >
-    <BigCalendar
+    <Calendar
       localizer={localizer}
       events={props.events}
       startAccessor="start"

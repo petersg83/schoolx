@@ -1,17 +1,17 @@
 import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import RemoveIcon from '@material-ui/icons/Remove';
-import IconButton from '@material-ui/core/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import IconButton from '@mui/material/IconButton';
 
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -38,7 +38,7 @@ const DumbEmailModal = (props) => {
       </TableCell>
       <TableCell>
         <IconButton aria-label="Remove" onClick={() => props.removeMetada(i)}>
-          <RemoveIcon />
+          <RemoveCircleOutlineIcon />
         </IconButton>
       </TableCell>
     </TableRow>

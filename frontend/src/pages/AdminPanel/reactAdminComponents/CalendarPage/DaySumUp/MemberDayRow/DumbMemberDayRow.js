@@ -1,14 +1,14 @@
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import SaveIcon from '@material-ui/icons/Save';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+import IconButton from '@mui/material/IconButton';
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+import SaveIcon from '@mui/icons-material/Save';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 import 'moment/locale/fr';
 
 export const DumbShowMemberDayRow = (props) => {
@@ -22,16 +22,16 @@ export const DumbShowMemberDayRow = (props) => {
 
   return (
     <TableRow>
-      <TableCell style={{ width: '25px' }} padding="none">
+      <TableCell sx={{ width: '25px' }} padding="none">
         <Checkbox
           checked={props.selected}
           onChange={props.onSelectedChange}
           color="secondary"
         />
       </TableCell>
-      <TableCell component="th" scope="row" style={{ width: '150px' }}>{props.memberDay.firstName} {props.memberDay.lastName}</TableCell>
-      <TableCell align="right" style={{ width: '100px' }}>{timeText}</TableCell>
-      <TableCell align="right" style={{ backgroundColor: props.memberDay.color, width: '100px' }}>{props.memberDay.title}</TableCell>
+      <TableCell component="th" scope="row" sx={{ width: '250px' }}>{props.memberDay.firstName} {props.memberDay.lastName}</TableCell>
+      <TableCell align="right" sx={{ width: '130px' }}>{timeText}</TableCell>
+      <TableCell align="right" sx={{ backgroundColor: props.memberDay.color, width: '150px' }}>{props.memberDay.title}</TableCell>
       <TableCell align="right">{props.memberDay.note}</TableCell>
     </TableRow>
   );
@@ -47,13 +47,13 @@ export const DumbEditableMemberDayRow = (props) => {
   }
 
   return <TableRow>
-    <TableCell padding="dense" component="th" scope="row">{props.memberDay.firstName} {props.memberDay.lastName}</TableCell>
-    <TableCell padding="dense" align="right">{timeText}</TableCell>
-    <TableCell padding="dense" align="right" style={{ backgroundColor: props.memberDay.color }}>{props.memberDay.title}</TableCell>
-    <TableCell padding="dense" align="right">
+    <TableCell padding="none" component="th" scope="row">{props.memberDay.firstName} {props.memberDay.lastName}</TableCell>
+    <TableCell padding="none" align="right" sx={{ paddingRight: '16px' }}>{timeText}</TableCell>
+    <TableCell padding="none" align="right" sx={{ backgroundColor: props.memberDay.color, paddingRight: '16px' }}>{props.memberDay.title}</TableCell>
+    <TableCell padding="none">
       <form onSubmit={props.onSubmit}>
-        <FormControl component="fieldset">
-          <FormGroup style={{ flexDirection: 'row' }}>
+        <FormControl component="fieldset" sx={{ margin: 0 }}>
+          <FormGroup sx={{ flexDirection: 'row', paddingLeft: '15px' }}>
             <FormControlLabel
               control={
                 <Switch
@@ -73,6 +73,7 @@ export const DumbEditableMemberDayRow = (props) => {
               value={props.arrivedAt}
               onChange={props.onArrivedAtChange}
               InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
+              sx={{ width: '90px', marginRight: '16px' }}
             />
             <TextField
               id="leftAt"
@@ -82,6 +83,7 @@ export const DumbEditableMemberDayRow = (props) => {
               value={props.leftAt}
               onChange={props.onLeftAtChange}
               InputProps={{ disableUnderline: true }} // eslint-disable-line react/jsx-no-duplicate-props
+              sx={{ width: '90px', marginRight: '16px' }}
             />
             <FormControlLabel
               control={

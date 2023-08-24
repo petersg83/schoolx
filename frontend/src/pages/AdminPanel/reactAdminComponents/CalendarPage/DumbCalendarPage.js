@@ -1,9 +1,9 @@
 import React from 'react';
 import { Title } from 'react-admin';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import MemberCalendar from './MemberCalendar';
 import SchoolCalendar from './SchoolCalendar';
 import DaySumUp from './DaySumUp';

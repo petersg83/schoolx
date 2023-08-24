@@ -1,11 +1,11 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import { withStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { withStyles } from '@mui/styles';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 
 
 document.body.style.margin = "0px";
@@ -78,7 +78,7 @@ const DumbInAndOutAccessPage = (props) => {
               />
               <br />
               <br />
-              {props.showLoading
+              {props.isLoading
                 ? <CircularProgress className={classes.progress} />
                 : <Button variant="contained" color="primary" className={classes.button} type="submit">
                 Accéder

@@ -78,7 +78,11 @@ export default compose(
     },
   }),
   withHandlers({
-    onDateChange: props => date => props.getMembers(date),
+    onDateChange: props => date => {
+      if (moment(date).isValid()) {
+        props.getMembers(date);
+      }
+    },
     onEditModeChange: props => newValue => props.setEditMode(newValue),
     afterChangingAMemberDay: props => () => props.getMembers(props.currentDate),
     selectMember: props => (member, selected) => {

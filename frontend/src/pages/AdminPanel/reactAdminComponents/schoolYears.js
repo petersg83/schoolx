@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
-import { ArrayField, ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, FormTab, NumberField, NumberInput, List, required, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout, TextField, TextInput } from 'react-admin';
+import { ArrayField, ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, FormTab, NumberField, NumberInput, List, required, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout, TextField, TextInput, WithRecord } from 'react-admin';
 
 const validateEdit = (values) => {
   const errors = {};
@@ -44,7 +44,7 @@ const sortArrayOfDaysName = (a, b) => daysValueMap[a] > daysValueMap[b] ? 1 : -1
 
 const getDateString = (date) => moment(date).format('DD/MM/YYYY');
 
-const SchoolYearTitle = ({ record }) => (<span>Année {record ? `${getDateString(record.startAt)} → ${getDateString(record.endAt)}` : ''}</span>);
+const SchoolYearTitle = ({ label }) => <WithRecord label={label} render={(record) => <span>Année {`${getDateString(record.startAt)} → ${getDateString(record.endAt)}`}</span>} />;
 
 export const SchoolYearList = (props) => (
   <List
@@ -61,8 +61,8 @@ export const SchoolYearList = (props) => (
   </List>
 );
 
-const DaysField = ({ record }) => <span>{record.days.sort(sortArrayOfDaysName).map(day => daysMap[day]).join(', ')}</span>;
-const EndAtField = ({ record }) => <span>{record.endAt ? moment(record.endAt).format('DD/MM/YYYY') : 'à définir'}</span>;
+const DaysField = ({ label, source }) => <WithRecord label={label} render={(record) => <span>{record[source].sort(sortArrayOfDaysName).map(day => daysMap[day]).join(', ')}</span>} />;
+const EndAtField = ({ label, source }) => <WithRecord label={label} render={(record) => <span>{record[source] ? moment(record[source]).format('DD/MM/YYYY') : 'à définir'}</span>} />;
 
 export const SchoolYearShow = (props) => (
   <Show title={<SchoolYearTitle />} {...props}>
@@ -110,11 +110,11 @@ export const SchoolYearEdit = (props) => (
             <ArrayInput source="usualOpenedDays" label="Journées types" style={{ width: '100%' }}>
               <SimpleFormIterator>
                 <SelectArrayInput label="Jours ouverts" source="days" choices={daysChoices} validate={required()} />
-                <TextInput source="openAt" label="De" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
-                <TextInput source="closeAt" label="À" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
-                <TextInput source="maxArrivalTime" label="Heure d'arrivée max" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
-                <TextInput source="minTimeBefPartialAbsence" label="Abscence partielle en dessous de"  type="time" InputLabelProps={{ shrink: true }} />
-                <TextInput source="minTimeBefTotalAbsence" label="Abscence totale en dessous de" validate={required()}  type="time" InputLabelProps={{ shrink: true }} />
+                <TextInput source="openAt" label="De" validate={required()}  type="time" InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
+                <TextInput source="closeAt" label="À" validate={required()}  type="time" InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
+                <TextInput source="maxArrivalTime" label="Heure d'arrivée max" validate={required()}  type="time" InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
+                <TextInput source="minTimeBefPartialAbsence" label="Abscence partielle en dessous de"  type="time" InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
+                <TextInput source="minTimeBefTotalAbsence" label="Abscence totale en dessous de" validate={required()}  type="time" InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
               </SimpleFormIterator>
             </ArrayInput>
           </SimpleFormIterator>
@@ -132,18 +132,18 @@ export const SchoolYearCreate = (props) => (
       <DateInput source="startAt" label="Du" validate={required()} />
       <DateInput source="endAt" label="Au" validate={required()} />
       <NumberInput source="nbOfDaysOfHolidays" label="Nb de jours de vacances" validate={required()} step={1}/>
-      <ArrayInput source="schoolYearSettings" label="Paramètres des journées" validate={required()}  style={{ width: '100%' }}>
+      <ArrayInput source="schoolYearSettings" label="Paramètres des journées" validate={required()}  sx={{ width: '100%' }}>
         <SimpleFormIterator>
           <DateInput source="startAt" label="Du" value={moment().format('YYYY-MM-DD')} validate={required()} />
           <DateInput source="endAt" label="Jusqu'au" />
-          <ArrayInput source="usualOpenedDays" label="Journées types" validate={required()} style={{ width: '100%' }}>
+          <ArrayInput source="usualOpenedDays" label="Journées types" validate={required()} sx={{ width: '100%' }}>
             <SimpleFormIterator>
               <SelectArrayInput label="Jours ouverts" source="days" choices={daysChoices} validate={required()} />
-              <TextInput source="openAt" label="De" validate={required()} type="time"  InputLabelProps={{ shrink: true }} />
-              <TextInput source="closeAt" label="À" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
-              <TextInput source="maxArrivalTime" label="Heure d'arrivée max" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
-              <TextInput source="minTimeBefPartialAbsence" label="Abscence partielle en dessous de" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
-              <TextInput source="minTimeBefTotalAbsence" label="Abscence totale en dessous de" validate={required()} type="time" InputLabelProps={{ shrink: true }} />
+              <TextInput source="openAt" label="De" validate={required()} type="time"  InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
+              <TextInput source="closeAt" label="À" validate={required()} type="time" InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
+              <TextInput source="maxArrivalTime" label="Heure d'arrivée max" validate={required()} type="time" InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
+              <TextInput source="minTimeBefPartialAbsence" label="Abscence partielle en dessous de" validate={required()} type="time" InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
+              <TextInput source="minTimeBefTotalAbsence" label="Abscence totale en dessous de" validate={required()} type="time" InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
             </SimpleFormIterator>
           </ArrayInput>
         </SimpleFormIterator>

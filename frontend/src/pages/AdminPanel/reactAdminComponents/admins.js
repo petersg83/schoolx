@@ -1,5 +1,5 @@
 import React from 'react';
-import { Create, Datagrid, DisabledInput, Edit, EditButton, List, ReferenceField, ReferenceInput, required, TextField, TextInput, SelectInput, SimpleForm } from 'react-admin';
+import { Create, Datagrid, Edit, EditButton, List, ReferenceField, ReferenceInput, required, TextField, TextInput, SelectInput, SimpleForm } from 'react-admin';
 
 const validateEdit = (values) => {
   const errors = {};
@@ -30,7 +30,7 @@ const AdminTitle = ({ record }) => (<span>Admin {record ? `"${record.email}"` : 
 export const AdminEdit = (props) => (
   <Edit title={<AdminTitle />} undoable={false} {...props}>
     <SimpleForm validate={validateEdit} redirect="list">
-      <DisabledInput source="id" />
+      <TextInput source="id" disabled />
       <TextInput source="email" label="Email" validate={required()} type='email' />
       {props.permissions === 'superAdmin' && <ReferenceInput label="Ecole" source="schoolId" reference="schools" validate={required()}>
         <SelectInput optionText="name" />

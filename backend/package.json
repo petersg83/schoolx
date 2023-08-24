@@ -11,11 +11,11 @@
     "sequelize": "./node_modules/sequelize-cli/lib/sequelize"
   },
   "dependencies": {
-    "@koa/cors": "4.0.0",
     "@babel/cli": "7.22.10",
     "@babel/core": "7.22.10",
     "@babel/eslint-parser": "7.22.10",
     "@babel/preset-env": "7.22.10",
+    "@koa/cors": "4.0.0",
     "bcrypt": "5.1.1",
     "eslint": "8.47.0",
     "jsonwebtoken": "9.0.1",
@@ -35,6 +35,7 @@
     "sharp": "0.32.5",
     "smsapicom": "1.5.1",
     "urlify": "0.3.6",
+    "uuid": "9.0.0",
     "xlsx": "0.18.5"
   },
   "devDependencies": {

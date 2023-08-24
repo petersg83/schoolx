@@ -1,10 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import AdminPanel from './pages/AdminPanel';
-import registerServiceWorker from './registerServiceWorker';
 
 const App = () => <AdminPanel />;
 
-
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
+);

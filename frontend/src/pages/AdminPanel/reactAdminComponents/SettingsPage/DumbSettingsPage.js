@@ -1,15 +1,15 @@
 import React from 'react';
 import { Title } from 'react-admin';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 const DumbSettingsPage = (props) => {
   let tableBody;

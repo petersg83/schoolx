@@ -1,6 +1,6 @@
 import moment from 'moment';
 import XLSX from 'xlsx';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import Urlify from 'urlify';
 import router from '../koa-router';
 import db from '../db';
@@ -15,7 +15,7 @@ const urlify = Urlify.create({
 });
 
 router.get('/export', authRequired(['admin'], async (ctx, next, { admin }) => {
-  const fileName = `${uuid.v4()}.xlsx`;
+  const fileName = `${uuidv4()}.xlsx`;
   let workbook = XLSX.utils.book_new();
 
   const school = await db.School.findOne({

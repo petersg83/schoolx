@@ -1,14 +1,12 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { userLogin, Notification } from 'react-admin';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import { withStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography';
-import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useAuthProvider, useLogin, useNotify, Notification } from 'react-admin';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { withStyles } from '@mui/styles';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 import config from '../../../config';
 
 document.body.style.margin = "0px";
@@ -62,46 +60,42 @@ const styles = {
   },
 };
 
-class LoginPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      login: '',
-      password: '',
-      showLoading: false,
-      schoolName: '',
-    };
-    this.timeouts = [];
-  }
-  onEmailChange = (e) => {
-    this.setState({ login: e.target.value })
-  }
+function LoginPage(props) {
+  const [schoolName, setSchoolName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const login = useLogin();
+  const notify = useNotify();
+  // const authProvider = useAuthProvider();
 
-  onPasswordChange = (e) => {
-    this.setState({ password: e.target.value })
-  }
+  const onEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
 
-  submit = (e) => {
+  const onPasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = e => {
+      e.preventDefault();
+      login({ email, password }).catch(() =>
+          notify('Invalid email or password')
+      );
+  };
+
+  const submit = async (e) => {
     e.preventDefault();
-    // gather your data/credentials here
-    const credentials = {
-      username: this.state.login,
-      password: this.state.password
-    };
-
-    // Dispatch the userLogin action (injected by connect)
-    this.props.userLogin(credentials);
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.admin.loading && !prevState.showLoading) {
-      return { loadingStart: new Date(), showLoading: true }
-    } else {
-      return null;
+    setIsLoading(true);
+    try {
+      await login({ email, password });
+    } catch (e) {
+      notify('Invalid email or password');
     }
+    setIsLoading(false);
   }
 
-  componentDidMount() {
+  useEffect(() => {
     fetch(`${config.apiEndpoint}/getSchoolName`, {
       headers: new Headers({
         "access-control-allow-origin": config.domainName ? `*.${config.domainName}` : '*',
@@ -115,78 +109,59 @@ class LoginPage extends Component {
       }
     })
     .then((res) => {
-      this.setState({ schoolName: res.schoolName });
+      setSchoolName(res.schoolName);
     })
     .catch((e) => {
       console.log(e);
     });
-  }
+  }, []);
 
-  componentWillUnmount() {
-    this.timeouts.forEach((to) => clearTimeout(to));
-  }
 
-  componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
-    const { admin: { loading: prevLoading } } = prevProps;
-    const { admin: { loading } } = this.props;
-    // Loadng has stopped
-    if (prevLoading && !loading) {
-      const loadingTime = moment.duration(this.state.loadingStart - new Date());
-      const remainingTime = loadingTime.asMilliseconds() > 500 ? 0 : 500 - loadingTime.asMilliseconds();
-      this.timeouts.push(setTimeout(() => { this.setState({ showLoading: false }) }, remainingTime));
-    }
-  }
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.main}>
-        <form onSubmit={this.submit}>
-          <Card className={classes.card}>
-            <CardContent className={classes.cardContent}>
-              <Typography gutterBottom variant="headline" component="h2">
-                Connexion
-              </Typography>
-              <Typography variant="subheading" gutterBottom>
-                {this.state.schoolName || "Aucune école ne correspond à cette url"}
-              </Typography>
-              {this.state.schoolName && <div>
-                <TextField onChange={this.onEmailChange} name="login" className={classes.textField} type="email" placeholder="Email" required />
-                <br />
-                <TextField onChange={this.onPasswordChange} name="password" className={classes.textField} type="password" placeholder="Password" required />
-                <br />
-                <br />
-                {this.state.showLoading
-                  ? <CircularProgress className={classes.progress} />
-                  : <Button variant="contained" color="primary" className={classes.button} type="submit">
-                  Login
-                  </Button>
-                }
-                {this.state.schoolName && <div>
-                  <Typography className={classes.inandoutLink}>
-                    <a href="/#/inandout" className={classes.link}>
-                      Page d'entrées/sorties
-                    </a>
-                  </Typography>
-                </div>}
+  const { classes } = props;
+  return (
+    <div className={classes.main}>
+      <form onSubmit={submit}>
+        <Card className={classes.card}>
+          <CardContent className={classes.cardContent}>
+            <Typography gutterBottom variant="headline" component="h2">
+              Connexion
+            </Typography>
+            <Typography variant="subheading" gutterBottom>
+              {schoolName || "Aucune école ne correspond à cette url"}
+            </Typography>
+            {schoolName && <div>
+              <TextField onChange={onEmailChange} name="login" className={classes.textField} type="email" placeholder="Email" value={email} required />
+              <br />
+              <TextField onChange={onPasswordChange} name="password" className={classes.textField} type="password" placeholder="Password" value={password} required />
+              <br />
+              <br />
+              {isLoading
+                ? <CircularProgress className={classes.progress} />
+                : <Button variant="contained" color="primary" className={classes.button} type="submit">
+                Login
+                </Button>
+              }
+              {schoolName && <div>
+                <Typography className={classes.inandoutLink}>
+                  <a href="/#/inandout" className={classes.link}>
+                    Page d'entrées/sorties
+                  </a>
+                </Typography>
               </div>}
-            </CardContent>
-          </Card>
-        </form>
-        {false && <div className={classes.credits}>
-          <Typography gutterBottom component="p" variant="body1" className={classes.p}>
-            Photo by Nahil Naseer on Unsplash
-          </Typography>
-        </div>}
-        <Notification />
-      </div>
-    );
-  }
+            </div>}
+          </CardContent>
+        </Card>
+      </form>
+      {false && <div className={classes.credits}>
+        <Typography gutterBottom component="p" variant="body1" className={classes.p}>
+          Photo by Nahil Naseer on Unsplash
+        </Typography>
+      </div>}
+      <Notification />
+    </div>
+  );
 };
 
 const StyledLogin = withStyles(styles)(LoginPage);
 
-export default connect(state => ({
-  admin: state.admin
-}), { userLogin })(StyledLogin);
+export default StyledLogin;

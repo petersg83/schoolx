@@ -4,7 +4,7 @@ import router from '../koa-router';
 import db from '../db';
 import { authRequired } from '../utils/auth';
 import { periodsOverlap } from '../utils/dates';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 
 // READ MANY & search
@@ -92,8 +92,8 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
     };
 
     if (ctx.request.body.pictures) {
-      let avatarBuff = new Buffer(ctx.request.body.pictures.src.split(',')[1], 'base64');
-      const avatarPath = `src/public/avatars/${ctx.params.id}.${ctx.request.body.pictures.title.split('.').pop()}`;
+      let avatarBuff = new Buffer(ctx.request.body.pictures[0].src.split(',')[1], 'base64');
+      const avatarPath = `src/public/avatars/${ctx.params.id}.${ctx.request.body.pictures[0].title.split('.').pop()}`;
       await sharp(avatarBuff)
         .resize({ width: 170, height: 200, options: { fit: 'outside' } })
         .toFile(avatarPath);
@@ -152,10 +152,10 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
 }));
 
 // CREATE
-router.post('/members/', authRequired(['superAdmin', 'admin'], async (ctx, next, { admin, superAdmin }) => {
+router.post('/members', authRequired(['superAdmin', 'admin'], async (ctx, next, { admin, superAdmin }) => {
   if (admin) {
     const memberCreationData = {
-      id: uuid.v4(),
+      id: uuidv4(),
       firstName: ctx.request.body.firstName,
       lastName: ctx.request.body.lastName,
       birthday: ctx.request.body.birthday,
@@ -173,8 +173,8 @@ router.post('/members/', authRequired(['superAdmin', 'admin'], async (ctx, next,
     };
 
     if (ctx.request.body.pictures) {
-      let avatarBuff = new Buffer(ctx.request.body.pictures.src.split(',')[1], 'base64');
-      const avatarPath = `src/public/avatars/${memberCreationData.id}.${ctx.request.body.pictures.title.split('.').pop()}`;
+      let avatarBuff = new Buffer(ctx.request.body.pictures[0].src.split(',')[1], 'base64');
+      const avatarPath = `src/public/avatars/${memberCreationData.id}.${ctx.request.body.pictures[0].title.split('.').pop()}`;
       await sharp(avatarBuff)
         .resize({ width: 170, height: 200, options: { fit: 'outside' } })
         .toFile(avatarPath);

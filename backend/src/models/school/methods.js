@@ -1,6 +1,6 @@
 import moment from 'moment';
 import jwtFactory from 'jsonwebtoken';
-import uuid from 'uuid';
+import { v4 as uuidv4} from 'uuid';
 import School from './index';
 import SchoolYear from '../schoolYear';
 import SchoolYearSettings from '../schoolYearSettings';
@@ -47,7 +47,7 @@ School.setAndgetNewJWT = async (schoolId, transaction) => {
 };
 
 School.createSchool = ({ name, urlName }) => {
-  const schoolId = uuid.v4();
+  const schoolId = uuidv4();
   return School.create({
     id: schoolId,
     name,

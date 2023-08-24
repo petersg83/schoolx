@@ -1,5 +1,5 @@
 import React from 'react';
-import { Create, Datagrid, DisabledInput, DateField, Edit, EditButton, List, TextField, TextInput, SimpleForm } from 'react-admin';
+import { Create, Datagrid, DateField, Edit, EditButton, List, TextField, TextInput, SimpleForm } from 'react-admin';
 
 export const SchoolList = (props) => (
     <List
@@ -21,7 +21,7 @@ const SchoolTitle = ({ record }) => (<span>Ecole {record ? `"${record.name}"` : 
 export const SchoolEdit = (props) => (
   <Edit title={<SchoolTitle />} {...props}>
     <SimpleForm>
-      <DisabledInput source="id" />
+      <TextInput source="id" disabled />
       <TextInput source="name" label="Nom" />
       <TextInput source="urlName" label="Sous domaine" url="url" />
     </SimpleForm>
