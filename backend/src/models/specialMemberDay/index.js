@@ -20,6 +20,9 @@ const SpecialMemberDay = sequelize.define('specialMemberDay', {
   leftAt: {
     type: Sequelize.STRING,
   },
+  leftTemporarlyAt: {
+    type: Sequelize.STRING,
+  },
   justifiedDelay: {
     type: Sequelize.BOOLEAN,
   },

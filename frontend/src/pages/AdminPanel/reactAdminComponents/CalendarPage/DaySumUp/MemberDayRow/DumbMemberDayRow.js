@@ -30,7 +30,7 @@ export const DumbShowMemberDayRow = (props) => {
         />
       </TableCell>
       <TableCell component="th" scope="row" sx={{ width: '250px' }}>{props.memberDay.firstName} {props.memberDay.lastName}</TableCell>
-      <TableCell align="right" sx={{ width: '130px' }}>{timeText}</TableCell>
+      <TableCell align="left" sx={{ width: '130px' }}>{timeText}</TableCell>
       <TableCell align="right" sx={{ backgroundColor: props.memberDay.color, width: '150px' }}>{props.memberDay.title}</TableCell>
       <TableCell align="right">{props.memberDay.note}</TableCell>
     </TableRow>

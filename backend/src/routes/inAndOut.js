@@ -52,6 +52,15 @@ router.post('/inandout/:memberId', inAndOutAuthRequired(async (ctx, next, school
     } else if (currentSpecialMemberDay && currentSpecialMemberDay.arrivedAt && !currentSpecialMemberDay.leftAt && ctx.request.body.action === 'left') {
       currentSpecialMemberDay.update({
         leftAt: moment().format('HH:mm'),
+        leftTemporarlyAt: null,
+      });
+    } else if (currentSpecialMemberDay && currentSpecialMemberDay.arrivedAt && !currentSpecialMemberDay.leftAt && ctx.request.body.action === 'leftTemporarly') {
+      currentSpecialMemberDay.update({
+        leftTemporarlyAt: moment().format('HH:mm'),
+      });
+    } else if (currentSpecialMemberDay && currentSpecialMemberDay.arrivedAt && !currentSpecialMemberDay.leftAt && ctx.request.body.action === 'comesBack') {
+      currentSpecialMemberDay.update({
+        leftTemporarlyAt: null,
       });
     } else {
       throw new Error('action not possible');

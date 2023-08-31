@@ -91,7 +91,6 @@ const uploadCapableDataProvider = withLifecycleCallbacks(dataProvider, [
 ]);
 
 const getResources = (role) => {
-  console.log('rrr', role);
   if (role === 'admin') {
     return <>
       <Resource options={{ label: 'Années' }} name="schoolYears" icon={DateRangeIcon} list={SchoolYearList} edit={SchoolYearEdit} create={SchoolYearCreate} show={SchoolYearShow} />

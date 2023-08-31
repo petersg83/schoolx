@@ -73,7 +73,11 @@ export default compose(
               } else {
                 let memberState = 'toBeArrived';
                 if (m.specialMemberDay && m.specialMemberDay.arrivedAt && !m.specialMemberDay.leftAt) {
-                  memberState = 'arrived';
+                  if (m.specialMemberDay.leftTemporarlyAt) {
+                    memberState = 'leftTemporarly'
+                  } else {
+                    memberState = 'arrived';
+                  }
                 } else if (m.specialMemberDay && m.specialMemberDay.arrivedAt && m.specialMemberDay.leftAt) {
                   memberState = 'left';
                 }
@@ -81,11 +85,12 @@ export default compose(
                 let memberTimeText = '';
                 if (m.specialMemberDay && m.specialMemberDay.arrivedAt) {
                   memberTimeText += m.specialMemberDay.arrivedAt;
-                  memberTimeText += ' → ';
                   if (m.specialMemberDay.leftAt) {
-                    memberTimeText += m.specialMemberDay.leftAt;
+                    memberTimeText += ` → ${m.specialMemberDay.leftAt}`;
+                  } else if (m.specialMemberDay.leftTemporarlyAt) {
+                    memberTimeText += ` ↗ ${m.specialMemberDay.leftTemporarlyAt}`;
                   } else {
-                    memberTimeText += '...';
+                    memberTimeText += ' → ...';
                   }
                 }
 
@@ -109,7 +114,7 @@ export default compose(
     },
   }),
   withHandlers({
-    memberInModalEnters: props => () => {
+    membersInModalAction: props => (action) => {
       fetch(`${config.apiEndpoint}/inandout/${props.memberShownInModalId}`, {
         method: 'POST',
         headers: new Headers({
@@ -118,7 +123,7 @@ export default compose(
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
         }),
-        body: JSON.stringify({ action: 'arrived' }),
+        body: JSON.stringify({ action }),
       }).then((res) => {
         if (res.status === 200) {
           props.getMembers();
@@ -130,27 +135,20 @@ export default compose(
         }
       });
     },
+  }),
+  withHandlers({
+    memberInModalEnters: props => () => {
+      props.membersInModalAction('arrived');
+    },
     memberInModalLeaves: props => () => {
-      fetch(`${config.apiEndpoint}/inandout/${props.memberShownInModalId}`, {
-        method: 'POST',
-        headers: new Headers({
-          Accept: 'application/json',
-          "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
-        }),
-        body: JSON.stringify({ action: 'left' }),
-      }).then((res) => {
-        if (res.status === 200) {
-          props.getMembers();
-          props.setMemberShownInModalId(null);
-        } else if (res.status === 403) {
-          props.removeInandoutjwt()
-        } else {
-          throw new Error('Une erreur inconnue s\'est produite. Si elle persiste, contactez le créateur à contact@pierre-noel.fr');
-        }
-      });
-    }
+      props.membersInModalAction('left');
+    },
+    memberInModalLeavesTemporarly: props => () => {
+      props.membersInModalAction('leftTemporarly');
+    },
+    memberInModalComesBack: props => () => {
+      props.membersInModalAction('comesBack');
+    },
   }),
   lifecycle({
     componentDidMount() {

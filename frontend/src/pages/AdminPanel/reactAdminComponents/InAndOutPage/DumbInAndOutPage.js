@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import green from '@mui/material/colors/green';
 import red from '@mui/material/colors/red';
+import yellow from '@mui/material/colors/yellow';
 import Button from '@mui/material/Button';
 import moment from 'moment';
 import { PacmanLoader } from 'react-spinners';
@@ -27,6 +28,7 @@ const theme = createTheme({
   palette: {
     primary: green,
     secondary: red,
+    warning: yellow,
   },
 });
 
@@ -68,6 +70,9 @@ const DumbInAndOutPage = (props) => {
         case 'left':
           tileBackgroundColor = '#ff1744';
           break;
+        case 'leftTemporarly':
+          tileBackgroundColor = '#ffeb3b';
+          break;
         case 'toBeArrived':
         default:
           tileBackgroundColor = 'white';
@@ -90,9 +95,7 @@ const DumbInAndOutPage = (props) => {
 
     const memberTime = props.memberInModal &&
       props.memberInModal.memberTimeText &&
-      (props.memberInModal.memberState === 'left' ||
-      props.memberInModal.memberState === 'toBeArrived' ||
-      props.memberInModal.memberState === 'arrived')
+      ['left', 'toBeArrived', 'arrived', 'leftTemporarly'].includes(props.memberInModal.memberState)
       ? <Typography variant='subtitle2' sx={{ paddingBottom: '20px' }}>
           {props.memberInModal.memberTimeText}
         </Typography>
@@ -100,20 +103,29 @@ const DumbInAndOutPage = (props) => {
 
     let inAndOutButton = null;
     if (props.memberInModal && props.memberInModal.memberState === 'left') {
-      inAndOutButton = <Typography variant='body1' sx={{ marginBottom: '50px' }}>
+      inAndOutButton = <Typography variant='body1'>
          Horaires déjà entrés pour aujourd'hui
        </Typography>
     } else if (props.memberInModal && ['toBeArrived', 'isOff'].includes(props.memberInModal.memberState)) {
       inAndOutButton = <ThemeProvider theme={theme}>
-        <Button variant="contained" color="primary" size="large" onClick={props.memberInModalEnters}>
+        <Button variant="contained" color="primary" size="large" onClick={props.memberInModalEnters} sx={{ width: '100%' }}>
           Entrer
         </Button>
       </ThemeProvider>;
     } else if (props.memberInModal && ['arrived', 'isOff'].includes(props.memberInModal.memberState)) {
       inAndOutButton = <ThemeProvider theme={theme}>
-        <Button variant="contained" color="secondary" size="large" onClick={props.memberInModalLeaves}>
+        <Button variant="contained" color="warning" size="large" onClick={props.memberInModalLeavesTemporarly} sx={{ marginBottom: '20px', width: '100%' }}>
+          Sortir temporairement
+        </Button>
+        <Button variant="contained" color="secondary" size="large" onClick={props.memberInModalLeaves} sx={{ width: '100%' }}>
           Sortir définitivement
         </Button>
+      </ThemeProvider>;
+    } else if (props.memberInModal && ['leftTemporarly'].includes(props.memberInModal.memberState)) {
+      inAndOutButton = <ThemeProvider theme={theme}>
+          <Button variant="contained" color="warning" size="large" onClick={props.memberInModalComesBack} sx={{ width: '100%' }}>
+            Revenir
+          </Button>
       </ThemeProvider>;
     } else if (props.memberInModal && props.memberInModal.memberState === 'inHoliday') {
       inAndOutButton = <Typography variant='body1' sx={{ marginBottom: '50px' }}>
@@ -143,14 +155,16 @@ const DumbInAndOutPage = (props) => {
               {`${props.memberInModal ? props.memberInModal.firstName : ''} ${props.memberInModal ? props.memberInModal.lastName : ''}`}
             </Typography>
             <div style={{ display: 'flex' }}>
-              <img alt={props.memberInModal ? props.memberInModal.firstName : ''} style={{ width: '170px', height: '200px', borderRadius: '4px' }} src={`${config.apiEndpoint}/public/${props.memberInModal && props.memberInModal.avatarPath ? `avatars/${props.memberInModal.avatarPath}` : 'default/defaultPic.png'}`} />
-              <div style={{ textAlign: 'center', padding: '20px 20px 0 20px', width: '100%' }}>
-                <Typography variant='h6' gutterBottom>
-                  {props.time.format('HH:mm:ss')}
-                </Typography>
-                <div style={{ marginTop: '20px' }} >
-                  {memberTime}
-                  {inAndOutButton}
+              <img alt={props.memberInModal ? props.memberInModal.firstName : ''} style={{ width: '187px', height: '220px', borderRadius: '4px' }} src={`${config.apiEndpoint}/public/${props.memberInModal && props.memberInModal.avatarPath ? `avatars/${props.memberInModal.avatarPath}` : 'default/defaultPic.png'}`} />
+              <div style={{ justifyContent: 'center', display: 'flex', padding: '20px 0 0 20px', width: '100%', minWidth: '200px' }}>
+                <div style={{ textAlign: 'center', width: '80%' }}>
+                  <Typography variant='h6' gutterBottom>
+                    {props.time.format('HH:mm:ss')}
+                  </Typography>
+                  <div style={{ marginTop: '20px' }} >
+                    {memberTime}
+                    {inAndOutButton}
+                  </div>
                 </div>
               </div>
             </div>

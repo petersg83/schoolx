@@ -97,7 +97,7 @@ const DumbStatisticsPage = (props) => {
         </TableHead>
         <TableBody>
           {props.rows.map(row => (
-            <TableRow key={row.memberId}>
+            <TableRow key={row.memberId} style={{ height: '40px' }}>
               <TableCell padding="none">{row.avatarPath ? <img alt={row.name} style={{ maxWidth: '34px', maxHeight: '40px' }} src={`${config.apiEndpoint}/public/avatars/${row.avatarPath}`} /> : null}</TableCell>
               <TableCell padding="none">{row.name}</TableCell>
               <TableCell padding="none" align="right" style={{ textAlign: 'right' }}>{row.totalNbOfOpenedDays}</TableCell>
