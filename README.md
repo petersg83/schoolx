@@ -12,90 +12,20 @@ Vous dites-vous aussi. Nos développeurs (un seul pour le moment, on attend des 
 
 
 
-![inandout](https://zupimages.net/up/19/25/38p4.png)
+![inandout](https://github.com/petersg83/schoolx/assets/11708220/92141ba7-5d21-4c7c-bef6-f7cc3ee13ae6)
 
-![calendar](https://www.zupimages.net/up/19/25/1akx.png)
+
+![calendar](https://github.com/petersg83/schoolx/assets/11708220/6fe7cf34-473f-4831-b19b-2c5c91b9ff54)
+
 
 # Installation
 
-Faite sur Ubuntu 18.04 Server
+Faite sur Ubuntu 20.04.6 Server
 
-### Installer node
-
-```bash
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
-
-### Installer postgreSQL
-
-```bash
-sudo apt update
-sudo apt install postgresql postgresql-contrib
-sudo -i -u postgres
-$postgres createuser --interactive # entrer : pierre, n, y, n
-$postgres createdb pierre # pour éviter les warnings. Mettre son nom linux.
-$postgres exit
-createdb schoolx
-psql
-$pierre ALTER USER pierre WITH PASSWORD 'new_password'; # mettre un mot de passe. Remplacer son nom linux.
-$pierre \q
-sudo su
-$root nano /etc/postgresql/10/main/postgresql.conf # add (or uncomment) the line listen_addresses = '*'
-$root nano /etc/postgresql/10/main/pg_hba.conf
-# modify the ip adresses to have those 2 lines
-# host    all             all             0.0.0.0/0            md5
-# host    all             all             ::0/0                md5
-$root exit
-sudo service postgresql restart
-```
-
-### Installer nginx
-
-```bash
-sudo apt install nginx
-```
-
-### Installer les certificats
-
-```bash
-sudo apt update
-sudo apt install python-minimal
-sudo apt install git-core
-cd /opt
-sudo git clone https://github.com/certbot/certbot.git
-cd certbot && ./certbot-auto # entrer votre nnd et choisir de rediriger http vers https
-sudo /opt/certbot/certbot-auto certonly \
-    --server https://acme-v02.api.letsencrypt.org/directory \
-    --manual -d *.clickin.fr -d clickin.fr # adapter avec votre adresse mail et votre ndd
-# hint: dans vos DNS c'est la ligne _acme-challenge.clickin.fr. 3600 TXT "CLE_DONNEE_PAR_CERBOT" en adaptant la clé et le ndd
-```
-
-### Créer une clée SSH & autorisation Github
-
-Créer la clée ssh du server :
-
-```bash
-ssh-keygen -t rsa -b 4096 -C "your_email@example.com" #Cliquer sur entrer jusqu'à la création de la clé.
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_rsa
-```
-
-Autoriser le server à accéder à Github :
-
-```bash
-cat ~/.ssh/id_rsa.pub
-```
-
-Allez sur github et ajouter la clée affichée
-
-### Installer yarn
-
-```bash
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt update && sudo apt install yarn
-```
+## Pré-requis
+- NodeJS 20
+- Postgres
+- Yarn
 
 ### Cloner et installer le projet
 
@@ -117,7 +47,7 @@ cd ..
 yarn execute scripts/db-init.js # initiate the database
 ```
 
-### Configurez nginx
+### Configurer nginx
 
 Remplacez le fichier `/etc/nginx/nginx.conf` par :
 
@@ -275,7 +205,7 @@ sudo service nginx reload
 sudo npm install -g pm2
 ```
 
-## Éxecution avec pm2
+### Éxecution avec pm2
 
 Dans le dossier `backend`, faites la commande :
 
@@ -288,40 +218,4 @@ Dans le dossier `frontend`, faites les commandes :
 ```bash
 yarn build
 pm2 -n front start "serve -s build"
-```
-
-## Backup avec gdrive
-
-Si vous souhaitez mettre des backups en place et les stocker en sécurité sur votre Google Drive (oui c'est pas très éthique tout ça...).
-
-### Installer gdrive
-
-```bash
-mkdir -p ~/bin
-cd ~/bin
-curl https://doc-08-48-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/9fgopm5t5oemi6oc7k0js0pjhsndgc0p/1549130400000/15876260727594163214/*/0B3X9GlR6EmbnQ0FtZmJJUXEyRTA > gdrive
-chmod u+x gdrive
-echo "export PATH=\"\$PATH:\$HOME/bin\"" >> ~/.bashrc
-source ~/.bashrc
-gdrive about # follow the link and enter the verification code
-```
-
-### Créer le dossier de sauvegarde
-
-```bash
-gdrive mkdir backups # store the backupsDirectoryId somewhere. Id ex: 1QI7qSIRO6Nj32G4TCM_OKz7-hoPr5d3F
-gdrive mkdir schoolx -p 1QI7qSIRO6Nj32G4TCM_OKz7-hoPr5d3F # replace the id with your backupsDirectoryId and store schoolxDirectoryId somewhere
-
-# Go to the schoolx project directory
-cd backend/scripts
-cp config.sh.dist config.sh
-nano config.sh # replace DIRECTORY_ID by the schoolxDirectoryId you stored and save
-```
-
-### Configurer crontab
-
-```bash
-crontab -e # add the end of the file the following lines and adapt the paths and the frequency:
-# PATH=/usr/bin:/bin:/home/pierre/bin
-# 0 14,22 * * * bash ~/schoolx/backend/scripts/backup.sh
 ```
