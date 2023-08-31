@@ -67,6 +67,7 @@ router.post('/sendEmailsAndSms', authRequired(['admin'], async (ctx, next, { adm
           text: _.template(emailContent)(data),
         });
       } catch (e) {
+        console.error('m.emailAddress' + e);
         emailAddressesError.push(m.emailAddress);
       }
     };
