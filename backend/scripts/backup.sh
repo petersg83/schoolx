@@ -7,9 +7,4 @@ fileName=schoolx_`date +%Y-%m-%d_%H:%M`.bak
 mkdir -p ~/postgres/backups/schoolx/
 pg_dump schoolx > ~/postgres/backups/schoolx/$fileName
 gdrive upload ~/postgres/backups/schoolx/$fileName -p $directoryId > /dev/null
-result="not done yet"
-while [ -n "$result" ]; do
-  result=`gdrive upload ~/postgres/backups/schoolx/$fileName -p $directoryId | grep "rateLimitExceeded"`
-  sleep 5
-done
-
+gdrive files upload ~/postgres/backups/schoolx/$fileName --parent $directoryId > /dev/null
