@@ -18,6 +18,9 @@ const Member = sequelize.define('member', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  pseudo: {
+    type: Sequelize.STRING,
+  },
   birthday: {
     type: Sequelize.DATE,
     allowNull: false,

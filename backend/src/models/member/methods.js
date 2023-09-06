@@ -106,6 +106,7 @@ Member.createWithSettingsAndPeriods = memberWithSettingsAndPeriods => {
   const creationData = {
     firstName: memberWithSettingsAndPeriods.firstName,
     lastName: memberWithSettingsAndPeriods.lastName,
+    pseudo: memberWithSettingsAndPeriods.pseudo,
     birthday: memberWithSettingsAndPeriods.birthday,
     schoolId: memberWithSettingsAndPeriods.schoolId,
     phoneNumber: memberWithSettingsAndPeriods.phoneNumber,

@@ -91,6 +91,7 @@ export const MemberList = (props) => (
   >
     <Datagrid>
       <TinyAvatarField source="avatarPath" label="Avatar" />
+      <TextField source="pseudo" label="Pseudo"/>
       <TextField source="firstName" label="Prénom"/>
       <TextField source="lastName" label="Nom" />
       <DateField source="birthday" label="Date de naissance" locales="fr-FR" />
@@ -109,6 +110,7 @@ export const MemberShow = (props) => (
     <TabbedShowLayout>
       <Tab label="Résumé">
         <AvatarField source="avatarPath"/>
+        <TextField source="pseudo" label="Pseudo"/>
         <TextField source="firstName" label="Prénom" />
         <TextField source="lastName" label="Nom" />
         <DateField source="birthday" label="Date de naissance" />
@@ -150,6 +152,7 @@ export const MemberEdit = (props) => (
         <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} sx={{ width: '224px' } } placeholder={<p>Faites glisser le nouvel avatar ici<br />5Mo max</p>}>
           <ImageField source="src" title="title" />
         </ImageInput>
+        <TextInput source="pseudo" label="Pseudo" />
         <TextInput source="firstName" label="Prénom" validate={required()} />
         <TextInput source="lastName" label="Nom" validate={required()} />
         <DateInput source="birthday" label="Date de naissance" validate={required()} />
@@ -189,6 +192,7 @@ export const MemberCreate = (props) => (
       <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} sx={{ width: '224px' } } placeholder={<p>Faites glisser le nouvel avatar ici<br />5Mo max</p>}>
         <ImageField source="src" title="title" />
       </ImageInput>
+      <TextInput source="pseudo" label="Pseudo" />
       <TextInput source="firstName" label="Prénom" validate={required()} />
       <TextInput source="lastName" label="Nom" validate={required()} />
       <DateInput source="birthday" label="Date de naissance" validate={required()} />

@@ -82,9 +82,9 @@ const DumbInAndOutPage = (props) => {
         <Grid key={member.id} onClick={() => props.onClickOnTile(member.id)} sx={{ cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }} item>
           <Paper className={props.classes.paper} sx={{ backgroundColor: tileBackgroundColor }}>
             <div style={{ textAlign: 'center' }}>
-              <img alt={member.firstName} style={{ width: '170px', height: '200px', borderRadius: '4px 4px 0 0' }} src={`${config.apiEndpoint}/public/${member.avatarPath ? `avatars/${member.avatarPath}` : 'default/defaultPic.png'}`} />
+              <img alt={member.pseudo || member.firstName} style={{ width: '170px', height: '200px', borderRadius: '4px 4px 0 0' }} src={`${config.apiEndpoint}/public/${member.avatarPath ? `avatars/${member.avatarPath}` : 'default/defaultPic.png'}`} />
               <div>
-                <Typography variant='subtitle1' sx={{ fontWeight: 500, lineHeight: 1.2 }}>{member.firstName}</Typography>
+                <Typography variant='subtitle1' sx={{ fontWeight: 500, lineHeight: 1.2 }}>{member.pseudo || member.firstName}</Typography>
                 {member.memberTimeText && <Typography variant='caption' gutterBottom>{member.memberTimeText}</Typography>}
               </div>
             </div>
@@ -129,7 +129,7 @@ const DumbInAndOutPage = (props) => {
       </ThemeProvider>;
     } else if (props.memberInModal && props.memberInModal.memberState === 'inHoliday') {
       inAndOutButton = <Typography variant='body1' sx={{ marginBottom: '50px' }}>
-         {props.memberInModal.firstName} est en congé aujourd'hui
+         {props.memberInModal.pseudo || props.memberInModal.firstName} est en congé aujourd'hui
        </Typography>
     }
 
@@ -152,10 +152,11 @@ const DumbInAndOutPage = (props) => {
         >
           <DialogContent>
             <Typography variant='h5' sx={{ textAlign: 'center', paddingBottom: '10px' }} gutterBottom>
-              {`${props.memberInModal ? props.memberInModal.firstName : ''} ${props.memberInModal ? props.memberInModal.lastName : ''}`}
+              {props.memberInModal && props.memberInModal.pseudo ? props.memberInModal.pseudo : ''}
+              {props.memberInModal && !props.memberInModal.pseudo ? `${props.memberInModal.firstName} ${props.memberInModal.lastName}` : ''}
             </Typography>
             <div style={{ display: 'flex' }}>
-              <img alt={props.memberInModal ? props.memberInModal.firstName : ''} style={{ width: '187px', height: '220px', borderRadius: '4px' }} src={`${config.apiEndpoint}/public/${props.memberInModal && props.memberInModal.avatarPath ? `avatars/${props.memberInModal.avatarPath}` : 'default/defaultPic.png'}`} />
+              <img alt={props.memberInModal ? props.memberInModal.pseudo || props.memberInModal.firstName : ''} style={{ width: '187px', height: '220px', borderRadius: '4px' }} src={`${config.apiEndpoint}/public/${props.memberInModal && props.memberInModal.avatarPath ? `avatars/${props.memberInModal.avatarPath}` : 'default/defaultPic.png'}`} />
               <div style={{ justifyContent: 'center', display: 'flex', padding: '20px 0 0 20px', width: '100%', minWidth: '200px' }}>
                 <div style={{ textAlign: 'center', width: '80%' }}>
                   <Typography variant='h6' gutterBottom>

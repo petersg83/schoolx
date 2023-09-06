@@ -18,6 +18,7 @@ router.get('/members', authRequired(['superAdmin', 'admin'], async (ctx, next, {
       searchWhereQuery.$and.push({ $or: [
         { firstName: { $iLike: `%${qw}%` } },
         { lastName: { $iLike: `%${qw}%` } },
+        { pseudo: { $iLike: `%${qw}%` } },
       ]});
     });
   }
@@ -42,7 +43,7 @@ router.get('/members', authRequired(['superAdmin', 'admin'], async (ctx, next, {
     const members = await db.Member.findAll({
       where: {
         ...searchWhereQuery,
-      },
+      },  
       offset: +ctx.query._start,
       limit: +ctx.query._end - ctx.query._start,
       order: [[ctx.query._sort, ctx.query._order]],
@@ -80,6 +81,7 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
     const memberUpdates = {
       firstName: ctx.request.body.firstName,
       lastName: ctx.request.body.lastName,
+      pseudo: ctx.request.body.pseudo,
       birthday: ctx.request.body.birthday,
       phoneNumber: ctx.request.body.phoneNumber,
       email: ctx.request.body.email,
@@ -158,6 +160,7 @@ router.post('/members', authRequired(['superAdmin', 'admin'], async (ctx, next, 
       id: uuidv4(),
       firstName: ctx.request.body.firstName,
       lastName: ctx.request.body.lastName,
+      pseudo: ctx.request.body.pseudo,
       birthday: ctx.request.body.birthday,
       phoneNumber: ctx.request.body.phoneNumber,
       schoolId: admin.schoolId,
