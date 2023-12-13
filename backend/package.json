@@ -15,7 +15,7 @@
     "@babel/core": "7.22.10",
     "@babel/eslint-parser": "7.22.10",
     "@babel/preset-env": "7.22.10",
-    "@koa/cors": "4.0.0",
+    "@koa/cors": "5.0.0",
     "bcrypt": "5.1.1",
     "eslint": "8.47.0",
     "jsonwebtoken": "9.0.1",
