@@ -7,13 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist/ && babel ./src/ --out-dir dist/ --copy-files",
     "start": "npm run build && node dist/server.js",
-    "execute": "./node_modules/babel-cli/bin/babel-node.js",
+    "execute": "./node_modules/@babel/node/bin/babel-node.js",
     "sequelize": "./node_modules/sequelize-cli/lib/sequelize"
   },
   "dependencies": {
     "@babel/cli": "7.22.10",
     "@babel/core": "7.22.10",
     "@babel/eslint-parser": "7.22.10",
+    "@babel/node": "^7.22.19",
     "@babel/preset-env": "7.22.10",
     "@koa/cors": "5.0.0",
     "bcrypt": "5.1.1",
