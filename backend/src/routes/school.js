@@ -44,7 +44,7 @@ router.put('/schools/:id', authRequired(['superAdmin'], async (ctx, next, { admi
   }
 }));
 
-router.post('/schools/', authRequired(['superAdmin'], async (ctx, next, { admin, superAdmin }) => {
+router.post('/schools', authRequired(['superAdmin'], async (ctx, next, { admin, superAdmin }) => {
   try {
     ctx.body = await db.School.createSchool({
       name: ctx.request.body.name,
