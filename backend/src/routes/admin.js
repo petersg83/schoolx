@@ -56,7 +56,10 @@ router.get('/admins/:id', authRequired(['superAdmin', 'admin'], async (ctx, next
 
 // EDIT
 router.put('/admins/:id', authRequired(['admin', 'superAdmin'], async (ctx, next, { admin, superAdmin }) => {
-  const updates = { email: ctx.request.body.email };
+  // Le jeton de connexion contient l'email (et l'école) de l'admin, et /login renvoie
+  // le jeton stocké s'il existe : on l'efface pour qu'une nouvelle connexion en génère
+  // un à jour. Sinon un admin dont l'email change ne peut plus jamais se connecter.
+  const updates = { email: ctx.request.body.email, jwt: null };
   const newPassword = ctx.request.body.password;
 
   if (typeof newPassword === 'string' && newPassword.length) {
