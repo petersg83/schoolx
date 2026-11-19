@@ -76,7 +76,7 @@ const DumbStatisticsPage = (props) => {
         <TableHead>
           <TableRow>
           {columnTitles.map((ct, index) => (
-            <TableCell key={ct.index} padding="none" align={ct.align} style={{ textAlign: ct.align }}>
+            <TableCell key={index} padding="none" align={ct.align} style={{ textAlign: ct.align }}>
               <Tooltip
                 title="Trier"
                 placement={ct.align === 'right' ? 'bottom-end' : 'bottom-start'}

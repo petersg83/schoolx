@@ -95,8 +95,8 @@ export const SchoolYearShow = (props) => (
 );
 
 export const SchoolYearEdit = (props) => (
-  <Edit title={<SchoolYearTitle />} undoable={false} {...props}>
-    <TabbedForm validate={validateEdit} redirect="show">
+  <Edit title={<SchoolYearTitle />} mutationMode="pessimistic" redirect="show" {...props}>
+    <TabbedForm validate={validateEdit}>
       <FormTab label="Début/Fin">
         <DateInput source="startAt" label="Du" validate={required()} />
         <DateInput source="endAt" label="Au" validate={required()} />
@@ -127,8 +127,8 @@ export const SchoolYearEdit = (props) => (
 
 // TODO: verifier que l'arrayusualOpenedDays n'est pas vide
 export const SchoolYearCreate = (props) => (
-  <Create title="Ajouter une nouvelle année"  {...props} undoable="false">
-    <SimpleForm validate={validateEdit} redirect="list">
+  <Create title="Ajouter une nouvelle année" redirect="list" {...props}>
+    <SimpleForm validate={validateEdit}>
       <DateInput source="startAt" label="Du" validate={required()} />
       <DateInput source="endAt" label="Au" validate={required()} />
       <NumberInput source="nbOfDaysOfHolidays" label="Nb de jours de vacances" validate={required()} step={1}/>

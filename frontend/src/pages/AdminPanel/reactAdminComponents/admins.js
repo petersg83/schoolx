@@ -1,5 +1,5 @@
 import React from 'react';
-import { Create, Datagrid, Edit, EditButton, List, ReferenceField, ReferenceInput, required, TextField, TextInput, SelectInput, SimpleForm, usePermissions } from 'react-admin';
+import { Create, Datagrid, Edit, EditButton, List, ReferenceField, ReferenceInput, required, TextField, TextInput, SelectInput, SimpleForm, usePermissions, useRecordContext } from 'react-admin';
 
 const validateEdit = (values) => {
   const errors = {};
@@ -28,13 +28,16 @@ export const AdminList = (props) => {
   );
 };
 
-const AdminTitle = ({ record }) => (<span>Admin {record ? `"${record.email}"` : ''}</span>);
+const AdminTitle = () => {
+  const record = useRecordContext();
+  return <span>Admin {record ? `"${record.email}"` : ''}</span>;
+};
 
 export const AdminEdit = (props) => {
   const { permissions } = usePermissions();
   return (
-  <Edit title={<AdminTitle />} undoable={false} {...props}>
-    <SimpleForm validate={validateEdit} redirect="list">
+  <Edit title={<AdminTitle />} mutationMode="pessimistic" redirect="list" {...props}>
+    <SimpleForm validate={validateEdit}>
       <TextInput source="id" disabled />
       <TextInput source="email" label="Email" validate={required()} type='email' />
       {permissions === 'superAdmin' && <ReferenceInput label="Ecole" source="schoolId" reference="schools" validate={required()}>
@@ -50,8 +53,8 @@ export const AdminEdit = (props) => {
 export const AdminCreate = (props) => {
   const { permissions } = usePermissions();
   return (
-  <Create {...props} undoable="false">
-    <SimpleForm validate={validateEdit} redirect="list">
+  <Create redirect="list" {...props}>
+    <SimpleForm validate={validateEdit}>
       <TextInput source="email" label="Email" validate={required()} type='email' />
       {permissions === 'superAdmin' &&  <ReferenceInput label="Ecole" source="schoolId" reference="schools" validate={required()} >
         <SelectInput optionText="name" />

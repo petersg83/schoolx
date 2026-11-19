@@ -1,5 +1,5 @@
 import React from 'react';
-import { Create, Datagrid, DateField, Edit, EditButton, List, TextField, TextInput, SimpleForm } from 'react-admin';
+import { Create, Datagrid, DateField, Edit, EditButton, List, TextField, TextInput, SimpleForm, useRecordContext } from 'react-admin';
 
 export const SchoolList = (props) => (
     <List
@@ -16,7 +16,10 @@ export const SchoolList = (props) => (
     </List>
 );
 
-const SchoolTitle = ({ record }) => (<span>Ecole {record ? `"${record.name}"` : ''}</span>);
+const SchoolTitle = () => {
+  const record = useRecordContext();
+  return <span>Ecole {record ? `"${record.name}"` : ''}</span>;
+};
 
 export const SchoolEdit = (props) => (
   <Edit title={<SchoolTitle />} {...props}>

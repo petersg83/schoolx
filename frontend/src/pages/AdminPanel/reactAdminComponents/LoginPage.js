@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLogin, useNotify, Notification } from 'react-admin';
+import { useLogin, useNotify } from 'react-admin';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
@@ -82,7 +82,9 @@ function LoginPage(props) {
     try {
       await login({ email, password });
     } catch (e) {
-      notify('Invalid email or password');
+      // authProvider rejette avec un message en français (identifiants incorrects, erreur inconnue)
+      const message = typeof e === 'string' ? e : 'Identifiants incorrects.';
+      notify(message, { type: 'error', messageArgs: { _: message } });
     }
     setIsLoading(false);
   }
@@ -140,7 +142,6 @@ function LoginPage(props) {
           </CardContent>
         </Card>
       </form>
-      <Notification />
     </div>
   );
 };

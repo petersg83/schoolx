@@ -6,6 +6,11 @@ import { httpClient } from '../../index';
 
 const compareNumber = attribute => (a, b) => a[attribute] < b[attribute] ? -1 : 1;
 const compareString = attribute => (a, b) => a[attribute].toLowerCase() < b[attribute].toLowerCase() ? -1 : 1;
+// Renvoie une copie triée (sans modifier le state existant), dans l'ordre demandé.
+const sortRows = (rows, orderKey, order) => {
+  const sorted = [...rows].sort(orderKey === 'name' ? compareString(orderKey) : compareNumber(orderKey));
+  return order === 'desc' ? sorted.reverse() : sorted;
+};
 
 export default compose(
   withState('from', 'setFrom', moment().startOf('day')),
@@ -49,13 +54,12 @@ export default compose(
               nbOfDayOffTaken: msu.nbOfDayOffTaken,
             }
           ));
-          props.setRows(membersSumUp.sort(props.sortSettings.orderKey === 'name' ? compareString(props.sortSettings.orderKey) : compareNumber(props.sortSettings.orderKey)));
+          props.setRows(sortRows(membersSumUp, props.sortSettings.orderKey, props.sortSettings.order));
         });
       }
     },
     orderRows: props => (orderKey, direction) => {
-      let newRows = props.rows.sort(orderKey === 'name' ? compareString(orderKey) : compareNumber(orderKey));
-      props.setRows(direction === 'asc' ? newRows : newRows.reverse());
+      props.setRows(sortRows(props.rows, orderKey, direction));
     },
   }),
   withHandlers({

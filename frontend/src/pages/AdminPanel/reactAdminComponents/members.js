@@ -27,6 +27,7 @@ import {
   TabbedForm,
   TabbedShowLayout,
   usePermissions,
+  useRecordContext,
   WithRecord
 } from 'react-admin';
 import { periodsOverlap } from '../../../utils/dates';
@@ -51,7 +52,10 @@ const validateEmailFormat = (value) => {
   }
 }
 
-const MemberTitle = ({ record }) => (<span>Membre {record ? `"${record.firstName} ${record.lastName}"` : ''}</span>);
+const MemberTitle = () => {
+  const record = useRecordContext();
+  return <span>Membre {record ? `"${record.firstName} ${record.lastName}"` : ''}</span>;
+};
 
 const dayOffChoices = [
   { id: 'monday', name: 'Lundi' },
@@ -149,8 +153,8 @@ export const MemberShow = (props) => (
 );
 
 export const MemberEdit = (props) => (
-  <Edit title={<MemberTitle />}>
-    <TabbedForm redirect="show">
+  <Edit title={<MemberTitle />} redirect="show">
+    <TabbedForm>
       <TabbedForm.Tab label="Résumé">
         <AvatarField source="avatarPath"/>
         <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} sx={{ width: '224px' } } placeholder={<p>Faites glisser le nouvel avatar ici<br />5Mo max</p>}>
@@ -191,8 +195,8 @@ export const MemberEdit = (props) => (
 );
 
 export const MemberCreate = (props) => (
-  <Create {...props} title="Ajouter un membre à l'école" undoable="false">
-    <SimpleForm redirect="show">
+  <Create {...props} title="Ajouter un membre à l'école" redirect="show">
+    <SimpleForm>
       <ImageInput source="pictures" label="Avatar" accept="image/*" multiple={false} sx={{ width: '224px' } } placeholder={<p>Faites glisser le nouvel avatar ici<br />5Mo max</p>}>
         <ImageField source="src" title="title" />
       </ImageInput>

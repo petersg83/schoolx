@@ -25,6 +25,7 @@ export default compose(
         }
       })
       .then((res) => {
+        props.setCurrentDate(moment(date));
         if (!res.isSchoolOpen) {
           props.setIsSchoolOpen(false);
         } else {
@@ -70,7 +71,6 @@ export default compose(
           }, []);
 
           membersDay.sort((m1, m2) => `${m1.firstName} ${m1.lastName}` < `${m2.firstName} ${m2.lastName}` ? -1 : 1);
-          props.setCurrentDate(moment(date));
           props.setMembersDay(membersDay);
           props.setDaySettings(res.daySettings);
         }
