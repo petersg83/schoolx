@@ -8,14 +8,10 @@ export default function InAndOutAccessPage(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [schoolName, setSchoolName] = useState('');
   const [errors, setErrors] = useState({});
-  const [isLogged, setIslogged] = useState(false);
+  const [isLogged, setIslogged] = useState(() => !!localStorage.getItem('inandoutjwt'));
 
   useEffect(() => {
-    fetch(`${config.apiEndpoint}/getSchoolName`, {
-      headers: new Headers({
-        "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
-      }),
-    })
+    fetch(`${config.apiEndpoint}/getSchoolName`)
     .then((res) => {
       if (res.status === 200) {
         return res.json();
@@ -28,19 +24,14 @@ export default function InAndOutAccessPage(props) {
     });
   }, []);
 
-  useEffect(() => {}, [isLogged]);
-
   const onCodeChange = code => {
     setErrors({ ...errors, code: '' });
     setCode(code);
   };
 
-  const getInandoutjwt = () => {
-    localStorage.getItem('inandoutjwt');
-  };
-
   const removeInandoutjwt = () => {
     localStorage.removeItem('inandoutjwt');
+    setIslogged(false);
   };
 
   const onSubmit = (e) => {
@@ -50,7 +41,6 @@ export default function InAndOutAccessPage(props) {
       method: 'POST',
       headers: new Headers({
         Accept: 'application/json',
-        "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
         'Content-Type': 'application/json',
       }),
       body: JSON.stringify({ accessCode: code }),
@@ -73,8 +63,8 @@ export default function InAndOutAccessPage(props) {
       });
   };
 
-  if (localStorage.getItem('inandoutjwt')) {
-    return <InAndOutPage getInandoutjwt={getInandoutjwt} removeInandoutjwt={removeInandoutjwt} />
+  if (isLogged) {
+    return <InAndOutPage removeInandoutjwt={removeInandoutjwt} />
   }
 
   return <DumbInAndOutAccessPage

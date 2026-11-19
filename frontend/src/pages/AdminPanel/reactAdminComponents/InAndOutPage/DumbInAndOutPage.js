@@ -112,7 +112,7 @@ const DumbInAndOutPage = (props) => {
           Entrer
         </Button>
       </ThemeProvider>;
-    } else if (props.memberInModal && ['arrived', 'isOff'].includes(props.memberInModal.memberState)) {
+    } else if (props.memberInModal && props.memberInModal.memberState === 'arrived') {
       inAndOutButton = <ThemeProvider theme={theme}>
         <Button variant="contained" color="warning" size="large" onClick={props.memberInModalLeavesTemporarly} sx={{ marginBottom: '20px', width: '100%' }}>
           Sortir temporairement

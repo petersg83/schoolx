@@ -26,6 +26,7 @@ import {
   Tab,
   TabbedForm,
   TabbedShowLayout,
+  usePermissions,
   WithRecord
 } from 'react-admin';
 import { periodsOverlap } from '../../../utils/dates';
@@ -83,7 +84,9 @@ const MemberFilter = (props) => (
     </Filter>
 );
 
-export const MemberList = (props) => (
+export const MemberList = (props) => {
+  const { permissions } = usePermissions();
+  return (
   <List
     title="Membres"
     filters={<MemberFilter />}
@@ -96,14 +99,15 @@ export const MemberList = (props) => (
       <TextField source="lastName" label="Nom" />
       <DateField source="birthday" label="Date de naissance" locales="fr-FR" />
       <TextField source="phoneNumber" label="Numéro de téléphone" />
-      {props.permissions === 'superAdmin' &&  <ReferenceField label="Ecole" source="schoolId" reference="schools">
+      {permissions === 'superAdmin' &&  <ReferenceField label="Ecole" source="schoolId" reference="schools">
         <TextField source="urlName" />
       </ReferenceField>}
       <EditButton />
       <ShowButton />
     </Datagrid>
   </List>
-);
+  );
+};
 
 export const MemberShow = (props) => (
   <Show title={<MemberTitle />} {...props}>

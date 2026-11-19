@@ -7,7 +7,6 @@ const login = async params => {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
-      "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
     }),
     body: JSON.stringify({
       email: params.email,

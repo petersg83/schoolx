@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuthProvider, useLogin, useNotify, Notification } from 'react-admin';
+import { useLogin, useNotify, Notification } from 'react-admin';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
@@ -67,7 +67,6 @@ function LoginPage(props) {
   const [isLoading, setIsLoading] = useState(false);
   const login = useLogin();
   const notify = useNotify();
-  // const authProvider = useAuthProvider();
 
   const onEmailChange = (e) => {
     setEmail(e.target.value);
@@ -75,13 +74,6 @@ function LoginPage(props) {
 
   const onPasswordChange = (e) => {
     setPassword(e.target.value);
-  };
-
-  const handleSubmit = e => {
-      e.preventDefault();
-      login({ email, password }).catch(() =>
-          notify('Invalid email or password')
-      );
   };
 
   const submit = async (e) => {
@@ -96,11 +88,7 @@ function LoginPage(props) {
   }
 
   useEffect(() => {
-    fetch(`${config.apiEndpoint}/getSchoolName`, {
-      headers: new Headers({
-        "access-control-allow-origin": config.domainName ? `*.${config.domainName}` : '*',
-      }),
-    })
+    fetch(`${config.apiEndpoint}/getSchoolName`)
     .then((res) => {
       if (res.status === 200) {
         return res.json();
@@ -152,11 +140,6 @@ function LoginPage(props) {
           </CardContent>
         </Card>
       </form>
-      {false && <div className={classes.credits}>
-        <Typography gutterBottom component="p" variant="body1" className={classes.p}>
-          Photo by Nahil Naseer on Unsplash
-        </Typography>
-      </div>}
       <Notification />
     </div>
   );

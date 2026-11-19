@@ -80,6 +80,7 @@ export default compose(
   withHandlers({
     onDateChange: props => date => {
       if (moment(date).isValid()) {
+        props.setSelectedMembers([]);
         props.getMembers(date);
       }
     },
@@ -92,7 +93,6 @@ export default compose(
         const newSelectedMembers = props.selectedMembers.filter(m => m.memberId !== member.memberId);
         props.setSelectedMembers(newSelectedMembers);
       }
-      console.log(props.selectedMembers);
     },
     closeEmailModal: props => () => props.setIsEmailModalOpen(false),
     openEmailModal: props => () => props.setIsEmailModalOpen(true),

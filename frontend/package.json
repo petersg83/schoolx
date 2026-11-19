@@ -7,7 +7,6 @@
     "jwt-decode": "3.1.2",
     "lodash": "4.18.1",
     "moment": "2.30.1",
-    "moment-timezone": "0.5.43",
     "ra-data-json-server": "4.13.1",
     "ra-i18n-polyglot": "4.13.1",
     "ra-language-english": "4.13.1",
@@ -24,7 +23,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "browserslist": {

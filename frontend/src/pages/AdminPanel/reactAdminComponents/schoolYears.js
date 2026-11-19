@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment-timezone';
+import moment from 'moment';
 import { ArrayField, ArrayInput, Create, Datagrid, DateInput, DateField, Edit, EditButton, FormTab, NumberField, NumberInput, List, required, SelectArrayInput, Show, ShowButton, SimpleForm, SimpleFormIterator, Tab, TabbedForm, TabbedShowLayout, TextField, TextInput, WithRecord } from 'react-admin';
 
 const validateEdit = (values) => {

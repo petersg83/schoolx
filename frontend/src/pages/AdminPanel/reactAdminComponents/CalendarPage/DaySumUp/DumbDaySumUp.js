@@ -20,7 +20,7 @@ const DumbDaySumUp = (props) => {
   let content;
 
   if (props.isSchoolOpen && props.membersDay.length) {
-    const memberDayRows = props.membersDay && props.membersDay.map(md => <MemberDayRow memberDay={md} key={`md-${md.memberId}`} editMode={props.editMode} date={props.currentDate} afterSubmit={props.afterChangingAMemberDay} selectMember={props.selectMember}/>);
+    const memberDayRows = props.membersDay && props.membersDay.map(md => <MemberDayRow memberDay={md} key={`md-${md.memberId}-${moment(props.currentDate).format('YYYY-MM-DD')}`} editMode={props.editMode} date={props.currentDate} afterSubmit={props.afterChangingAMemberDay} selectMember={props.selectMember}/>);
     content = <div>
       <Typography variant="subtitle2" sx={{ marginBottom: '10px', fontWeight: 400, fontSize: '0.75rem', lineHeight: 1.5, letterSpacing: '0.03333em' }}>
         {props.daySettings && props.daySettings.openAt} → {props.daySettings && props.daySettings.closeAt}<br />

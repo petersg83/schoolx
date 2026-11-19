@@ -53,12 +53,12 @@ export default compose(
             event.color = 'limegreen';
             event.start = schoolOpenDate;
             event.end = schoolCloseDate;
-          } else if (day.absence === 'partial' && !day.justifiedDelay) {
+          } else if (day.absence === 'partial' && !day.justifiedAbsence) {
             event.title = 'Absence partielle';
             event.color = 'orange';
             event.start = memberArrivedDate;
             event.end = memberLeftDate;
-          } else if (day.absence === 'partial' && day.justifiedDelay) {
+          } else if (day.absence === 'partial' && day.justifiedAbsence) {
             event.title = 'Absence partielle justifiée';
             event.color = 'MediumSeaGreen';
             event.start = memberArrivedDate;

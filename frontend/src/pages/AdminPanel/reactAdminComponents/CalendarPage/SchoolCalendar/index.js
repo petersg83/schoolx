@@ -97,10 +97,6 @@ export default compose(
         props.setModalType('createSSD');
       }
     },
-    onSelectMember: props => e => {
-      props.setSelectedMemberDays(null);
-      props.setSelectedMemberId(e.target.value);
-    },
     closeModal: props => () => props.setModalType(''),
   }),
   withHandlers({

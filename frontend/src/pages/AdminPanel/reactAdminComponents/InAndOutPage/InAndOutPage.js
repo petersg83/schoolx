@@ -9,7 +9,6 @@ export default compose(
   withState('memberShownInModalId', 'setMemberShownInModalId', null),
   withState('timer', 'setTimer', null),
   withState('time', 'setTime', moment()),
-  withState('refreshDateTime', 'setRefreshDateTime', moment().startOf('minute')),
   withState('firstLoadDone', 'setFirstLoadDone', false),
   withState('todaySettings', 'setTodaySetting', {}),
   withHandlers({
@@ -19,7 +18,6 @@ export default compose(
         headers: new Headers({
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
           Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
         }),
       })
@@ -33,6 +31,9 @@ export default compose(
         }
       })
       .then(res => {
+        if (!res) {
+          return; // 403 : retour au formulaire du code d'accès
+        }
         props.setTodaySetting(res);
         if (res.isClosed) {
           props.setFirstLoadDone(true);
@@ -41,7 +42,6 @@ export default compose(
             method: 'GET',
             headers: new Headers({
               Accept: 'application/json',
-              "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
             }),
@@ -56,6 +56,9 @@ export default compose(
             }
           })
           .then((res) => {
+            if (!res) {
+              return; // 403 : retour au formulaire du code d'accès
+            }
             const today = moment();
             const members = res.sort((m1, m2) => `${m1.firstName} ${m1.lastName}` < `${m2.firstName} ${m2.lastName}` ? -1 : 1);
             const membersMap = {};
@@ -119,7 +122,6 @@ export default compose(
         method: 'POST',
         headers: new Headers({
           Accept: 'application/json',
-          "Access-Control-Allow-Origin": config.domainName ? `*.${config.domainName}` : '*',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('inandoutjwt')}`,
         }),
@@ -158,7 +160,7 @@ export default compose(
           this.props.getMembers();
         }
         this.props.setTime(now);
-      }, 200);
+      }, 1000);
       this.props.setTimer(timer);
       this.props.getMembers();
       window.oncontextmenu = (e) => {
@@ -167,7 +169,7 @@ export default compose(
         return false;
       };
     },
-    componentWillUnmout() {
+    componentWillUnmount() {
       clearInterval(this.props.timer);
       window.oncontextmenu = null;
     }
