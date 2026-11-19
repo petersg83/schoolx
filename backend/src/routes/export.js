@@ -1,11 +1,9 @@
 import moment from 'moment';
 import XLSX from 'xlsx';
-import { v4 as uuidv4 } from 'uuid';
 import Urlify from 'urlify';
 import router from '../koa-router';
 import db from '../db';
 import { authRequired } from '../utils/auth';
-import config from '../config';
 
 const urlify = Urlify.create({
   spaces: '',
@@ -15,7 +13,6 @@ const urlify = Urlify.create({
 });
 
 router.get('/export', authRequired(['admin'], async (ctx, next, { admin }) => {
-  const fileName = `${uuidv4()}.xlsx`;
   let workbook = XLSX.utils.book_new();
 
   const school = await db.School.findOne({
@@ -148,16 +145,11 @@ router.get('/export', authRequired(['admin'], async (ctx, next, { admin }) => {
     }
   }
 
-  // const fileName = "writee.xlsx";
-  // const data = [[1,2,3],[true, false, null, "sheetjs"],["foo","bar", new Date("2014-02-19T14:30Z"), "0.3"], ["baz", null, "qux"]];
-  // const sheetName = "SheetJS";
-  //
-  // let ws = XLSX.utils.aoa_to_sheet(data);
-  // XLSX.utils.book_append_sheet(wb, ws, sheetName);
-  XLSX.writeFile(workbook, `src/public/exports/${fileName}`);
-
-  ctx.body = {
-    fileName: `dataa-${moment().format('DD-MM-YYYY')}.xlsx`,
-    downloadUrl: `${config.apiEndpoint}/public/exports/${fileName}`,
-  };
+  // Le fichier est renvoyé directement : il n'est jamais écrit sur le disque,
+  // donc jamais accessible sans authentification.
+  const fileName = `export-${moment().format('DD-MM-YYYY')}.xlsx`;
+  ctx.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  ctx.set('Content-Disposition', `attachment; filename="${fileName}"`);
+  ctx.set('Access-Control-Expose-Headers', 'Content-Disposition');
+  ctx.body = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
 }));

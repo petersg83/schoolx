@@ -58,8 +58,6 @@ router.get('/admins/:id', authRequired(['superAdmin', 'admin'], async (ctx, next
 router.put('/admins/:id', authRequired(['admin', 'superAdmin'], async (ctx, next, { admin, superAdmin }) => {
   const updates = { email: ctx.request.body.email };
   const newPassword = ctx.request.body.password;
-  console.log('ctx.request.body.password', ctx.request.body.password);
-  console.log('typeof ctx.request.body.password', typeof ctx.request.body.password);
 
   if (typeof newPassword === 'string' && newPassword.length) {
     updates.passwordHash = await bcrypt.hash(newPassword, 8);

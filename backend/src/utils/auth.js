@@ -48,3 +48,11 @@ export const inAndOutAuthRequired = (routeHandler) => async (ctx, next) => {
 
   await routeHandler(ctx, next, school);
 };
+
+// Sous-domaine de l'école à partir de l'en-tête Origin (https://<sous-domaine>.clickin.fr).
+// Renvoie undefined si l'en-tête est absent ou mal formé.
+export const getSubdomainFromOrigin = (ctx) => {
+  const origin = ctx.request.header.origin || '';
+  const host = origin.split('//')[1];
+  return host ? host.split('.')[0] : undefined;
+};

@@ -94,7 +94,7 @@ router.put('/members/:id', authRequired(['superAdmin', 'admin'], async (ctx, nex
     };
 
     if (ctx.request.body.pictures) {
-      let avatarBuff = new Buffer(ctx.request.body.pictures[0].src.split(',')[1], 'base64');
+      let avatarBuff = Buffer.from(ctx.request.body.pictures[0].src.split(',')[1], 'base64');
       const avatarPath = `src/public/avatars/${ctx.params.id}.${ctx.request.body.pictures[0].title.split('.').pop()}`;
       await sharp(avatarBuff)
         .resize({ width: 170, height: 200, options: { fit: 'outside' } })
@@ -176,7 +176,7 @@ router.post('/members', authRequired(['superAdmin', 'admin'], async (ctx, next, 
     };
 
     if (ctx.request.body.pictures) {
-      let avatarBuff = new Buffer(ctx.request.body.pictures[0].src.split(',')[1], 'base64');
+      let avatarBuff = Buffer.from(ctx.request.body.pictures[0].src.split(',')[1], 'base64');
       const avatarPath = `src/public/avatars/${memberCreationData.id}.${ctx.request.body.pictures[0].title.split('.').pop()}`;
       await sharp(avatarBuff)
         .resize({ width: 170, height: 200, options: { fit: 'outside' } })

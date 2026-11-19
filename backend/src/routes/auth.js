@@ -1,5 +1,6 @@
 import router from '../koa-router';
 import db from '../db';
+import { getSubdomainFromOrigin } from '../utils/auth';
 
 router.post('/login', async (ctx, next) => {
   const params = ctx.request.body;
@@ -38,7 +39,7 @@ router.post('/login', async (ctx, next) => {
 });
 
 router.get('/getSchoolName', async (ctx, next) => {
-  const subdomain = ctx.request.header.origin.split('//')[1].split('.')[0];
+  const subdomain = getSubdomainFromOrigin(ctx);
   try {
     if (subdomain === 'superadmin') {
       ctx.body = { schoolName: 'Interface Administrateur' };

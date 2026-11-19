@@ -6,7 +6,12 @@ import { isStringTimeStrictlyBefore, isStringTimeValid, stringTimeToMinutes } fr
 
 router.get('/memberEvents', authRequired(['admin'], async (ctx, next, { admin, superAdmin }) => {
   if (ctx.query.currentDay && ctx.query.memberId) {
-    admin.canEditMembers([ctx.query.memberId]);
+    try {
+      await admin.canEditMembers([ctx.query.memberId]);
+    } catch (e) {
+      ctx.status = 403;
+      return;
+    }
     const fromDate = new Date(moment(+ctx.query.currentDay).startOf('month').subtract(2, 'months'));
     const toDate = new Date(moment(+ctx.query.currentDay).endOf('month').add(2, 'months'));
 
@@ -19,7 +24,12 @@ router.get('/memberEvents', authRequired(['admin'], async (ctx, next, { admin, s
 
 router.put('/modifyMemberDay/:memberId', authRequired(['admin'], async (ctx, next, { admin, superAdmin }) => {
   if (ctx.request.body.memberDay && ctx.request.body.date) {
-    admin.canEditMembers([ctx.params.memberId]);
+    try {
+      await admin.canEditMembers([ctx.params.memberId]);
+    } catch (e) {
+      ctx.status = 403;
+      return;
+    }
     const memberId = ctx.params.memberId;
     const date = new Date (moment(ctx.request.body.date).startOf('day'));
     const memberDay = ctx.request.body.memberDay;

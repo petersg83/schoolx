@@ -1,7 +1,7 @@
 import moment from 'moment';
 import router from '../koa-router';
 import db from '../db';
-import { inAndOutAuthRequired } from '../utils/auth';
+import { inAndOutAuthRequired, getSubdomainFromOrigin } from '../utils/auth';
 
 
 router.get('/inandout', inAndOutAuthRequired(async (ctx, next, school) => {
@@ -24,7 +24,7 @@ router.get('/todaySettings', inAndOutAuthRequired(async (ctx, next, school) => {
 }));
 
 router.post('/inandout/:memberId', inAndOutAuthRequired(async (ctx, next, school) => {
-  const member = db.Member.findByIdAndSchoolId(ctx.params.memberId, school.id);
+  const member = await db.Member.findByIdAndSchoolId(ctx.params.memberId, school.id);
   const isSchoolOpenToday = await db.School.isSchoolOpenOn(school.id, moment().toISOString());
   const now = moment();
 
@@ -43,23 +43,23 @@ router.post('/inandout/:memberId', inAndOutAuthRequired(async (ctx, next, school
       },
     });
 
-    if ((!currentSpecialMemberDay || !currentSpecialMemberDay.openAt) && ctx.request.body.action === 'arrived') {
-      db.SpecialMemberDay.upsert({
+    if ((!currentSpecialMemberDay || !currentSpecialMemberDay.arrivedAt) && ctx.request.body.action === 'arrived') {
+      await db.SpecialMemberDay.upsert({
         memberId: ctx.params.memberId,
         day: new Date(moment(now).startOf('day')),
         arrivedAt: moment(now).format('HH:mm'),
       });
     } else if (currentSpecialMemberDay && currentSpecialMemberDay.arrivedAt && !currentSpecialMemberDay.leftAt && ctx.request.body.action === 'left') {
-      currentSpecialMemberDay.update({
+      await currentSpecialMemberDay.update({
         leftAt: moment().format('HH:mm'),
         leftTemporarlyAt: null,
       });
     } else if (currentSpecialMemberDay && currentSpecialMemberDay.arrivedAt && !currentSpecialMemberDay.leftAt && ctx.request.body.action === 'leftTemporarly') {
-      currentSpecialMemberDay.update({
+      await currentSpecialMemberDay.update({
         leftTemporarlyAt: moment().format('HH:mm'),
       });
     } else if (currentSpecialMemberDay && currentSpecialMemberDay.arrivedAt && !currentSpecialMemberDay.leftAt && ctx.request.body.action === 'comesBack') {
-      currentSpecialMemberDay.update({
+      await currentSpecialMemberDay.update({
         leftTemporarlyAt: null,
       });
     } else {
@@ -78,15 +78,23 @@ router.post('/inandout/:memberId', inAndOutAuthRequired(async (ctx, next, school
     } else if (e.message === 'action not possible') {
       ctx.status = 500;
       ctx.body = { status: 500, message: 'Action doesnt match database state for the specialMemberDay' };
+    } else {
+      ctx.status = 500;
+      ctx.body = { status: 500, message: 'Unknown error' };
     }
   }
 }));
 
 router.post('/inandoutlogin', async (ctx, next) => {
   const params = ctx.request.body;
-  const subdomain = ctx.request.header.origin.split('//')[1].split('.')[0];
-  const schoolId = await db.School.getSchoolIdBySubdomain(subdomain);
-  const inandoutjwt = await db.School.getJWTByAccessCode(schoolId, params.accessCode);
+  const subdomain = getSubdomainFromOrigin(ctx);
+  let inandoutjwt;
+  try {
+    const schoolId = await db.School.getSchoolIdBySubdomain(subdomain);
+    inandoutjwt = await db.School.getJWTByAccessCode(schoolId, params.accessCode);
+  } catch (e) {
+    inandoutjwt = null;
+  }
 
   if (inandoutjwt) {
     ctx.body = { inandoutjwt };

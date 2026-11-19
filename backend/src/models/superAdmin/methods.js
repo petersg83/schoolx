@@ -7,7 +7,7 @@ SuperAdmin.authenticate = async ({ email, password }) => {
   let isSuccess = false;
   const superAdmin = await SuperAdmin.findOne({ where: { email } });
 
-  if (superAdmin && superAdmin.passwordHash && bcrypt.compare(password, superAdmin.passwordHash)) {
+  if (superAdmin && superAdmin.passwordHash && await bcrypt.compare(password, superAdmin.passwordHash)) {
     isSuccess = true;
   }
   return isSuccess ? superAdmin : null;

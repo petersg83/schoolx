@@ -23,6 +23,22 @@ const formatPhoneNumber = (phoneNumber = '') => {
   return newPhoneNumber;
 };
 
+// Remplace les variables <%=nom%> des modèles saisis par les admins.
+// Volontairement limité à une substitution : les modèles ne doivent jamais être
+// exécutés (lodash _.template exécute le JavaScript contenu dans <% %>).
+// Une variable inconnue est laissée telle quelle.
+const TEMPLATE_VARIABLE = /<%[=-]?\s*(\w+)\s*%>/g;
+const fillTemplate = (template, data, { escapeHtml = false } = {}) => template.replace(
+  TEMPLATE_VARIABLE,
+  (match, name) => {
+    if (!Object.prototype.hasOwnProperty.call(data, name)) {
+      return match;
+    }
+    const value = String(data[name] == null ? '' : data[name]);
+    return escapeHtml ? _.escape(value) : value;
+  },
+);
+
 router.get('/emailsMetadata', authRequired(['admin'], async (ctx, next, { admin, superAdmin }) => {
   const membersIds = ctx.query.membersIds.split(',');
   if (admin) {
@@ -62,9 +78,9 @@ router.post('/sendEmailsAndSms', authRequired(['admin'], async (ctx, next, { adm
         await transporter.sendMail({
           to: m.emailAddress,
           from: school.emailAddress,
-          subject: _.template(emailSubject)(data),
-          html: _.template(emailContent)(data),
-          text: _.template(emailContent)(data),
+          subject: fillTemplate(emailSubject, data),
+          html: fillTemplate(emailContent, data, { escapeHtml: true }),
+          text: fillTemplate(emailContent, data),
         });
       } catch (e) {
         console.error('m.emailAddress' + e);
@@ -89,7 +105,7 @@ router.post('/sendEmailsAndSms', authRequired(['admin'], async (ctx, next, { adm
           .sms()
           .from(_.toUpper(_.camelCase(school.urlName)))
           .to(formatPhoneNumber(m.phoneNumber))
-          .message(_.template(smsContent)(data))
+          .message(fillTemplate(smsContent, data))
           .execute();
       } catch (e) {
         phoneNumbersError.push(m.phoneNumber);

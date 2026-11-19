@@ -2,8 +2,6 @@ backend/node_modules/
 backend/dist/
 backend/src/public/avatars/*
 !backend/src/public/avatars/.gitkeep
-backend/src/public/exports/*
-!backend/src/public/exports/.gitkeep
 backend/tmp_invoices/*
 !backend/tmp_invoices/.gitkeep
 backend/src/config.js
